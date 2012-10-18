@@ -6,9 +6,11 @@
 
 
 DEF RoboticArm Transform {
-	translation	0 0 0
+	translation	0 0 0.42
+	rotation	-1 0 0  1.5708
 	children [ 
 	    DEF Arm Transform {
+		    translation	0 -0.4 0
 		    scale	0.1 0.1 0.1
 		    children [ 
 			DEF Sholder_sideBar_02 Transform {
@@ -2627,6 +2629,7 @@ DEF RoboticArm Transform {
     }
 
     DEF ForeArm Transform {
+	    translation	0 -0.4 0
 	    scale	0.1 0.1 0.1
 	    children [ 
 		DEF Arm_sideBar_02 Transform {
@@ -8765,6 +8768,7 @@ DEF RoboticArm Transform {
     }
 
     DEF Gripper Transform {
+    translation	0 -0.4 0
     scale	0.1 0.1 0.1
     children [ 
 DEF Gripper_sideBar_01 Transform {
@@ -10598,6 +10602,7 @@ DEF Gripper_Servo Transform {
 }
 
 DEF Gripper_Mechanism Transform {
+translation	0 -0.4 0
 scale	0.1 0.1 0.1
 children [ 
     DEF Gripper_base Transform {
@@ -20541,6 +20546,23 @@ coordIndex	[ 2, 0, 1, -1, 1, 0, 3, -1,
     }
 ]
 }
+Transform {
+	translation	0 0.25 0
+	rotation	0 0 -1  3.14159
+	children Shape {
+		appearance	Appearance {
+			material	Material {
+			}
+
+		}
+
+		geometry	Cone {
+			bottomRadius	0.1
+			height	0.5
+		}
+
+	}
+}
 DEF Table Transform {
 	translation	0.5 -0.01 0
 	children Shape {
@@ -20726,6 +20748,11 @@ DEF SideView01 Viewpoint {
 DEF SideView02 Viewpoint {
 	position	-1.5 1.1 0.5
 	description	"TopView"
+}
+Viewpoint {
+	orientation	-0.991749 -0.127436 -0.0138987  0.281708
+	position	0.419511 0.669813 1.45322
+	description	"FullSceneViewAbove"
 }
 Viewpoint {
 	position	0.6 0 1.0915
