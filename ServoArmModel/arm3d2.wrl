@@ -6,6 +6,7 @@
 
 
 DEF Gripper Transform {
+	scale	0.1 0.1 0.1
 	children [ 
 	    DEF Gripper_sideBar_01 Transform {
 		    translation	0 0 0
@@ -1837,6 +1838,7 @@ DEF Gripper Transform {
     ]
     }
 DEF Gripper_Mechanism Transform {
+	scale	0.1 0.1 0.1
 	children [ 
 	    DEF Gripper_base Transform {
 		    translation	0 0 0
@@ -11778,6 +11780,7 @@ coordIndex	[ 2, 0, 1, -1, 1, 0, 3, -1,
     ]
     }
 DEF ForeArm Transform {
+	scale	0.1 0.1 0.1
 	children [ 
 	    DEF Arm_sideBar_02 Transform {
 		    translation	0 0 0
@@ -11869,6 +11872,7 @@ DEF ForeArm Transform {
 	    DEF Arm_sideBar_01 Transform {
 		    translation	0 0 0
 		    children DEF ME_mesh26-geometry Group {
+			    bboxSize	-1 -1 -1
 			    children Shape {
 				    appearance	Appearance {
 					    material	Material {
@@ -17912,11 +17916,8 @@ DEF Arm_Elbow_servo_02 Transform {
     }
 ]
 }
-Viewpoint {
-	orientation	0.470629 0.65659 0.589405  2.52764
-	position	9.00431 7.76622 0.824854
-}
 DEF Arm Transform {
+	scale	0.1 0.1 0.1
 	children [ 
 	    DEF Sholder_sideBar_02 Transform {
 		    translation	0.0543895 0 0.0125387
@@ -20532,20 +20533,7 @@ DEF Arm Transform {
     }
 ]
 }
-Viewpoint {
-	orientation	0.180494 0.689327 0.701606  2.67918
-	position	8.34113 9.66284 1.42312
-	description	"FrontViewCloseUp"
-}
-Viewpoint {
-	orientation	0 0 1  2.7187
-	position	2.2 -1.5 9.7
-}
-Viewpoint {
-	orientation	0 0 1  2.7187
-	position	2.2 -1.5 9.7
-}
-Transform {
+DEF Table Transform {
 	children Shape {
 		appearance	Appearance {
 			material	Material {
@@ -20578,12 +20566,9 @@ NavigationInfo {
 			  "ANY" ]
 	visibilityLimit	25.4
 }
-Viewpoint {
-	orientation	0.16135 0.642472 0.74913  2.585
-	position	8.54235 14.1478 0.969095
-}
 DEF Base_Cube Transform {
 	translation	0.118682 0.113517 4.76837e-007
+	scale	0.1 0.1 0.1
 	children DEF BaseCube_mesh22-geometry Group {
 		bboxCenter	0 0 0
 		bboxSize	-1 -1 -1
@@ -20780,6 +20765,11 @@ DEF SideView01 Viewpoint {
 	orientation	0.233439 0.657322 0.716543  2.7187
 	position	14.5774 22.4404 2.0252
 	description	"SideView01"
+}
+Viewpoint {
+	orientation	0.417138 0.645399 0.639887  2.6956
+	position	1.81061 1.88909 -0.255302
+	description	"TopView"
 }
 DEF OB_Camera_001 Transform {
 	translation	9.8384 7.80679 2.23531
