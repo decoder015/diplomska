@@ -11582,7 +11582,6 @@ DEF Arm Transform {
 						    diffuseColor	0.995802 1 0.0127848
 						    shininess	0.5
 						    specularColor	1 1 1
-						    transparency	0
 					    }
 
 				    }
@@ -11835,10 +11834,7 @@ DEF Arm Transform {
 					    material	Material {
 						    ambientIntensity	0.2
 						    diffuseColor	0.8 0.789856 0.00200167
-						    emissiveColor	0 0 0
-						    shininess	0.2
 						    specularColor	1 1 1
-						    transparency	0
 					    }
 
 				    }
@@ -14753,7 +14749,7 @@ DEF Gripper_sideBar_01 Transform {
 		}
 	}
 }
-DEF finger_02_screw_01 Transform {
+DEF Gripper_finger_02_screw_01 Transform {
 	translation	6.77465 5.42209 2.38649
 	rotation	0.17355 0.002539 0.984822  3.1286
 	scale	0.005556 0.004511 0.013398
@@ -14989,7 +14985,7 @@ DEF finger_02_screw_01 Transform {
 		}
 	}
 }
-DEF Gripper_tetiva_01_01 Transform {
+DEF Gripper_finger_02_tetiva_01 Transform {
 	translation	0 0 0
 	children DEF ME_mesh7-geometry Group {
 		children Shape {
@@ -15521,12 +15517,12 @@ DEF Gripper_tetiva_01_01 Transform {
 	    }
     }
     }
-DEF finger_02_screw_02 Transform {
+DEF Gripper_finger_02_screw_02 Transform {
 	translation	6.74928 5.19128 2.33959
 	rotation	0.17355 0.002539 0.984822  3.1286
 	scale	0.005556 0.004511 0.013398
 	children USE ME_mesh5-geometry }
-DEF Gripper_tetiva_01_04 Transform {
+DEF Gripper_finger_02_tetiva_04 Transform {
 	translation	0 0 0
 	children DEF ME_mesh10-geometry Group {
 		children Shape {
@@ -16053,7 +16049,7 @@ DEF Gripper_tetiva_01_04 Transform {
 	    }
     }
     }
-DEF Griper_tetiva_01_03 Transform {
+DEF Gripper_finger_02_tetiva_03 Transform {
 	translation	0 0 0
 	children DEF ME_mesh11-geometry Group {
 		children Shape {
@@ -16531,17 +16527,17 @@ DEF Gripper_finger_02_geer_02_screw_01 Transform {
 	rotation	0.17355 0.002539 0.984822  3.1286
 	scale	0.005556 0.004511 0.013398
 	children USE ME_mesh5-geometry }
-DEF OB_mesh5_007 Transform {
+DEF Gripper_finger_02_screw_03 Transform {
 	translation	6.56735 5.33631 2.46189
 	rotation	0.17355 0.002539 0.984822  3.1286
 	scale	0.005556 0.004511 0.013398
 	children USE ME_mesh5-geometry }
-DEF OB_mesh5_008 Transform {
+DEF Gripper_finger_02_screw_04 Transform {
 	translation	6.57082 5.51386 2.46063
 	rotation	0.17355 0.002539 0.984822  3.1286
 	scale	0.005556 0.004511 0.013398
 	children USE ME_mesh5-geometry }
-DEF Gripper_tetiva_01_02 Transform {
+DEF Gripper_finger_02_tetiva_02 Transform {
 	translation	0 0 0
 	children DEF ME_mesh14-geometry Group {
 		children Shape {
@@ -17561,7 +17557,7 @@ DEF Gripper_finger_02 Transform {
 	    }
     }
     }
-DEF Gripper_gear_02 Transform {
+DEF Gripper_finger_02_gear_02 Transform {
 	translation	0 0 0
 	children DEF ME_mesh18-geometry Group {
 		children Shape {
@@ -19544,10 +19540,7 @@ DEF Gripper_Servo_Axe Transform {
 				material	Material {
 					ambientIntensity	0.1
 					diffuseColor	0 0 0
-					emissiveColor	0 0 0
 					shininess	0.5
-					specularColor	0 0 0
-					transparency	0
 				}
 
 			}
