@@ -6,7 +6,7 @@ Model {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.4"
+    ComputedModelVersion    "1.5"
     NumModelReferences	    0
     NumTestPointedSignals   0
   }
@@ -24,11 +24,11 @@ Model {
   Creator		  "Owner"
   UpdateHistory		  "UpdateHistoryNever"
   ModifiedByFormat	  "%<Auto>"
-  LastModifiedBy	  "user"
+  LastModifiedBy	  "Owner"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Thu Oct 18 16:35:16 2012"
-  RTWModifiedTimeStamp	  272476579
-  ModelVersionFormat	  "1.%<AutoIncrement:4>"
+  LastModifiedDate	  "Thu Oct 18 20:17:01 2012"
+  RTWModifiedTimeStamp	  272490716
+  ModelVersionFormat	  "1.%<AutoIncrement:5>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -65,7 +65,6 @@ Model {
     $ObjectID		    1
     $ClassName		    "Simulink.SimulationData.ModelLoggingInfo"
     model_		    "RobotArmSimulator"
-    signals_		    []
     overrideMode_	    [0.0]
     Array {
       Type		      "Cell"
@@ -681,8 +680,8 @@ Model {
       BlockType		      Reference
       Name		      "VR Sink"
       SID		      "1"
-      Ports		      []
-      Position		      [365, 119, 467, 284]
+      Ports		      [1]
+      Position		      [365, 117, 465, 283]
       LibraryVersion	      "1.241"
       SourceBlock	      "vrlib/VR Sink"
       SourceType	      "Virtual Reality Sink"
@@ -690,6 +689,7 @@ Model {
       ViewEnable	      on
       RemoteChange	      off
       RemoteView	      on
+      FieldsWritten	      "RoboticArm.rotation.4.1.1.double"
       WorldFileName	      "arm3d2.wrl"
       AutoView		      off
       VideoDimensions	      "[]"
