@@ -22,7 +22,7 @@ function varargout = UIJointJog(varargin)
 
 % Edit the above text to modify the response to help UIJointJog
 
-% Last Modified by GUIDE v2.5 19-Oct-2012 20:06:05
+% Last Modified by GUIDE v2.5 20-Oct-2012 17:16:28
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -79,9 +79,12 @@ function m_sliderJoint2_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'Value') returns position of slider
-%        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
+%get vlue form slider
+currentVl = get(hObject,'Value');
 
+% set value to tboJoint0Val text edit control using handles!!!
+set(handles.m_tboJoint2Val, 'String', currentVl);
+disp(currentVl);
 
 % --- Executes during object creation, after setting all properties.
 function m_sliderJoint2_CreateFcn(hObject, eventdata, handles)
@@ -101,8 +104,13 @@ function m_sliderJoint1_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'Value') returns position of slider
-%        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
+%get vlue form slider
+currentVl = get(hObject,'Value');
+
+% set value to tboJoint0Val text edit control using handles!!!
+set(handles.m_tboJoint1Val, 'String', currentVl);
+disp(currentVl);
+%*********************************END*********************************
 
 
 % --- Executes during object creation, after setting all properties.
@@ -122,12 +130,14 @@ function m_sliderJoint0_Callback(hObject, eventdata, handles)
 % hObject    handle to m_sliderJoint0 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-currentVl = get(hObject,'Value');
-m_tboJoint0Val.String = currentVl;
-disp(currentVl);
-% Hints: get(hObject,'Value') returns position of slider
-%        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
 
+%get vlue form slider
+currentVl = get(hObject,'Value');
+
+% set value to tboJoint0Val text edit control using handles!!!
+set(handles.m_tboJoint0Val, 'String', currentVl);
+disp(currentVl);
+%*********************************END*********************************
 
 % --- Executes during object creation, after setting all properties.
 function m_sliderJoint0_CreateFcn(hObject, eventdata, handles)
@@ -147,8 +157,13 @@ function m_sliderJoint3_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'Value') returns position of slider
-%        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
+%get vlue form slider
+currentVl = get(hObject,'Value');
+
+% set value to tboJoint0Val text edit control using handles!!!
+set(handles.m_tboJoint3Val, 'String', currentVl);
+disp(currentVl);
+%*********************************END*********************************
 
 
 % --- Executes during object creation, after setting all properties.
@@ -187,18 +202,18 @@ end
 
 
 
-function m_tboJoin1Val_Callback(hObject, eventdata, handles)
-% hObject    handle to m_tboJoin1Val (see GCBO)
+function m_tboJoint1Val_Callback(hObject, eventdata, handles)
+% hObject    handle to m_tboJoint1Val (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of m_tboJoin1Val as text
-%        str2double(get(hObject,'String')) returns contents of m_tboJoin1Val as a double
+% Hints: get(hObject,'String') returns contents of m_tboJoint1Val as text
+%        str2double(get(hObject,'String')) returns contents of m_tboJoint1Val as a double
 
 
 % --- Executes during object creation, after setting all properties.
-function m_tboJoin1Val_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to m_tboJoin1Val (see GCBO)
+function m_tboJoint1Val_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to m_tboJoint1Val (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
