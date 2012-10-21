@@ -6,7 +6,7 @@ Model {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.16"
+    ComputedModelVersion    "1.19"
     NumModelReferences	    0
     NumTestPointedSignals   0
   }
@@ -26,9 +26,9 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "Owner"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Sun Oct 21 12:42:03 2012"
-  RTWModifiedTimeStamp	  272723987
-  ModelVersionFormat	  "1.%<AutoIncrement:16>"
+  LastModifiedDate	  "Sun Oct 21 21:30:23 2012"
+  RTWModifiedTimeStamp	  272755322
+  ModelVersionFormat	  "1.%<AutoIncrement:19>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -65,7 +65,6 @@ Model {
     $ObjectID		    1
     $ClassName		    "Simulink.SimulationData.ModelLoggingInfo"
     model_		    "RobotArmSimulator"
-    signals_		    []
     overrideMode_	    [0.0]
     Array {
       Type		      "Cell"
@@ -704,7 +703,7 @@ Model {
   }
   System {
     Name		    "RobotArmSimulator"
-    Location		    [164, 82, 1255, 755]
+    Location		    [285, 82, 1255, 762]
     Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -724,13 +723,13 @@ Model {
       Name		      "Constant"
       SID		      "21"
       Position		      [560, 70, 590, 100]
+      Value		      "0"
     }
     Block {
       BlockType		      Constant
       Name		      "Constant1"
       SID		      "22"
       Position		      [560, 120, 590, 150]
-      Value		      "0"
     }
     Block {
       BlockType		      Constant
@@ -880,8 +879,8 @@ Model {
       BlockType		      Reference
       Name		      "VR Sink"
       SID		      "1"
-      Ports		      [1]
-      Position		      [795, 42, 935, 278]
+      Ports		      []
+      Position		      [795, 247, 935, 483]
       LibraryVersion	      "1.241"
       SourceBlock	      "vrlib/VR Sink"
       SourceType	      "Virtual Reality Sink"
@@ -889,8 +888,7 @@ Model {
       ViewEnable	      on
       RemoteChange	      off
       RemoteView	      on
-      FieldsWritten	      "RoboticArm.rotation.4.1.1.double"
-      WorldFileName	      "arm3d2.wrl"
+      WorldFileName	      "ArmModel3D.wrl"
       AutoView		      off
       VideoDimensions	      "[]"
     }
@@ -940,12 +938,6 @@ Model {
       SrcBlock		      "From3"
       SrcPort		      1
       DstBlock		      "Display3"
-      DstPort		      1
-    }
-    Line {
-      SrcBlock		      "Mux"
-      SrcPort		      1
-      DstBlock		      "VR Sink"
       DstPort		      1
     }
     Line {
