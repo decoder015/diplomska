@@ -35,6 +35,12 @@ DEF Table Transform {
 }
 Viewpoint {
 	position	0 0.3 1
+	description	"CameraZ1"
+}
+Viewpoint {
+	orientation	0 1 0  1.5708
+	position	1 0.3 0
+	description	"CameraX+"
 }
 Background {
 	groundAngle	[ 0.9, 1.5, 1.57 ]
@@ -55,6 +61,12 @@ NavigationInfo {
 			  "ANY" ]
 	visibilityLimit	25.4
 }
+DEF RoboticArm Transform {
+	children []
+}
+DEF ForeArm Transform {
+	children []
+}
 DEF ForeArm_sideBar_01 Transform {
 	translation	-4.42378e-009 -1.49012e-008 7.45058e-009
 	children DEF ME_mesh1-geometry Group {
@@ -66,7 +78,6 @@ DEF ForeArm_sideBar_01 Transform {
 					emissiveColor	0.52 0.505622 0.0576665
 					shininess	0.1
 					specularColor	0.0008008 0.0008008 0.0008008
-					transparency	0
 				}
 
 			}
@@ -184,7 +195,6 @@ DEF ForeArm_sideBar_02 Transform {
 					emissiveColor	0.52 0.505622 0.0576665
 					shininess	0.1
 					specularColor	0.0008008 0.0008008 0.0008008
-					transparency	0
 				}
 
 			}
@@ -512,7 +522,7 @@ DEF Arm_Side_Bar_01 Transform {
 	}
 }
 DEF Gripper_finger_02_rubber Transform {
-	translation	0 0 0
+	translation	0 0 -0.001
 	children DEF ME_mesh5-geometry Group {
 		children Shape {
 			appearance	Appearance {
@@ -1081,242 +1091,6 @@ DEF Gripper_finger_02 Transform {
 	    }
     }
     }
-DEF OB_mesh7 Transform {
-	translation	0.016635 0.357312 -0.026469
-	rotation	-0.468674 0.477756 -0.743031  1.90898
-	scale	0.000612 0.000589 0.000199
-	children DEF ME_mesh7-geometry Group {
-		children Shape {
-			appearance	Appearance {
-				material	DEF MA_material_3_0ID_001 Material {
-					ambientIntensity	0.166667
-					diffuseColor	0.419608 0.407843 0.407843
-					shininess	0.0976563
-					specularColor	0.0008008 0.0008008 0.0008008
-				}
-
-			}
-
-			geometry	IndexedFaceSet {
-				coord	DEF coord_mesh7-geometry Coordinate {
-					point	[ -2.05073 1.76387 -2.10155,
-							  -2.52373 -0.346547 -1.5158,
-							  -2.52373 1.76387 -1.5158,
-							  -2.05073 -0.346547 -2.10155,
-							  -2.83389 -0.346547 -0.82976,
-							  -2.0723 1.76387 -0.041171,
-							  -1.44539 -0.346547 -2.54923,
-							  -2.0723 -0.346547 -0.041171,
-							  -2.83389 1.76387 -0.82976,
-							  -2.00152 1.76387 -0.578848,
-							  -1.44539 1.76387 -2.54923,
-							  -2.00152 -0.346547 -0.578848,
-							  -2.96117 -0.346547 -0.087708,
-							  -2.96117 1.76387 -0.087708,
-							  -0.746792 -0.346547 -2.82994,
-							  -1.79398 -0.346547 -1.07988,
-							  -1.79398 1.76387 -1.07988,
-							  -0.746792 1.76387 -2.82994,
-							  -1.03359 -0.346547 -1.84027,
-							  -1.46384 -0.346547 -1.51013,
-							  -1.46384 1.76387 -1.51013,
-							  -1.03359 1.76387 -1.84027,
-							  0 -0.346547 -2.92556,
-							  -0.532558 -0.346547 -2.04781,
-							  -0.532558 1.76387 -2.04781,
-							  0 1.76387 -2.92556,
-							  0.746792 -0.346547 -2.82994,
-							  0.005118 -0.346547 -2.11859,
-							  0.005118 1.76387 -2.11859,
-							  0.746792 1.76387 -2.82994,
-							  1.44539 -0.346547 -2.54923,
-							  0.542795 -0.346547 -2.04781,
-							  0.542795 1.76387 -2.04781,
-							  1.44539 1.76387 -2.54923,
-							  1.04383 -0.346547 -1.84027,
-							  1.04383 1.76387 -1.84027,
-							  2.05073 -0.346547 -2.10155,
-							  1.47408 -0.346547 -1.51013,
-							  1.47408 1.76387 -1.51013,
-							  2.05073 1.76387 -2.10155,
-							  2.52373 1.76387 -1.5158,
-							  1.80422 -0.346547 -1.07988,
-							  1.80422 1.76387 -1.07988,
-							  2.52373 -0.346547 -1.5158,
-							  2.08254 1.76387 -0.041171,
-							  2.01175 -0.346547 -0.578848,
-							  2.01175 1.76387 -0.578848,
-							  2.83389 1.76387 -0.82976,
-							  2.08254 -0.346547 -0.041171,
-							  2.22639 1.76387 1.96647,
-							  2.83389 -0.346547 -0.82976,
-							  2.5567 1.76387 1.51633,
-							  2.22639 -0.346547 1.96647,
-							  2.04632 1.76387 0.343099,
-							  2.96117 1.76387 -0.087708,
-							  2.5567 -0.346547 1.51633,
-							  2.79453 1.76387 1.01119,
-							  2.04632 -0.346547 0.343099,
-							  1.93892 1.76387 0.71383,
-							  2.96117 -0.346547 -0.087708,
-							  2.93105 1.76387 0.469807,
-							  2.79453 -0.346547 1.01119,
-							  1.93892 -0.346547 0.71383,
-							  1.81586 1.76387 2.34488,
-							  2.93105 -0.346547 0.469807,
-							  1.81586 -0.346547 2.34488,
-							  1.76414 1.76387 1.05796,
-							  1.76414 -0.346547 1.05796,
-							  1.52812 1.76387 1.36337,
-							  1.34036 -0.346547 2.63751,
-							  1.52812 -0.346547 1.36337,
-							  1.34036 1.76387 2.63751,
-							  1.23919 1.76387 1.61929,
-							  0.817563 -0.346547 2.8335,
-							  1.23919 -0.346547 1.61929,
-							  0.90753 1.76387 1.81671,
-							  0.817563 1.76387 2.8335,
-							  0.90753 -0.346547 1.81671,
-							  0.266876 -0.346547 2.92556,
-							  0.544816 -0.346547 1.94867,
-							  0.544816 1.76387 1.94867,
-							  0.266876 1.76387 2.92556,
-							  -0.291243 -0.346547 2.91027,
-							  0.163832 -0.346547 2.01052,
-							  0.163832 1.76387 2.01052,
-							  -0.291243 1.76387 2.91027,
-							  -0.222 -0.346547 2.00009,
-							  -0.222 1.76387 2.00009,
-							  -0.836064 -0.346547 2.78821,
-							  -0.599087 -0.346547 1.91774,
-							  -0.599087 1.76387 1.91774,
-							  -0.836064 1.76387 2.78821,
-							  -1.34735 -0.346547 2.5639,
-							  -0.954142 -0.346547 1.76638,
-							  -0.954142 1.76387 1.76638,
-							  -1.34735 1.76387 2.5639,
-							  -1.27465 -0.346547 1.55133,
-							  -1.27465 1.76387 1.55133,
-							  -1.80612 -0.346547 2.24568,
-							  -1.80612 1.76387 2.24568,
-							  -2.31058 -0.346547 2.7883,
-							  -0.821382 -0.346547 0.971474,
-							  -2.31058 1.76387 2.7883,
-							  -0.821382 1.76387 0.971474,
-							  -2.48929 -0.346547 1.15018,
-							  -2.48929 1.76387 1.15018 ]
-				}
-
-				solid	TRUE
-				coordIndex	[ 2, 0, 1, -1, 1, 0, 3, -1,
-						  1, 4, 2, -1, 0, 2, 5, -1,
-						  3, 0, 6, -1, 3, 7, 1, -1,
-						  8, 2, 4, -1, 1, 7, 4, -1,
-						  2, 8, 5, -1, 9, 0, 5, -1,
-						  6, 0, 10, -1, 6, 11, 3, -1,
-						  11, 7, 3, -1, 4, 12, 8, -1,
-						  12, 4, 7, -1, 13, 5, 8, -1,
-						  9, 5, 11, -1, 10, 0, 9, -1,
-						  6, 10, 14, -1, 15, 11, 6, -1,
-						  7, 11, 5, -1, 13, 8, 12, -1,
-						  7, 5, 12, -1, 13, 12, 5, -1,
-						  11, 15, 9, -1, 16, 10, 9, -1,
-						  17, 14, 10, -1, 14, 18, 6, -1,
-						  19, 15, 6, -1, 16, 9, 15, -1,
-						  20, 10, 16, -1, 17, 10, 21, -1,
-						  14, 17, 22, -1, 18, 19, 6, -1,
-						  23, 18, 14, -1, 15, 19, 16, -1,
-						  20, 16, 19, -1, 21, 10, 20, -1,
-						  24, 17, 21, -1, 25, 22, 17, -1,
-						  22, 23, 14, -1, 18, 21, 19, -1,
-						  23, 24, 18, -1, 20, 19, 21, -1,
-						  21, 18, 24, -1, 25, 17, 24, -1,
-						  22, 25, 26, -1, 27, 23, 22, -1,
-						  24, 23, 28, -1, 28, 25, 24, -1,
-						  29, 26, 25, -1, 26, 27, 22, -1,
-						  27, 28, 23, -1, 29, 25, 28, -1,
-						  26, 29, 30, -1, 31, 27, 26, -1,
-						  28, 27, 32, -1, 32, 29, 28, -1,
-						  33, 30, 29, -1, 30, 34, 26, -1,
-						  34, 31, 26, -1, 31, 32, 27, -1,
-						  35, 29, 32, -1, 33, 29, 35, -1,
-						  30, 33, 36, -1, 37, 34, 30, -1,
-						  34, 35, 31, -1, 32, 31, 35, -1,
-						  38, 33, 35, -1, 39, 36, 33, -1,
-						  36, 37, 30, -1, 37, 38, 34, -1,
-						  35, 34, 38, -1, 39, 33, 38, -1,
-						  39, 40, 36, -1, 41, 37, 36, -1,
-						  37, 41, 38, -1, 42, 39, 38, -1,
-						  43, 36, 40, -1, 40, 39, 44, -1,
-						  45, 41, 36, -1, 42, 38, 41, -1,
-						  46, 39, 42, -1, 40, 47, 43, -1,
-						  43, 48, 36, -1, 44, 39, 46, -1,
-						  49, 40, 44, -1, 48, 45, 36, -1,
-						  41, 45, 42, -1, 46, 42, 45, -1,
-						  50, 43, 47, -1, 47, 40, 51, -1,
-						  52, 48, 43, -1, 44, 46, 48, -1,
-						  44, 53, 49, -1, 51, 40, 49, -1,
-						  45, 48, 46, -1, 47, 54, 50, -1,
-						  50, 55, 43, -1, 56, 47, 51, -1,
-						  55, 52, 43, -1, 48, 52, 57, -1,
-						  48, 57, 44, -1, 53, 58, 49, -1,
-						  53, 44, 57, -1, 51, 49, 55, -1,
-						  59, 50, 54, -1, 54, 47, 60, -1,
-						  61, 55, 50, -1, 56, 51, 61, -1,
-						  60, 47, 56, -1, 52, 55, 49, -1,
-						  57, 52, 62, -1, 49, 58, 63, -1,
-						  58, 53, 62, -1, 57, 62, 53, -1,
-						  55, 61, 51, -1, 54, 60, 59, -1,
-						  59, 64, 50, -1, 64, 61, 50, -1,
-						  61, 64, 56, -1, 60, 56, 64, -1,
-						  52, 49, 65, -1, 52, 65, 62, -1,
-						  58, 66, 63, -1, 63, 65, 49, -1,
-						  62, 67, 58, -1, 64, 59, 60, -1,
-						  62, 65, 67, -1, 66, 68, 63, -1,
-						  66, 58, 67, -1, 65, 63, 69, -1,
-						  67, 65, 70, -1, 63, 68, 71, -1,
-						  68, 66, 70, -1, 67, 70, 66, -1,
-						  71, 69, 63, -1, 65, 69, 70, -1,
-						  68, 72, 71, -1, 68, 70, 72, -1,
-						  69, 71, 73, -1, 70, 69, 74, -1,
-						  72, 75, 71, -1, 74, 72, 70, -1,
-						  76, 73, 71, -1, 69, 73, 77, -1,
-						  74, 69, 77, -1, 71, 75, 76, -1,
-						  72, 74, 75, -1, 73, 76, 78, -1,
-						  77, 73, 79, -1, 77, 75, 74, -1,
-						  75, 80, 76, -1, 81, 78, 76, -1,
-						  73, 78, 79, -1, 79, 80, 77, -1,
-						  75, 77, 80, -1, 76, 80, 81, -1,
-						  78, 81, 82, -1, 79, 78, 83, -1,
-						  80, 79, 84, -1, 80, 84, 81, -1,
-						  85, 82, 81, -1, 78, 82, 86, -1,
-						  83, 78, 86, -1, 83, 84, 79, -1,
-						  84, 87, 81, -1, 81, 87, 85, -1,
-						  82, 85, 88, -1, 86, 82, 89, -1,
-						  86, 87, 83, -1, 84, 83, 87, -1,
-						  87, 90, 85, -1, 91, 88, 85, -1,
-						  82, 88, 89, -1, 89, 90, 86, -1,
-						  87, 86, 90, -1, 85, 90, 91, -1,
-						  88, 91, 92, -1, 89, 88, 93, -1,
-						  90, 89, 94, -1, 90, 94, 91, -1,
-						  95, 92, 91, -1, 92, 96, 88, -1,
-						  93, 88, 96, -1, 93, 94, 89, -1,
-						  94, 97, 91, -1, 95, 91, 97, -1,
-						  92, 95, 98, -1, 92, 98, 96, -1,
-						  96, 97, 93, -1, 94, 93, 97, -1,
-						  95, 97, 99, -1, 99, 98, 95, -1,
-						  98, 100, 96, -1, 96, 101, 97, -1,
-						  99, 97, 102, -1, 99, 102, 98, -1,
-						  96, 100, 101, -1, 100, 98, 102, -1,
-						  103, 97, 101, -1, 97, 103, 102, -1,
-						  104, 101, 100, -1, 102, 105, 100, -1,
-						  103, 101, 105, -1, 105, 102, 103, -1,
-						  104, 100, 105, -1, 104, 105, 101, -1 ]
-			}
-
-		}
-	}
-}
 DEF Gripper_finger_02_tetiva_02 Transform {
 	translation	0 0 0
 	children DEF ME_mesh8-geometry Group {
@@ -1870,11 +1644,6 @@ DEF OB_mesh9 Transform {
 	    }
     }
     }
-DEF OB_mesh7_001 Transform {
-	translation	0.016487 0.358575 0.029571
-	rotation	-0.468674 0.477756 -0.743031  1.90898
-	scale	0.000612 0.000589 0.000199
-	children USE ME_mesh7-geometry }
 DEF Gripper_finger_01_tetiva_02 Transform {
 	translation	0 0 0
 	children DEF ME_mesh10-geometry Group {
@@ -1882,11 +1651,7 @@ DEF Gripper_finger_01_tetiva_02 Transform {
 			appearance	Appearance {
 				material	Material {
 					ambientIntensity	0.2
-					diffuseColor	0.8 0.8 0.8
-					emissiveColor	0 0 0
-					shininess	0.2
 					specularColor	1 1 1
-					transparency	0
 				}
 
 			}
@@ -2410,16 +2175,6 @@ DEF Gripper_finger_01_tetiva_02 Transform {
 	    }
     }
     }
-DEF OB_mesh7_002 Transform {
-	translation	0.010746 0.357953 0.004161
-	rotation	-0.468674 0.477756 -0.743031  1.90898
-	scale	0.000612 0.000589 0.000199
-	children USE ME_mesh7-geometry }
-DEF OB_mesh7_003 Transform {
-	translation	0.010755 0.357718 -0.001101
-	rotation	-0.468674 0.477756 -0.743031  1.90898
-	scale	0.000612 0.000589 0.000199
-	children USE ME_mesh7-geometry }
 DEF Gripper_finger_02_tetiva_03 Transform {
 	translation	0 0 0
 	children DEF ME_mesh11-geometry Group {
@@ -2919,7 +2674,7 @@ DEF OB_mesh12 Transform {
 	    }
     }
     }
-DEF OB_mesh13 Transform {
+DEF Gripper_finger_01_tetiva_04_2 Transform {
 	translation	0 0 0
 	children DEF ME_mesh13-geometry Group {
 		children Shape {
@@ -3414,7 +3169,7 @@ DEF OB_mesh13 Transform {
 	    }
     }
     }
-DEF Gripper_finger_02_tetiva_04 Transform {
+DEF Gripper_finger_02_tetiva_04_1 Transform {
 	translation	0 0 0
 	children DEF ME_mesh14-geometry Group {
 		children Shape {
@@ -3477,7 +3232,7 @@ DEF Gripper_finger_02_tetiva_04 Transform {
 	    }
     }
     }
-DEF OB_mesh15 Transform {
+DEF Gripper_finger_01_tetiva_03 Transform {
 	translation	0 0 0
 	children DEF ME_mesh15-geometry Group {
 		children Shape {
@@ -4004,7 +3759,7 @@ DEF OB_mesh15 Transform {
 	    }
     }
     }
-DEF OB_mesh16 Transform {
+DEF Gripper_finger_02_tetiva_03 Transform {
 	translation	0 0 0
 	children DEF ME_mesh16-geometry Group {
 		children Shape {
@@ -5418,21 +5173,6 @@ DEF Gripper_base Transform {
 	    }
     }
     }
-DEF OB_mesh7_004 Transform {
-	translation	0.012694 0.33416 0.01425
-	rotation	-0.468674 0.477756 -0.743031  1.90898
-	scale	0.000612 0.000589 0.000199
-	children USE ME_mesh7-geometry }
-DEF OB_mesh7_005 Transform {
-	translation	0.015684 0.33359 -0.016597
-	rotation	-0.468674 0.477756 -0.743031  1.90898
-	scale	0.000612 0.000589 0.000199
-	children USE ME_mesh7-geometry }
-DEF OB_mesh7_006 Transform {
-	translation	0.015738 0.333194 -0.036128
-	rotation	-0.468674 0.477756 -0.743031  1.90898
-	scale	0.000612 0.000589 0.000199
-	children USE ME_mesh7-geometry }
 DEF Gripper_finger_02_tetiva_01 Transform {
 	translation	0 0 0
 	children DEF ME_mesh18-geometry Group {
@@ -5906,16 +5646,6 @@ DEF Gripper_finger_02_tetiva_01 Transform {
 	    }
     }
     }
-DEF OB_mesh7_007 Transform {
-	translation	0.015584 0.334333 0.02012
-	rotation	-0.468674 0.477756 -0.743031  1.90898
-	scale	0.000612 0.000589 0.000199
-	children USE ME_mesh7-geometry }
-DEF OB_mesh7_008 Transform {
-	translation	0.01553 0.334728 0.03965
-	rotation	-0.468674 0.477756 -0.743031  1.90898
-	scale	0.000612 0.000589 0.000199
-	children USE ME_mesh7-geometry }
 DEF Gripper_finger_01_tetiva_01 Transform {
 	translation	0 0 0
 	children DEF ME_mesh19-geometry Group {
@@ -6930,11 +6660,6 @@ DEF Gripper_finger_01 Transform {
 	    }
     }
     }
-DEF OB_mesh7_009 Transform {
-	translation	0.012763 0.333654 -0.010749
-	rotation	-0.468674 0.477756 -0.743031  1.90898
-	scale	0.000612 0.000589 0.000199
-	children USE ME_mesh7-geometry }
 DEF Gripper_geer_02 Transform {
 	translation	0 0 0
 	children DEF ME_mesh22-geometry Group {
@@ -6942,11 +6667,7 @@ DEF Gripper_geer_02 Transform {
 			appearance	Appearance {
 				material	Material {
 					ambientIntensity	0.2
-					diffuseColor	0.8 0.8 0.8
-					emissiveColor	0 0 0
-					shininess	0.2
 					specularColor	1 1 1
-					transparency	0
 				}
 
 			}
@@ -8261,10 +7982,7 @@ DEF Base Transform {
 				material	Material {
 					ambientIntensity	0.2
 					diffuseColor	0 0 0
-					emissiveColor	0 0 0
-					shininess	0.2
 					specularColor	1 1 1
-					transparency	0
 				}
 
 			}
@@ -8389,7 +8107,7 @@ DEF Base Transform {
 		}
 	}
 }
-DEF Gripper_axe Transform {
+DEF Gripper_axe_01 Transform {
 	translation	0 0 0
 	children DEF ME_mesh27-geometry Group {
 		children Shape {
@@ -8445,7 +8163,7 @@ DEF Gripper_axe Transform {
 		}
 	}
 }
-DEF OB_mesh28 Transform {
+DEF Gripper_axe_04 Transform {
 	translation	0 0 0
 	children DEF ME_mesh28-geometry Group {
 		children Shape {
@@ -8468,7 +8186,7 @@ DEF OB_mesh28 Transform {
 		}
 	}
 }
-DEF OB_mesh29 Transform {
+DEF Gripper_axe_03 Transform {
 	translation	0 0 0
 	children DEF ME_mesh29-geometry Group {
 		children Shape {
@@ -8491,7 +8209,7 @@ DEF OB_mesh29 Transform {
 		}
 	}
 }
-DEF OB_mesh30 Transform {
+DEF Gripper_axe_02 Transform {
 	translation	0 0 0
 	children DEF ME_mesh30-geometry Group {
 		children Shape {
@@ -8544,7 +8262,7 @@ DEF OB_mesh30 Transform {
 		}
 	}
 }
-DEF OB_mesh31 Transform {
+DEF Gripper_axe_05 Transform {
 	translation	0 0 0
 	children DEF ME_mesh31-geometry Group {
 		children Shape {
@@ -8578,7 +8296,6 @@ DEF Gripper_side_bar_02 Transform {
 					emissiveColor	0.52 0.505622 0.0576665
 					shininess	0.1
 					specularColor	0.0008008 0.0008008 0.0008008
-					transparency	0
 				}
 
 			}
@@ -8775,7 +8492,7 @@ DEF Gripper_side_bar_02 Transform {
 	}
 }
 DEF OB_mesh33 Transform {
-	translation	0 0 0
+	translation	-34.5725 5.46991 -1.99303e-007
 	children DEF ME_mesh33-geometry Group {
 		children Shape {
 			appearance	Appearance {
@@ -8801,7 +8518,7 @@ DEF OB_mesh33 Transform {
 	}
 }
 DEF OB_mesh34 Transform {
-	translation	0 0 0
+	translation	0.0722374 0 0.00326084
 	children DEF ME_mesh34-geometry Group {
 		children Shape {
 			appearance	Appearance {
@@ -8825,7 +8542,7 @@ DEF OB_mesh34 Transform {
 		}
 	}
 }
-DEF OB_mesh35 Transform {
+DEF Gripper_axe_05 Transform {
 	translation	0 0 0
 	children DEF ME_mesh35-geometry Group {
 		children Shape {
@@ -8883,7 +8600,6 @@ DEF Gripper_Side_Bar_01 Transform {
 					emissiveColor	0.52 0.505622 0.0576665
 					shininess	0.1
 					specularColor	0.0008008 0.0008008 0.0008008
-					transparency	0
 				}
 
 			}
@@ -9083,7 +8799,7 @@ DEF Gripper_Side_Bar_01 Transform {
 		}
 	}
 }
-DEF OB_mesh38 Transform {
+DEF Gripper_Axe_part_01 Transform {
 	translation	0 0 0
 	children DEF ME_mesh38-geometry Group {
 		children Shape {
@@ -10246,28 +9962,18 @@ DEF Base_Servo_01 Transform {
 	    ]
     }
     }
-DEF Base_Serv0_02 Transform {
+DEF Base_Servo_02 Transform {
 	translation	0.047649 0.032249 -0.048203
 	rotation	0.57735 0.57735 0.57735  2.09439
 	scale	0.03498 0.028334 0.029383
 	children USE ME_mesh39-geometry }
-DEF OB_mesh39_002 Transform {
+DEF Elbow_Servo Transform {
 	translation	-0.046215 0.142036 0.003327
 	rotation	1 0 0  1.5708
 	scale	0.03498 0.028334 0.029383
 	children USE ME_mesh39-geometry }
-DEF OB_mesh39_003 Transform {
+DEF Gripper_Servo Transform {
 	translation	-0.043394 0.223955 0.002254
 	rotation	1 0 0  1.5708
 	scale	0.03498 0.028334 0.029383
 	children USE ME_mesh39-geometry }
-DEF OB_Camera_002 Transform {
-	translation	-36.2472 20.5107 -11.0576
-	rotation	0.398985 -0.756308 0.518468  2.08741
-	scale	1 1 0.999999
-	children DEF Camera_002 Viewpoint {
-		fieldOfView	0.701
-		orientation	-1 0 0  1.5708
-		description	"Camera.002"
-	}
-}
