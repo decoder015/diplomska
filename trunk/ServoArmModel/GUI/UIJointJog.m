@@ -80,11 +80,12 @@ function m_sliderJoint2_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 %get vlue form slider
-currentVl = get(hObject,'Value');
+global joint2Val;
+joint2Val = get(hObject,'Value');
 
 % set value to tboJoint0Val text edit control using handles!!!
-set(handles.m_tboJoint2Val, 'String', currentVl);
-disp(currentVl);
+set(handles.m_tboJoint2Val, 'String', joint2Val);
+%*********************************END*********************************
 
 % --- Executes during object creation, after setting all properties.
 function m_sliderJoint2_CreateFcn(hObject, eventdata, handles)
@@ -105,11 +106,11 @@ function m_sliderJoint1_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 %get vlue form slider
-currentVl = get(hObject,'Value');
+global joint1Val;
+joint1Val = get(hObject,'Value');
 
 % set value to tboJoint0Val text edit control using handles!!!
-set(handles.m_tboJoint1Val, 'String', currentVl);
-disp(currentVl);
+set(handles.m_tboJoint1Val, 'String', joint1Val);
 %*********************************END*********************************
 
 
@@ -132,11 +133,11 @@ function m_sliderJoint0_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 %get vlue form slider
-currentVl = get(hObject,'Value');
+global joint0Val;
+joint0Val = get(hObject,'Value');
 
 % set value to tboJoint0Val text edit control using handles!!!
-set(handles.m_tboJoint0Val, 'String', currentVl);
-disp(currentVl);
+set(handles.m_tboJoint0Val, 'String', joint0Val);
 %*********************************END*********************************
 
 % --- Executes during object creation, after setting all properties.
@@ -158,11 +159,11 @@ function m_sliderJoint3_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 %get vlue form slider
-currentVl = get(hObject,'Value');
+global joint3Val;
+joint3Val = get(hObject,'Value');
 
 % set value to tboJoint0Val text edit control using handles!!!
-set(handles.m_tboJoint3Val, 'String', currentVl);
-disp(currentVl);
+set(handles.m_tboJoint3Val, 'String', joint3Val);
 %*********************************END*********************************
 
 
