@@ -60,10 +60,13 @@ DEF ForeArm_sideBar_01 Transform {
 	children DEF ME_mesh1-geometry Group {
 		children Shape {
 			appearance	Appearance {
-				material	Material {
+				material	DEF MA_material_0_8ID_001 Material {
 					ambientIntensity	0.2
-					diffuseColor	0.9 0.55237 0.00733938
-					specularColor	1 1 1
+					diffuseColor	1 0.843137 0
+					emissiveColor	0.52 0.505622 0.0576665
+					shininess	0.1
+					specularColor	0.0008008 0.0008008 0.0008008
+					transparency	0
 				}
 
 			}
@@ -181,6 +184,7 @@ DEF ForeArm_sideBar_02 Transform {
 					emissiveColor	0.52 0.505622 0.0576665
 					shininess	0.1
 					specularColor	0.0008008 0.0008008 0.0008008
+					transparency	0
 				}
 
 			}
@@ -287,7 +291,7 @@ DEF ForeArm_sideBar_02 Transform {
 		}
 	}
 }
-DEF OB_mesh3 Transform {
+DEF Arm_sideBar_02 Transform {
 	translation	0 0 0
 	children DEF ME_mesh3-geometry Group {
 		children Shape {
@@ -507,7 +511,7 @@ DEF Arm_Side_Bar_01 Transform {
 		}
 	}
 }
-DEF OB_mesh5 Transform {
+DEF Gripper_finger_02_rubber Transform {
 	translation	0 0 0
 	children DEF ME_mesh5-geometry Group {
 		children Shape {
@@ -545,8 +549,8 @@ DEF OB_mesh5 Transform {
 		}
 	}
 }
-DEF OB_mesh6 Transform {
-	translation	0 0 0
+DEF Gripper_finger_02 Transform {
+	translation	-2.79397e-009 -3.74913e-005 -0.00135843
 	children DEF ME_mesh6-geometry Group {
 		children Shape {
 			appearance	Appearance {
@@ -1313,7 +1317,7 @@ DEF OB_mesh7 Transform {
 		}
 	}
 }
-DEF OB_mesh8 Transform {
+DEF Gripper_finger_02_tetiva_02 Transform {
 	translation	0 0 0
 	children DEF ME_mesh8-geometry Group {
 		children Shape {
@@ -1876,7 +1880,15 @@ DEF OB_mesh10 Transform {
 	children DEF ME_mesh10-geometry Group {
 		children Shape {
 			appearance	Appearance {
-				material	USE MA_material_2_2_0ID_001 
+				material	Material {
+					ambientIntensity	0.2
+					diffuseColor	0.8 0.8 0.8
+					emissiveColor	0 0 0
+					shininess	0.2
+					specularColor	1 1 1
+					transparency	0
+				}
+
 			}
 
 			geometry	IndexedFaceSet {
@@ -4465,7 +4477,7 @@ DEF OB_mesh16 Transform {
 	    }
     }
     }
-DEF OB_mesh17 Transform {
+DEF Gripper_base Transform {
 	translation	0 0 0
 	children DEF ME_mesh17-geometry Group {
 		children Shape {
@@ -5421,7 +5433,7 @@ DEF OB_mesh7_006 Transform {
 	rotation	-0.468674 0.477756 -0.743031  1.90898
 	scale	0.000612 0.000589 0.000199
 	children USE ME_mesh7-geometry }
-DEF OB_mesh18 Transform {
+DEF Gripper_finger_02_tetiva_01 Transform {
 	translation	0 0 0
 	children DEF ME_mesh18-geometry Group {
 		children Shape {
@@ -5904,7 +5916,7 @@ DEF OB_mesh7_008 Transform {
 	rotation	-0.468674 0.477756 -0.743031  1.90898
 	scale	0.000612 0.000589 0.000199
 	children USE ME_mesh7-geometry }
-DEF OB_mesh19 Transform {
+DEF Gripper_finger_01_tetiva_01 Transform {
 	translation	0 0 0
 	children DEF ME_mesh19-geometry Group {
 		children Shape {
@@ -6377,7 +6389,7 @@ DEF OB_mesh19 Transform {
 	    }
     }
     }
-DEF OB_mesh20 Transform {
+DEF Gripper_finger_01_rubber Transform {
 	translation	0 0 0
 	children DEF ME_mesh20-geometry Group {
 		children Shape {
@@ -6409,7 +6421,7 @@ DEF OB_mesh20 Transform {
 		}
 	}
 }
-DEF OB_mesh21 Transform {
+DEF Gripper_finger_01 Transform {
 	translation	0 0 0
 	children DEF ME_mesh21-geometry Group {
 		children Shape {
@@ -6923,7 +6935,7 @@ DEF OB_mesh7_009 Transform {
 	rotation	-0.468674 0.477756 -0.743031  1.90898
 	scale	0.000612 0.000589 0.000199
 	children USE ME_mesh7-geometry }
-DEF OB_mesh22 Transform {
+DEF Gripper_geer_02 Transform {
 	translation	0 0 0
 	children DEF ME_mesh22-geometry Group {
 		children Shape {
@@ -7581,7 +7593,7 @@ DEF OB_mesh23 Transform {
 		}
 	}
 }
-DEF OB_mesh24 Transform {
+DEF Gripper_geer_01 Transform {
 	translation	0 0 0
 	children DEF ME_mesh24-geometry Group {
 		children Shape {
@@ -8366,7 +8378,7 @@ DEF Base Transform {
 		}
 	}
 }
-DEF OB_mesh27 Transform {
+DEF Gripper_axe Transform {
 	translation	0 0 0
 	children DEF ME_mesh27-geometry Group {
 		children Shape {
@@ -8544,12 +8556,20 @@ DEF OB_mesh31 Transform {
 		}
 	}
 }
-DEF OB_mesh32 Transform {
+DEF Gripper_side_bar_02 Transform {
 	translation	0 0 0
 	children DEF ME_mesh32-geometry Group {
 		children Shape {
 			appearance	Appearance {
-				material	USE MA_material_0_0ID_001 
+				material	DEF MA_material_0_8ID_001 Material {
+					ambientIntensity	0.2
+					diffuseColor	1 0.843137 0
+					emissiveColor	0.52 0.505622 0.0576665
+					shininess	0.1
+					specularColor	0.0008008 0.0008008 0.0008008
+					transparency	0
+				}
+
 			}
 
 			geometry	IndexedFaceSet {
@@ -8841,12 +8861,20 @@ DEF OB_mesh36 Transform {
 		}
 	}
 }
-DEF OB_mesh37 Transform {
+DEF Gripper_Side_Bar_01 Transform {
 	translation	0 0 0
 	children DEF ME_mesh37-geometry Group {
 		children Shape {
 			appearance	Appearance {
-				material	USE MA_material_0_0ID_001 
+				material	DEF MA_material_0_8ID_001 Material {
+					ambientIntensity	0.2
+					diffuseColor	1 0.843137 0
+					emissiveColor	0.52 0.505622 0.0576665
+					shininess	0.1
+					specularColor	0.0008008 0.0008008 0.0008008
+					transparency	0
+				}
+
 			}
 
 			geometry	IndexedFaceSet {
