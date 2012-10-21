@@ -6,7 +6,7 @@
 
 
 SpotLight {
-	ambientIntensity	1
+	ambientIntensity	0.3
 	attenuation	1 0 0
 	beamWidth	1.47
 	color	1 0.897959 0.960663
@@ -1875,7 +1875,7 @@ DEF OB_mesh7_001 Transform {
 	rotation	-0.468674 0.477756 -0.743031  1.90898
 	scale	0.000612 0.000589 0.000199
 	children USE ME_mesh7-geometry }
-DEF OB_mesh10 Transform {
+DEF Gripper_finger_01_tetiva_02 Transform {
 	translation	0 0 0
 	children DEF ME_mesh10-geometry Group {
 		children Shape {
@@ -2420,7 +2420,7 @@ DEF OB_mesh7_003 Transform {
 	rotation	-0.468674 0.477756 -0.743031  1.90898
 	scale	0.000612 0.000589 0.000199
 	children USE ME_mesh7-geometry }
-DEF OB_mesh11 Transform {
+DEF Gripper_finger_02_tetiva_03 Transform {
 	translation	0 0 0
 	children DEF ME_mesh11-geometry Group {
 		children Shape {
@@ -3414,7 +3414,7 @@ DEF OB_mesh13 Transform {
 	    }
     }
     }
-DEF OB_mesh14 Transform {
+DEF Gripper_finger_02_tetiva_04 Transform {
 	translation	0 0 0
 	children DEF ME_mesh14-geometry Group {
 		children Shape {
@@ -6940,11 +6940,13 @@ DEF Gripper_geer_02 Transform {
 	children DEF ME_mesh22-geometry Group {
 		children Shape {
 			appearance	Appearance {
-				material	DEF MA_material_4_0ID_001 Material {
-					ambientIntensity	0.166667
-					diffuseColor	0.54902 0.545098 0.505882
-					shininess	0.0976563
-					specularColor	0.0008008 0.0008008 0.0008008
+				material	Material {
+					ambientIntensity	0.2
+					diffuseColor	0.8 0.8 0.8
+					emissiveColor	0 0 0
+					shininess	0.2
+					specularColor	1 1 1
+					transparency	0
 				}
 
 			}
@@ -7570,7 +7572,13 @@ DEF OB_mesh23 Transform {
 	children DEF ME_mesh23-geometry Group {
 		children Shape {
 			appearance	Appearance {
-				material	USE MA_material_4_0ID_001 
+				material	DEF MA_material_4_0ID_001 Material {
+					ambientIntensity	0.166667
+					diffuseColor	0.54902 0.545098 0.505882
+					shininess	0.0976563
+					specularColor	0.0008008 0.0008008 0.0008008
+				}
+
 			}
 
 			geometry	IndexedFaceSet {
@@ -8251,9 +8259,12 @@ DEF Base Transform {
 		children Shape {
 			appearance	Appearance {
 				material	Material {
-					ambientIntensity	0.1
-					diffuseColor	0.9 0.55237 0.00733938
+					ambientIntensity	0.2
+					diffuseColor	0 0 0
+					emissiveColor	0 0 0
+					shininess	0.2
 					specularColor	1 1 1
+					transparency	0
 				}
 
 			}
@@ -10235,7 +10246,7 @@ DEF Base_Servo_01 Transform {
 	    ]
     }
     }
-DEF OB_mesh39_001 Transform {
+DEF Base_Serv0_02 Transform {
 	translation	0.047649 0.032249 -0.048203
 	rotation	0.57735 0.57735 0.57735  2.09439
 	scale	0.03498 0.028334 0.029383
