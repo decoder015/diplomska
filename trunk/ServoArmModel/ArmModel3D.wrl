@@ -55,8 +55,8 @@ NavigationInfo {
 			  "ANY" ]
 	visibilityLimit	25.4
 }
-DEF OB_mesh1 Transform {
-	translation	0 0 0
+DEF ForeArm_sideBar_01 Transform {
+	translation	-4.42378e-009 -1.49012e-008 7.45058e-009
 	children DEF ME_mesh1-geometry Group {
 		children Shape {
 			appearance	Appearance {
@@ -170,7 +170,7 @@ DEF OB_mesh1 Transform {
 		}
 	}
 }
-DEF OB_mesh2 Transform {
+DEF ForeArm_sideBar_02 Transform {
 	translation	0 0 0
 	children DEF ME_mesh2-geometry Group {
 		children Shape {
@@ -397,7 +397,7 @@ DEF OB_mesh3 Transform {
 		}
 	}
 }
-DEF OB_mesh4 Transform {
+DEF Arm_Side_Bar_01 Transform {
 	translation	0 0 0
 	children DEF ME_mesh4-geometry Group {
 		children Shape {
@@ -9067,7 +9067,7 @@ DEF OB_mesh38 Transform {
 		}
 	}
 }
-DEF OB_mesh39 Transform {
+DEF Base_Servo_01 Transform {
 	translation	0.047649 0.032249 0.003327
 	rotation	0.57735 0.57735 0.57735  2.09439
 	scale	0.03498 0.028334 0.029383

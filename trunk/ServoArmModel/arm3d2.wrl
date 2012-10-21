@@ -6,11 +6,10 @@
 
 
 DEF RoboticArm Transform {
-	translation	0 0 0.42
-	rotation	-1 0 0  1.5708
+	translation	0 0 0
 	children [ 
 	    DEF Arm Transform {
-		    translation	0 -0.4 0
+		    translation	0 0 0
 		    scale	0.1 0.1 0.1
 		    children [ 
 			DEF Sholder_sideBar_02 Transform {
@@ -2629,7 +2628,7 @@ DEF RoboticArm Transform {
     }
 
     DEF ForeArm Transform {
-	    translation	0 -0.4 0
+	    translation	0 0 0
 	    scale	0.1 0.1 0.1
 	    children [ 
 		DEF Arm_sideBar_02 Transform {
@@ -8768,7 +8767,7 @@ DEF RoboticArm Transform {
     }
 
     DEF Gripper Transform {
-    translation	0 -0.4 0
+    translation	0 0 0
     scale	0.1 0.1 0.1
     children [ 
 DEF Gripper_sideBar_01 Transform {
@@ -10602,7 +10601,7 @@ DEF Gripper_Servo Transform {
 }
 
 DEF Gripper_Mechanism Transform {
-translation	0 -0.4 0
+translation	0 0 0
 scale	0.1 0.1 0.1
 children [ 
     DEF Gripper_base Transform {
@@ -20546,7 +20545,7 @@ coordIndex	[ 2, 0, 1, -1, 1, 0, 3, -1,
     }
 ]
 }
-Transform {
+DEF Cone Transform {
 	translation	0 0.25 0
 	rotation	0 0 -1  3.14159
 	children Shape {
@@ -20581,6 +20580,25 @@ DEF Table Transform {
 
 	}
 }
+Transform {
+	translation	0 0 0
+	children Shape {
+		appearance	Appearance {
+			material	Material {
+				ambientIntensity	0.2
+				diffuseColor	0.0065239 0.8 0.0942574
+			}
+
+		}
+
+		geometry	Cylinder {
+			height	0.5
+			radius	0.002
+			bottom	TRUE
+		}
+
+	}
+}
 Background {
 	groundAngle	[ 0.9, 1.5, 1.57 ]
 	groundColor	[ 0 0.8 0,
@@ -20601,8 +20619,7 @@ NavigationInfo {
 	visibilityLimit	25.4
 }
 DEF Base_Cube Transform {
-	translation	5.96046e-008 -3.72529e-009 0.8
-	rotation	1 0 0  4.71239
+	translation	0 0 0
 	scale	0.1 0.1 0.1
 	children DEF BaseCube_mesh22-geometry Group {
 		bboxCenter	0 0 0
