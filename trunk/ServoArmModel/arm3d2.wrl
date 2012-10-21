@@ -20740,15 +20740,6 @@ DEF Base_Cube Transform {
 		}
 	}
 }
-DEF SideView01 Viewpoint {
-	orientation	0.233439 0.657322 0.716543  2.7187
-	position	14.5774 22.4404 2.0252
-	description	"SideView01"
-}
-DEF SideView02 Viewpoint {
-	position	-1.5 1.1 0.5
-	description	"TopView"
-}
 Viewpoint {
 	orientation	-0.991749 -0.127436 -0.0138987  0.281708
 	position	0.419511 0.669813 1.45322
@@ -20762,13 +20753,4 @@ Viewpoint {
 	orientation	0 1 0  1.31947
 	position	1.1 0 0.5
 	description	"SideViewCloseUp"
-}
-DEF OB_Camera_001 Transform {
-	translation	9.8384 7.80679 2.23531
-	rotation	0.371858 0.606784 0.70252  2.32851
-	children DEF Camera_001 Viewpoint {
-		fieldOfView	0.701
-		orientation	-1 0 0  1.5708
-		description	"Camera.001"
-	}
 }

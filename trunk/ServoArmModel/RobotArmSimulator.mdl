@@ -6,7 +6,7 @@ Model {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.14"
+    ComputedModelVersion    "1.16"
     NumModelReferences	    0
     NumTestPointedSignals   0
   }
@@ -26,9 +26,9 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "Owner"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Sun Oct 21 12:21:36 2012"
-  RTWModifiedTimeStamp	  272721798
-  ModelVersionFormat	  "1.%<AutoIncrement:14>"
+  LastModifiedDate	  "Sun Oct 21 12:42:03 2012"
+  RTWModifiedTimeStamp	  272723987
+  ModelVersionFormat	  "1.%<AutoIncrement:16>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -131,7 +131,7 @@ Model {
 	  $ObjectID		  3
 	  Version		  "1.11.0"
 	  StartTime		  "0.0"
-	  StopTime		  "10.0"
+	  StopTime		  "inf"
 	  AbsTol		  "auto"
 	  FixedStep		  "auto"
 	  InitialStep		  "auto"
@@ -660,6 +660,19 @@ Model {
   }
   BlockParameterDefaults {
     Block {
+      BlockType		      Constant
+      Value		      "1"
+      VectorParams1D	      on
+      SamplingMode	      "Sample based"
+      OutMin		      "[]"
+      OutMax		      "[]"
+      OutDataTypeStr	      "Inherit: Inherit from 'Constant value'"
+      LockScale		      off
+      SampleTime	      "inf"
+      FramePeriod	      "inf"
+      PreserveConstantTs      off
+    }
+    Block {
       BlockType		      Display
       Format		      "short"
       Decimation	      "10"
@@ -680,10 +693,18 @@ Model {
       FunctionName	      "matlabfile"
       DisplayMFileStacktrace  on
     }
+    Block {
+      BlockType		      Mux
+      Inputs		      "4"
+      DisplayOption	      "none"
+      UseBusObject	      off
+      BusObject		      "BusObject"
+      NonVirtualBus	      off
+    }
   }
   System {
     Name		    "RobotArmSimulator"
-    Location		    [164, 78, 1255, 751]
+    Location		    [164, 82, 1255, 755]
     Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -697,7 +718,27 @@ Model {
     ShowPageBoundaries	    off
     ZoomFactor		    "100"
     ReportName		    "simulink-default.rpt"
-    SIDHighWatermark	    "18"
+    SIDHighWatermark	    "23"
+    Block {
+      BlockType		      Constant
+      Name		      "Constant"
+      SID		      "21"
+      Position		      [560, 70, 590, 100]
+    }
+    Block {
+      BlockType		      Constant
+      Name		      "Constant1"
+      SID		      "22"
+      Position		      [560, 120, 590, 150]
+      Value		      "0"
+    }
+    Block {
+      BlockType		      Constant
+      Name		      "Constant2"
+      SID		      "23"
+      Position		      [560, 170, 590, 200]
+      Value		      "0"
+    }
     Block {
       BlockType		      Display
       Name		      "Display"
@@ -767,6 +808,14 @@ Model {
       GotoTag		      "Joint3"
     }
     Block {
+      BlockType		      From
+      Name		      "From4"
+      SID		      "19"
+      Position		      [530, 224, 620, 246]
+      BackgroundColor	      "lightBlue"
+      GotoTag		      "Joint0"
+    }
+    Block {
       BlockType		      Goto
       Name		      "Goto"
       SID		      "11"
@@ -801,6 +850,15 @@ Model {
       BackgroundColor	      "orange"
       GotoTag		      "Joint3"
       TagVisibility	      "local"
+    }
+    Block {
+      BlockType		      Mux
+      Name		      "Mux"
+      SID		      "20"
+      Ports		      [4, 1]
+      Position		      [705, 62, 725, 258]
+      ShowName		      off
+      DisplayOption	      "bar"
     }
     Block {
       BlockType		      M-S-Function
@@ -883,6 +941,36 @@ Model {
       SrcPort		      1
       DstBlock		      "Display3"
       DstPort		      1
+    }
+    Line {
+      SrcBlock		      "Mux"
+      SrcPort		      1
+      DstBlock		      "VR Sink"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "From4"
+      SrcPort		      1
+      DstBlock		      "Mux"
+      DstPort		      4
+    }
+    Line {
+      SrcBlock		      "Constant"
+      SrcPort		      1
+      DstBlock		      "Mux"
+      DstPort		      1
+    }
+    Line {
+      SrcBlock		      "Constant1"
+      SrcPort		      1
+      DstBlock		      "Mux"
+      DstPort		      2
+    }
+    Line {
+      SrcBlock		      "Constant2"
+      SrcPort		      1
+      DstBlock		      "Mux"
+      DstPort		      3
     }
   }
 }
