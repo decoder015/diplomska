@@ -14,9 +14,7 @@ joint1Val = 0;
 joint2Val = 0;
 joint3Val = 0;
 
-%% Show the GUI and run the sim
-
-%hanlde = UIJointJog;
+%% Kinematic model in meters
 
 % world frame 
 % x+ is to the right 
@@ -29,35 +27,62 @@ worldFrame = [ 1, 0, 0, 0;
     ];
 
 % current robot orientation
-% x+ is to the right
-% y+ is towrd me
-% z+ is down
-FromRobotToWorld =   [1, 0,  0,   -0.5;
-                      0, 0, -1,    0;
-                      0, 1,  0,   -0.51;
-                      0, 0,  0,   1;
-    ];
-FromWorldToRobot = inv(FromRobotToWorld)
+% Fore arm
+Joint0Frame =   [1, 0,  0,   0;
+                 0, 1,  0,   0.06;
+                 0, 0,  1,   0;
+                 0, 0,  0,   1;
+                 ];
+% Fore arm            
+Joint1Frame =   [1, 0,  0,   0;
+                 0, 1,  0,   0.16;
+                 0, 0,  1,   0;
+                 0, 0,  0,   1;
+                 ];  
 
-CenterRobotInWorldFrame=[0.5, 0.51, 0, 1]';
-CenterWorldFrame = [0,0,0,1]';
+Joint2Frame =   [1, 0,  0,   0;
+                 0, 1,  0,   0.26;
+                 0, 0,  1,   0;
+                 0, 0,  0,   1;
+                 ];             
+             
+%% Show the GUI and run the sim
 
-% transformation from  frame to robot frame
-FromRobotToWorld * CenterRobotInWorldFrame ;
-
-% transformation from world frame to robot frame
-FromWorldToRobot * CenterWorldFrame ;
-
-
-%%
+%hanlde = UIJointJog;
 world = vrworld('ArmModel3D.wrl', 'new');
 open(world);
 fig = vrfigure(world);
+%% Get robot components
 baseCube = vrnode(world, 'Base');
-disp(baseCube.translation);% = [-.5, -.51, 0];
-disp(baseCube.rotation);
-for i=0:0.1:2*pi
-    pause(0.1)
-    baseCube.rotation = [0,1,0,i];
-end
+foreArm  = vrnode(world, 'ForeArm');
+arm = vrnode(world, 'Arm');
+%% Do the transformations
+% parameters in degres:
+% theta0
+% theta1
+% theta2
+% theta3
+
+theta0 = 45;
+theta1 = 45;
+
+Joint0FrameInv = [];
+Joint0FrameInv = inv(Joint0Frame);
+disp(Joint0FrameInv)
+
+foreArmTranslation = GetTranslationFromFrame(Joint0FrameInv)
+foreArm.translation = foreArmTranslation(1:3);
+
+%[RotationAxe, Angle]
+vectorY = GetY(Joint0FrameInv);
+Joint0RotationVector = [vectorY(1:3), theta1];
+disp(Joint0RotationVector);
+foreArm.rotation = Joint0RotationVector;
+
+%plot frame
+%trplot(Joint0FrameInv, 'frame', 'Joint0')
+
+
+
+
 %sim('JointJogSim');
