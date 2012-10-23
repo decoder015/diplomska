@@ -43,7 +43,13 @@ Joint2Frame =   [1, 0,  0,   0;
                  0, 1,  0,   0.11;  % link 2 arm offset
                  0, 0,  1,   0;
                  0, 0,  0,   1;
-                 ];             
+                 ];
+             
+VR_Joint2Frame =[1, 0,  0,   0;
+                 0, 1,  0,   0.19;  % link 2 arm offset
+                 0, 0,  1,   0;
+                 0, 0,  0,   1;
+                 ];                     
 center = [0,0,0,1];
 Joint1Offset = [];
 Joint2Offset = [];
@@ -56,6 +62,7 @@ fig = vrfigure(world);
 baseCube = vrnode(world, 'Base');
 foreArm  = vrnode(world, 'ForeArm');
 arm = vrnode(world, 'Arm');
+gripper = vrnode(world, 'Gripper');
 %% Do the transformations
 % parameters in degres:
 % theta0
@@ -70,16 +77,16 @@ fprintf('                         Joint1                                 \n');
 fprintf('****************************************************************\n')
 
 % angle
-theta1 = 90;
+theta1 = 0;
 fprintf('Theta1: %d\n' ,theta1);
 
 % rotation bu angle of theta in degrees
-Joint1Frame = Joint1Frame * rothz(theta1);
+Joint1Frame =  Joint1Frame * rothz(theta1);
 
 fprintf('Joint 1 frame:\n');
 disp(Joint1Frame);
 
-Joint1Offset = Joint1Frame * center';
+Joint1Offset =  Joint1Frame * center';
  % 3d vector no homogeneous 
 Joint1Offset = Joint1Offset(1:3)';
 
@@ -107,15 +114,13 @@ fprintf('****************************************************************\n');
 fprintf('                         Joint2                                 \n');
 fprintf('****************************************************************\n');
 
-theta2 = 0;
+theta2 = -90;
 fprintf('Theta2:');
 disp(theta2);
 
 %rotate by joint1 rotation
 Joint2Frame =  Joint1Frame * Joint2Frame;
-
-test = [0,0.19,0];
-test * rotz(theta0)
+Joint2Frame = Joint2Frame * rothz(theta2);
 
 fprintf('Joint 2 frame:\n');
 disp(Joint2Frame);
@@ -126,15 +131,33 @@ Joint2Offset = Joint2Offset(1:3)'; %3d vector no homogenious
 fprintf('Joint2Offset:\n');
 disp(Joint2Offset);
 
-% get axis angle representation from rotation matrix
-arm.rotation = vrrotmat2vec( (rotz(pi/2)) ); %t2r(Joint2Frame) 
+VR_Joint2Position=[0,0.19,0,1];
 
+VR_Joint2Frame = rothz(theta2) * VR_Joint2Frame
+
+VR_Joint2Position = GetTranslationFromFrame(VR_Joint2Frame);
+
+fprintf('VR_Joint2Position:\n');
+disp(VR_Joint2Position);
+
+VR_Translation = (-1)* VR_Joint2Position(1:3) + Joint2Offset;
+
+fprintf('translation');
+disp(VR_Translation);
+% get axis angle representation from rotation matrix
+vrrotmat2vec( t2r(Joint2Frame) )
+arm.rotation = vrrotmat2vec( t2r(VR_Joint2Frame) ); %t2r(Joint2Frame) 
+arm.translation = VR_Translation; %= Joint2Offset;
  vrdrawnow; 
 %%  Rotate Joint3
 fprintf('****************************************************************\n');
 fprintf('                         Joint3                                 \n');
 fprintf('****************************************************************\n');
 
+
+% get axis angle representation from rotation matrix
+gripper.rotation = vrrotmat2vec( (rotz(pi/2)) ); %t2r(Joint2Frame) 
+gripper.translation = tmpJoint1Offset;
 %Joint2Frame = Joint2Frame * Joint1Frame * rothz(theta2);
 %Joint2Offset = Joint2Offset * t2r(Joint1Frame);
 %disp(Joint2Frame);
