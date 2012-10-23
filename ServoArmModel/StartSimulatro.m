@@ -35,7 +35,7 @@ Joint0Frame =   [1, 0,  0,   0;
                  ];
 % Fore arm            
 Joint1Frame =   [1, 0,  0,   0;
-                 0, 1,  0,   0.16;
+                 0, 1,  0,   0.08;
                  0, 0,  1,   0;
                  0, 0,  0,   1;
                  ];  
@@ -45,10 +45,11 @@ Joint2Frame =   [1, 0,  0,   0;
                  0, 0,  1,   0;
                  0, 0,  0,   1;
                  ];             
-             
+
+Joint1Offset = [0, 0.08, 0];
 %% Show the GUI and run the sim
 
-%hanlde = UIJointJog;
+hanlde = UIJointJog;
 world = vrworld('ArmModel3D.wrl', 'new');
 open(world);
 fig = vrfigure(world);
@@ -62,27 +63,29 @@ arm = vrnode(world, 'Arm');
 % theta1
 % theta2
 % theta3
+%% Rotate Joint0
+theta0 = 10;
 
-theta0 = 45;
-theta1 = 45;
+%% Rotate Joint1
+theta1 = 10;
 
-Joint0FrameInv = [];
-Joint0FrameInv = inv(Joint0Frame);
-disp(Joint0FrameInv)
+Joint1Frame = Joint1Frame * rothz(theta1);
+tmpJoint1Offset = Joint1Offset * t2r(Joint1Frame);
 
-foreArmTranslation = GetTranslationFromFrame(Joint0FrameInv)
-foreArm.translation = foreArmTranslation(1:3);
+disp(Joint1Frame);
+disp(tmpJoint1Offset);
 
-%[RotationAxe, Angle]
-vectorY = GetY(Joint0FrameInv);
-Joint0RotationVector = [vectorY(1:3), theta1];
-disp(Joint0RotationVector);
-foreArm.rotation = Joint0RotationVector;
+tmpJoint1Offset(1,1) = tmpJoint1Offset(1,1);
+tmpJoint1Offset(1,2) = Joint1Offset(1,2) - tmpJoint1Offset(1,2);
+tmpJoint1Offset(1,3) = tmpJoint1Offset(1,3);
 
+disp(Joint1Offset);
+disp(tmpJoint1Offset);
+
+% get axis angle representation form rottion matrix
+foreArm.rotation = vrrotmat2vec( t2r(Joint1Frame) );
+foreArm.translation = tmpJoint1Offset;
+%% Rotate Joint2
 %plot frame
 %trplot(Joint0FrameInv, 'frame', 'Joint0')
-
-
-
-
 %sim('JointJogSim');
