@@ -1,18 +1,4 @@
-%%
-clc;
-close all;
-clear all;
-%% Global variables for rotation of joints 
-% used for communication between GUI and Simulink
-global joint0Val ;
-global joint1Val ;
-global joint2Val ;
-global joint3Val ;
-%% Global variables initialization
-joint0Val = 0;
-joint1Val = 0;
-joint2Val = 0;
-joint3Val = 0;
+function [foreArmRotation foreArmTranslation armRotation armTranslation gripperRotation gripperTranslation] = JointValuesToVRTranformations(joint0Val, joint1Val, joint2Val, joint3Val)
 %% Kinematic model in meters
 % world frame 
 % x+ is to the right 
@@ -53,16 +39,7 @@ VR_Joint2Frame =[1, 0,  0,   0;
 center = [0,0,0,1];
 Joint1Offset = [];
 Joint2Offset = [];
-%% Show the GUI and run the sim
-%hanlde = UIJointJog;
-world = vrworld('ArmModel3D.wrl', 'new');
-open(world);
-fig = vrfigure(world);
-%% Get the robot components
-baseCube = vrnode(world, 'Base');
-foreArm  = vrnode(world, 'ForeArm');
-arm = vrnode(world, 'Arm');
-gripper = vrnode(world, 'Gripper');
+
 %% Do the transformations
 % parameters in degres:
 % theta0
@@ -70,14 +47,14 @@ gripper = vrnode(world, 'Gripper');
 % theta2
 % theta3
 %% Rotate Joint0
-theta0 = 10;
+theta0 = joint0Val;
 %% Rotate Joint1
 fprintf('****************************************************************\n');
 fprintf('                         Joint1                                 \n');
 fprintf('****************************************************************\n')
 
 % angle
-theta1 = 90;
+theta1 = joint1Val;
 fprintf('Theta1: %d\n' ,theta1);
 
 % rotation bu angle of theta in degrees
@@ -105,16 +82,17 @@ disp(tmpJoint1Offset);
 %Joint1Frame * testv
 
 % get axis angle representation from rotation matrix
-foreArm.rotation = vrrotmat2vec( t2r(Joint1Frame) );
-foreArm.translation = tmpJoint1Offset;
-
+foreArmRotation = vrrotmat2vec( t2r(Joint1Frame) );
+foreArmTranslation = tmpJoint1Offset;
+fprintf('foreArmRotation');
+disp(foreArmRotation);
  vrdrawnow;
 %% Rotate Joint2
 fprintf('****************************************************************\n');
 fprintf('                         Joint2                                 \n');
 fprintf('****************************************************************\n');
 
-theta2 = -40;
+theta2 = joint2Val;
 fprintf('Theta2:');
 disp(theta2);
 
@@ -134,7 +112,7 @@ disp(Joint2Offset);
 VR_Joint2Position=[0,0.19,0,1];
 
 % ret rotation in VR world
-VR_Joint2Frame = rothz(theta1 + theta2) * VR_Joint2Frame
+VR_Joint2Frame = rothz(theta1 + theta2) * VR_Joint2Frame;
 
 VR_Joint2Position = GetTranslationFromFrame(VR_Joint2Frame);
 
@@ -146,42 +124,17 @@ VR_Translation = (-1)* VR_Joint2Position(1:3) + Joint2Offset;
 fprintf('translation');
 disp(VR_Translation);
 % get axis angle representation from rotation matrix
-vrrotmat2vec( t2r(Joint2Frame) )
-arm.rotation = vrrotmat2vec( t2r(VR_Joint2Frame) ); %t2r(Joint2Frame) 
-arm.translation = VR_Translation; %= Joint2Offset;
- vrdrawnow; 
+
+armRotation = vrrotmat2vec( t2r(VR_Joint2Frame) ); %t2r(Joint2Frame) 
+armTranslation = VR_Translation; %= Joint2Offset;
+ 
 %%  Rotate Joint3
 fprintf('****************************************************************\n');
 fprintf('                         Joint3                                 \n');
 fprintf('****************************************************************\n');
 
-
+theta3= joint3Val;
 % get axis angle representation from rotation matrix
-gripper.rotation = vrrotmat2vec( (rotz(pi/2)) ); %t2r(Joint2Frame) 
-gripper.translation = tmpJoint1Offset;
-
-test = JointValuesToVRTranformations(0,0,0,0);
-%Joint2Frame = Joint2Frame * Joint1Frame * rothz(theta2);
-%Joint2Offset = Joint2Offset * t2r(Joint1Frame);
-%disp(Joint2Frame);
-%disp(Joint2Offset);
-
-%tmpJoint2Offset = tmpJoint1Offset + Joint2Offset * t2r(Joint2Frame);
-
-
-%disp(tmpJoint2Offset);
-
-%tmpJoint2Offset(1,1) = tmpJoint2Offset(1,1);
-%tmpJoint2Offset(1,2) = Joint2Offset(1,2) - tmpJoint2Offset(1,2);
-%tmpJoint2Offset(1,3) = tmpJoint2Offset(1,3);
-
-%disp(Joint2Offset);
-%disp(tmpJoint2Offset);
-
-% get axis angle representation form rottion matrix
-%arm.rotation = vrrotmat2vec( t2r(Joint2Frame) );
-%arm.translation = tmpJoint2Offset;
-
-%plot frame
-%trplot(Joint0FrameInv, 'frame', 'Joint0')
-%sim('JointJogSim');
+gripperRotation = vrrotmat2vec( (rotz(pi/2)) ); %t2r(Joint2Frame) 
+gripperTranslation = tmpJoint1Offset;
+end
