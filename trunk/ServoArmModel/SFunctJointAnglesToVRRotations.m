@@ -3,8 +3,7 @@ function SFunctJointAnglesToVRRotations(block)
 %   Copyright 1990-2009 The MathWorks, Inc.
 %   $Revision: 1.1.6.2 $ 
 
-  setup(block);
-  
+  setup(block);  
 %endfunction
 
 function setup(block)
@@ -13,10 +12,7 @@ function setup(block)
   block.NumInputPorts  = 4;
   block.NumOutputPorts = 8;
 
-  %% Setup functional port properties to dynamically
-  %% inherited.
-  %block.SetPreCompInpPortInfoToDynamic;
-  %block.SetPreCompOutPortInfoToDynamic;
+  %% Setup functional port properties to dynamically inherited.
   %% Setup functional port to default
   block.SetPreCompPortInfoToDefaults;
 
@@ -61,20 +57,17 @@ function Output(block)
   
   % get VR transformations 
   [vr_foreArmRotation, vr_foreArmTranslation,...
-   vr_armRotation, vr_armTranslation,...
+   vr_armRotation,     vr_armTranslation,...
    vr_gripperRotation, vr_gripperTranslation] = JointValuesToVRTranformations(joint0Val, joint1Val, joint2Val, joint3Val);
 
-  %fprintf('VR parameters:');
-  %disp(roboticArmVRtransformations);
   
-  %roboticArmVRtransformations(1)
   % set output
-  block.OutputPort(1).Data = vr_foreArmRotation;%roboticArmVRtransformations(1); %*block.InputPort(1).Data;
-  block.OutputPort(2).Data = vr_foreArmTranslation;%[0,0,0];%roboticArmVRtransformations(2);
-  block.OutputPort(3).Data = vr_armRotation; %[0,0,0,0];%roboticArmVRtransformations(3);
-  block.OutputPort(4).Data = vr_armTranslation;%[0,0,0];%roboticArmVRtransformations(4);
+  block.OutputPort(1).Data = vr_foreArmRotation;
+  block.OutputPort(2).Data = vr_foreArmTranslation;
+  block.OutputPort(3).Data = vr_armRotation; 
+  block.OutputPort(4).Data = vr_armTranslation;
   
-  block.OutputPort(5).Data = vr_gripperRotation; %*block.InputPort(1).Data;
+  block.OutputPort(5).Data = vr_gripperRotation; 
   block.OutputPort(6).Data = vr_gripperTranslation;
   block.OutputPort(7).Data = [0,0,0,0];
   block.OutputPort(8).Data = [0,0,0];
