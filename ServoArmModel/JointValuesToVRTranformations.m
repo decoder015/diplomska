@@ -134,6 +134,24 @@ fprintf('                         Joint3                                 \n');
 fprintf('****************************************************************\n');
 
 theta3= joint3Val;
+
+fprintf('Theta3:');
+disp(theta3);
+
+%rotate by joint3 rotation
+Joint3Frame =  Joint1Frame * Joint2Frame * Joint2Frame;
+%Joint3Frame = Joint3Frame * rothz(theta3);
+
+fprintf('Joint 3 frame:\n');
+disp(Joint2Frame);
+
+Joint3Offset = Joint3Frame * center';
+Joint3Offset = Joint2Offset(1:3)'; %3d vector no homogenious
+
+fprintf('Joint2Offset:\n');
+disp(Joint2Offset);
+
+
 % get axis angle representation from rotation matrix
 gripperRotation = vrrotmat2vec( (rotz(pi/2)) ); %t2r(Joint2Frame) 
 gripperTranslation = tmpJoint1Offset;
