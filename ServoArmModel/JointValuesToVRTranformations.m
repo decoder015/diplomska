@@ -20,25 +20,25 @@ Joint0Frame =   [1, 0,  0,   0;
              
 % Fore arm  Joint 1          
 Joint1Frame =   [1, 0,  0,   0;
-                 0, 1,  0,   0.08; % link 1 offset (fore arm)
+                 0, 1,  0,   0.0837; % link 1 offset (fore arm)
                  0, 0,  1,   0;
                  0, 0,  0,   1;
                  ];  
 
 Joint2Frame =   [1, 0,  0,   0;
-                 0, 1,  0,   0.10;  % link 2 arm offset
+                 0, 1,  0,   0.1014;  % link 2 arm offset
                  0, 0,  1,   0;
                  0, 0,  0,   1;
                  ];
              
 Joint3Frame =   [1, 0,  0,   0;
-                 0, 1,  0,   0.08;  % link 2 arm offset
+                 0, 1,  0,   0.0825;  % link 2 arm offset
                  0, 0,  1,   0;
                  0, 0,  0,   1;
                  ];
                          
 VR_Joint2Frame =[1, 0,  0,   0;
-                 0, 1,  0,   0.18;  % link 2 arm offset
+                 0, 1,  0,   0.185;  %185 link 2 arm offset
                  0, 0,  1,   0;
                  0, 0,  0,   1;
                  ];

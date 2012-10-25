@@ -6,7 +6,7 @@ Model {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.27"
+    ComputedModelVersion    "1.32"
     NumModelReferences	    0
     NumTestPointedSignals   0
   }
@@ -20,15 +20,17 @@ Model {
   MinMaxOverflowLogging	  "UseLocalSettings"
   MinMaxOverflowArchiveMode "Overwrite"
   MaxMDLFileLineLength	  120
+  StartFcn		  "% global vars \nglobal joint0Val ;\nglobal joint1Val ;\nglobal joint2Val ;\nglobal joint3Val ;\n\n%init"
+  "\njoint0Val = 0;\njoint1Val = 0;\njoint2Val = 0;\njoint3Val = 0;\n\n% show the JointJog\nUiJointJog"
   Created		  "Wed Oct 17 23:51:18 2012"
   Creator		  "Owner"
   UpdateHistory		  "UpdateHistoryNever"
   ModifiedByFormat	  "%<Auto>"
-  LastModifiedBy	  "user"
+  LastModifiedBy	  "Owner"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Wed Oct 24 13:22:00 2012"
-  RTWModifiedTimeStamp	  272976359
-  ModelVersionFormat	  "1.%<AutoIncrement:27>"
+  LastModifiedDate	  "Thu Oct 25 21:46:44 2012"
+  RTWModifiedTimeStamp	  273101991
+  ModelVersionFormat	  "1.%<AutoIncrement:32>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -65,6 +67,7 @@ Model {
     $ObjectID		    1
     $ClassName		    "Simulink.SimulationData.ModelLoggingInfo"
     model_		    "RobotArmSimulator"
+    signals_		    []
     overrideMode_	    [0.0]
     Array {
       Type		      "Cell"
@@ -703,7 +706,7 @@ Model {
   }
   System {
     Name		    "RobotArmSimulator"
-    Location		    [1282, 78, 2627, 748]
+    Location		    [116, 82, 1367, 752]
     Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -852,7 +855,7 @@ Model {
       BlockType		      From
       Name		      "From7"
       SID		      "27"
-      Position		      [315, 524, 405, 546]
+      Position		      [315, 519, 405, 541]
       BackgroundColor	      "lightBlue"
       GotoTag		      "Joint2"
     }
@@ -860,7 +863,7 @@ Model {
       BlockType		      From
       Name		      "From8"
       SID		      "28"
-      Position		      [315, 589, 405, 611]
+      Position		      [315, 584, 405, 606]
       BackgroundColor	      "lightBlue"
       GotoTag		      "Joint3"
     }
@@ -946,7 +949,7 @@ Model {
       Name		      "VR Sink"
       SID		      "1"
       Ports		      [6]
-      Position		      [850, 351, 1120, 589]
+      Position		      [875, 356, 1145, 594]
       LibraryVersion	      "1.241"
       SourceBlock	      "vrlib/VR Sink"
       SourceType	      "Virtual Reality Sink"
@@ -959,15 +962,6 @@ Model {
       WorldFileName	      "ArmModel3D.wrl"
       AutoView		      off
       VideoDimensions	      "[]"
-      FigureProperties	      "{'Position', 'Name', 'Viewpoint', 'CameraBound', 'CameraDirection', 'CameraPosition', 'C"
-      "ameraUpVector', 'ZoomFactor', 'Antialiasing', 'Headlight', 'Lighting', 'NavPanel', 'StatusBar', 'ToolBar', 'Text"
-      "ures', 'Transparency', 'Wireframe', 'NavZones', 'NavMode', 'NavSpeed', 'Record2DCompressMethod', 'Record2DCompre"
-      "ssQuality', 'Record2D', 'Record2DFileName', 'Record2DFPS'; [-1.2000000000000000e+001  6.6000000000000000e+001  8"
-      ".5100000000000000e+002  6.9200000000000000e+002], '', 'CameraZ1', 'on', [5.6906423709722687e-001 -1.735330273947"
-      "5993e-001 -8.0377371346676962e-001], [-6.1178611341789857e-001  1.5610623000019130e-001 -2.8747992683562285e-001"
-      "], [-1.4240624874352395e-001  9.4191067765969971e-001 -3.0417878892099642e-001], [1.0000000000000000e+000], 'on'"
-      ", 'on', 'on', 'halfbar', 'on', 'on', 'on', 'on', 'off', 'off', 'examine', 'normal', 'auto', [7.5000000000000000e"
-      "+001], 'off', '%f_anim_%n.avi', [1.5000000000000000e+001]} "
     }
     Line {
       SrcBlock		      "Output From GUI Joint Jog"
@@ -1068,41 +1062,41 @@ Model {
     Line {
       SrcBlock		      "Level-2 MATLAB\nS-Function"
       SrcPort		      1
-      Points		      [145, 0]
       DstBlock		      "VR Sink"
       DstPort		      1
     }
     Line {
       SrcBlock		      "Level-2 MATLAB\nS-Function"
       SrcPort		      2
+      Points		      [170, 0]
       DstBlock		      "VR Sink"
       DstPort		      2
     }
     Line {
       SrcBlock		      "Level-2 MATLAB\nS-Function"
       SrcPort		      3
-      Points		      [70, 0; 0, 5]
+      Points		      [170, 0]
       DstBlock		      "VR Sink"
       DstPort		      3
     }
     Line {
       SrcBlock		      "Level-2 MATLAB\nS-Function"
       SrcPort		      4
-      Points		      [145, 0]
+      Points		      [170, 0]
       DstBlock		      "VR Sink"
       DstPort		      4
     }
     Line {
       SrcBlock		      "Level-2 MATLAB\nS-Function"
       SrcPort		      5
-      Points		      [65, 0; 0, 15]
+      Points		      [150, 0; 0, 20]
       DstBlock		      "VR Sink"
       DstPort		      5
     }
     Line {
       SrcBlock		      "Level-2 MATLAB\nS-Function"
       SrcPort		      6
-      Points		      [65, 0; 0, 20]
+      Points		      [130, 0; 0, 25]
       DstBlock		      "VR Sink"
       DstPort		      6
     }

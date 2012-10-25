@@ -64,7 +64,7 @@ NavigationInfo {
 DEF RoboticArm Transform {
 	children [ 
 	    DEF Base_Servo_01 Transform {
-		    translation	0.047649 0.032249 0.003327
+		    translation	0.0462 0.0322 0.0033
 		    rotation	0.57735 0.57735 0.57735  2.09439
 		    scale	0.03498 0.028334 0.029383
 		    children DEF ME_mesh39-geometry Group {
@@ -1205,7 +1205,7 @@ DEF RoboticArm Transform {
 	}
 
 	DEF Base_Servo_02 Transform {
-		translation	0.047649 0.032249 -0.048203
+		translation	0.0462 0.0322 -0.0482
 		rotation	0.57735 0.57735 0.57735  2.09439
 		scale	0.03498 0.028334 0.029383
 		children DEF ME_mesh39-geometry Group {
