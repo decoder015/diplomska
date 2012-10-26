@@ -29,7 +29,7 @@ gripper = vrnode(world, 'Gripper');
  theta0 = 0;
  theta1 = 0;
  theta2 = 0;
- theta3 = 90;
+ theta3 = 45;
 
 % get VR transformations
 [vr_foreArmRotation, vr_foreArmTranslation,...
