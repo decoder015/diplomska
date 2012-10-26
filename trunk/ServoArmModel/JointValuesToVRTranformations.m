@@ -1,5 +1,9 @@
 function [foreArmRotation foreArmTranslation armRotation armTranslation gripperRotation gripperTranslation] = JointValuesToVRTranformations(joint0Val, joint1Val, joint2Val, joint3Val)
 %% Kinematic model in meters
+link0Len = 0.06;
+link1Len = 0.0837;
+link2Len = 0.1014;
+link3Len = 0.0825;
 % world frame 
 % x+ is to the right 
 % y+ is pointing up
@@ -13,30 +17,31 @@ worldFrame = [ 1, 0, 0, 0;
 % current robot orientation
 % Fore arm Joint 0
 Joint0Frame =   [1, 0,  0,   0;
-                 0, 1,  0,   0.06; % offset from base to first joint
+                 0, 1,  0,   link0Len; % offset from base to first joint
                  0, 0,  1,   0;
                  0, 0,  0,   1;
                  ];
              
 % Fore arm  Joint 1          
 Joint1Frame =   [1, 0,  0,   0;
-                 0, 1,  0,   0.0837; % link 1 offset (fore arm)
+                 0, 1,  0,   link1Len; % link 1 offset (fore arm)
                  0, 0,  1,   0;
                  0, 0,  0,   1;
                  ];  
 
 Joint2Frame =   [1, 0,  0,   0;
-                 0, 1,  0,   0.1014;  % link 2 arm offset
+                 0, 1,  0,   link2Len;  % link 2 arm offset
                  0, 0,  1,   0;
                  0, 0,  0,   1;
                  ];
              
 Joint3Frame =   [1, 0,  0,   0;
-                 0, 1,  0,   0.0825;  % link 2 arm offset
+                 0, 1,  0,   link3Len;  % link 2 arm offset
                  0, 0,  1,   0;
                  0, 0,  0,   1;
                  ];
-                         
+%% VR link frames
+
 VR_Joint2Frame =[1, 0,  0,   0;
                  0, 1,  0,   0.185;  %185 link 2 arm offset
                  0, 0,  1,   0;
@@ -50,6 +55,7 @@ VR_Joint3Frame =[1, 0,  0,   0;
                  ]; 
              
 center = [0,0,0,1];
+
 Joint1Offset = [];
 Joint2Offset = [];
 
