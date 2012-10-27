@@ -27,3 +27,27 @@ FromRobotToWorld * CenterRobotInWorldFrame ;
 
 % transformation from world frame to robot frame
 FromWorldToRobot * CenterWorldFrame ;
+
+%% Somme extra code
+%Joint2Frame = Joint2Frame * Joint1Frame * rothz(theta2);
+%Joint2Offset = Joint2Offset * t2r(Joint1Frame);
+%disp(Joint2Frame);
+%disp(Joint2Offset);
+%tmpJoint2Offset = tmpJoint1Offset + Joint2Offset * t2r(Joint2Frame);
+
+%disp(tmpJoint2Offset);
+
+%tmpJoint2Offset(1,1) = tmpJoint2Offset(1,1);
+%tmpJoint2Offset(1,2) = Joint2Offset(1,2) - tmpJoint2Offset(1,2);
+%tmpJoint2Offset(1,3) = tmpJoint2Offset(1,3);
+
+%disp(Joint2Offset);
+%disp(tmpJoint2Offset);
+
+% get axis angle representation form rottion matrix
+%arm.rotation = vrrotmat2vec( t2r(Joint2Frame) );
+%arm.translation = tmpJoint2Offset;
+
+%plot frame
+%trplot(Joint0FrameInv, 'frame', 'Joint0')
+%sim('JointJogSim');

@@ -68,7 +68,7 @@ VR_Joint3Frame =[1, 0,  0,   0.005;
                  0, 0,  0,   1;
                  ]; 
              
-center = [0,0,0,1];
+VR_center = [0,0,0,1];
 Joint1Offset = [];
 Joint2Offset = [];
 
@@ -79,7 +79,18 @@ Joint2Offset = [];
 % theta2
 % theta3
 %% Rotate Joint0
+fprintf('****************************************************************\n');
+fprintf('                         Joint0                                 \n');
+fprintf('****************************************************************\n')
+
+% angle
 theta0 = joint0Val;
+fprintf('Theta0: %d\n' ,theta0);
+
+% rotation bu angle of theta in degrees
+%Joint0Frame = Joint0Frame * Joint1Frame;
+Joint1Frame = Joint1Frame * rothz(theta0);
+
 %% Rotate Joint1
 fprintf('****************************************************************\n');
 fprintf('                         Joint1                                 \n');
@@ -97,7 +108,7 @@ fprintf('Joint 1 frame:\n');
 disp(Joint1Frame);
 
 % 3d vector no homogeneous
-Joint1Offset =  Joint1Frame * center'; 
+Joint1Offset =  Joint1Frame * VR_center'; 
 Joint1Offset = Joint1Offset(1:3)';
 
 fprintf('Joint1Offset:\n');
@@ -129,7 +140,7 @@ Joint2Frame = Joint2Frame * rothz(theta2);
 fprintf('Joint 2 frame:\n');
 disp(Joint2Frame);
 
-Joint2Offset = Joint2Frame * center';
+Joint2Offset = Joint2Frame * VR_center';
 Joint2Offset = Joint2Offset(1:3)'; %3d vector no homogenious
 
 fprintf('Joint2Offset:\n');
@@ -168,7 +179,7 @@ Joint3Frame = Joint3Frame * rothz(theta3);
 fprintf('Joint 3 frame:\n');
 disp(Joint3Frame);
 
-Joint3Offset = Joint3Frame * center';
+Joint3Offset = Joint3Frame * VR_center';
 Joint3Offset = Joint3Offset(1:3)'; %3d vector no homogenious
 
 fprintf('Joint3Offset:\n');
