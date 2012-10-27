@@ -6,7 +6,7 @@ Model {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.32"
+    ComputedModelVersion    "1.33"
     NumModelReferences	    0
     NumTestPointedSignals   0
   }
@@ -20,17 +20,18 @@ Model {
   MinMaxOverflowLogging	  "UseLocalSettings"
   MinMaxOverflowArchiveMode "Overwrite"
   MaxMDLFileLineLength	  120
-  StartFcn		  "% global vars \nglobal joint0Val ;\nglobal joint1Val ;\nglobal joint2Val ;\nglobal joint3Val ;\n\n%init"
-  "\njoint0Val = 0;\njoint1Val = 0;\njoint2Val = 0;\njoint3Val = 0;\n\n% show the JointJog\nUiJointJog"
+  StartFcn		  "path(path,'.\\GUI');\npath(path,'.\\Util');\npath(path,'.\\SFunct');\n\n% global vars \nglobal joint0Va"
+  "l ;\nglobal joint1Val ;\nglobal joint2Val ;\nglobal joint3Val ;\n\n%init\njoint0Val = 0;\njoint1Val = 0;\njoint2Val "
+  "= 0;\njoint3Val = 0;\n\n% show the JointJog\nUiJointJog"
   Created		  "Wed Oct 17 23:51:18 2012"
   Creator		  "Owner"
   UpdateHistory		  "UpdateHistoryNever"
   ModifiedByFormat	  "%<Auto>"
-  LastModifiedBy	  "Owner"
+  LastModifiedBy	  "user"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Thu Oct 25 21:46:44 2012"
-  RTWModifiedTimeStamp	  273101991
-  ModelVersionFormat	  "1.%<AutoIncrement:32>"
+  LastModifiedDate	  "Fri Oct 26 21:00:16 2012"
+  RTWModifiedTimeStamp	  273181993
+  ModelVersionFormat	  "1.%<AutoIncrement:33>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -67,7 +68,6 @@ Model {
     $ObjectID		    1
     $ClassName		    "Simulink.SimulationData.ModelLoggingInfo"
     model_		    "RobotArmSimulator"
-    signals_		    []
     overrideMode_	    [0.0]
     Array {
       Type		      "Cell"
@@ -706,7 +706,7 @@ Model {
   }
   System {
     Name		    "RobotArmSimulator"
-    Location		    [116, 82, 1367, 752]
+    Location		    [61, 92, 1312, 752]
     Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
