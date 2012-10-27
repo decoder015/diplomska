@@ -1,6 +1,8 @@
-function [foreArmRotation foreArmTranslation armRotation armTranslation gripperRotation gripperTranslation] = JointValuesToVRTranformations(joint0Val, joint1Val, joint2Val, joint3Val)
+function [foreArmRotation foreArmTranslation ...
+          armRotation armTranslation ... 
+          gripperRotation gripperTranslation] = JointValuesToVRTranformations(joint0Val, joint1Val, joint2Val, joint3Val)
 %% Kinematic model in meters
-link0Len = 0.06;
+link0Len = 0.00;
 link1Len = 0.0837;
 link2Len = 0.1014;
 link3Len = 0.0825;
@@ -42,20 +44,31 @@ Joint3Frame =   [1, 0,  0,   0;
                  ];
 %% VR link frames
 
+VR_Joint0Frame =[1, 0,  0,   0;
+                 0, 1,  0,   0;  %185 link 2 arm offset
+                 0, 0,  1,   0;
+                 0, 0,  0,   1;
+                 ];
+
+VR_Joint1Frame =[1, 0,  0,   0;
+                 0, 1,  0,   0.0837;  %185 link 2 arm offset
+                 0, 0,  1,   0;
+                 0, 0,  0,   1;
+                 ];
+
 VR_Joint2Frame =[1, 0,  0,   0;
-                 0, 1,  0,   0.185;  %185 link 2 arm offset
+                 0, 1,  0,   0.1851;  %185 link 2 arm offset
                  0, 0,  1,   0;
                  0, 0,  0,   1;
                  ];
              
-VR_Joint3Frame =[1, 0,  0,   0;
-                 0, 1,  0,   0.27;  % link 3 arm offset
+VR_Joint3Frame =[1, 0,  0,   0.005;
+                 0, 1,  0,   0.265;  % 0.2676 link 3 arm offset
                  0, 0,  1,   0;
                  0, 0,  0,   1;
                  ]; 
              
 center = [0,0,0,1];
-
 Joint1Offset = [];
 Joint2Offset = [];
 
@@ -77,35 +90,29 @@ theta1 = joint1Val;
 fprintf('Theta1: %d\n' ,theta1);
 
 % rotation bu angle of theta in degrees
-Joint1Frame =  Joint1Frame * rothz(theta1);
+Joint1Frame = Joint0Frame * Joint1Frame;
+Joint1Frame = Joint1Frame * rothz(theta1);
 
 fprintf('Joint 1 frame:\n');
 disp(Joint1Frame);
 
-Joint1Offset =  Joint1Frame * center';
- % 3d vector no homogeneous 
+% 3d vector no homogeneous
+Joint1Offset =  Joint1Frame * center'; 
 Joint1Offset = Joint1Offset(1:3)';
 
-tmpJoint1Offset = Joint1Offset * t2r(Joint1Frame);
-fprintf('Joint1 offset vector:\n')
-disp(tmpJoint1Offset);
-
-tmpJoint1Offset(1,1) = tmpJoint1Offset(1,1);
-tmpJoint1Offset(1,2) = Joint1Offset(1,2) - tmpJoint1Offset(1,2);
-tmpJoint1Offset(1,3) = tmpJoint1Offset(1,3);
-
+fprintf('Joint1Offset:\n');
 disp(Joint1Offset);
-disp(tmpJoint1Offset);
 
-%testv=[0,0,0,1]';
-%Joint1Frame * testv
+% get rotation in VR world
+VR_Joint1Frame = rothz(theta1) * VR_Joint1Frame;
+
+VR_Joint1Position = GetTranslationFromFrame(VR_Joint1Frame);
+VR_Joint1Translation = (-1)* VR_Joint1Position(1:3) + Joint1Offset;
 
 % get axis angle representation from rotation matrix
-foreArmRotation = vrrotmat2vec( t2r(Joint1Frame) );
-foreArmTranslation = tmpJoint1Offset;
-fprintf('foreArmRotation');
-disp(foreArmRotation);
- vrdrawnow;
+foreArmRotation = vrrotmat2vec( t2r(VR_Joint1Frame) );
+foreArmTranslation = VR_Joint1Translation;
+%vrdrawnow;
 %% Rotate Joint2
 fprintf('****************************************************************\n');
 fprintf('                         Joint2                                 \n');
@@ -116,7 +123,7 @@ fprintf('Theta2:');
 disp(theta2);
 
 %rotate by joint1 rotation
-Joint2Frame =  Joint1Frame * Joint2Frame;
+Joint2Frame = Joint1Frame * Joint2Frame;
 Joint2Frame = Joint2Frame * rothz(theta2);
 
 fprintf('Joint 2 frame:\n');
@@ -128,7 +135,7 @@ Joint2Offset = Joint2Offset(1:3)'; %3d vector no homogenious
 fprintf('Joint2Offset:\n');
 disp(Joint2Offset);
 
-% ret rotation in VR world
+% get rotation in VR world
 VR_Joint2Frame = rothz(theta1 + theta2) * VR_Joint2Frame;
 
 VR_Joint2Position = GetTranslationFromFrame(VR_Joint2Frame);
@@ -137,7 +144,7 @@ VR_Joint2Translation = (-1)* VR_Joint2Position(1:3) + Joint2Offset;
 fprintf('VR_Joint2Position:\n');
 disp(VR_Joint2Position);
 
-fprintf('VR_Joint2Translation');
+fprintf('VR_Joint2Translation:\n');
 disp(VR_Joint2Translation);
 % get axis angle representation from rotation matrix
 
