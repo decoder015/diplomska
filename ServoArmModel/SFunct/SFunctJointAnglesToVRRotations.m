@@ -58,7 +58,7 @@ function Output(block)
   % get VR transformations 
   [vr_foreArmRotation, vr_foreArmTranslation,...
    vr_armRotation,     vr_armTranslation,...
-   vr_gripperRotation, vr_gripperTranslation] = JointValuesToVRTranformations(joint0Val, joint1Val, joint2Val, joint3Val);
+   vr_gripperRotation, vr_gripperTranslation] = JointValuesToVRTranformations(joint0Val, joint1Val, joint2Val, joint3Val, false);
 
   
   % set output
