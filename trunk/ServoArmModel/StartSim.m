@@ -44,7 +44,7 @@ baseServo02 = vrnode(world, 'Base_Servo_02');
 % get VR transformations
 [vr_foreArmRotation, vr_foreArmTranslation,...
  vr_armRotation,     vr_armTranslation,...
- vr_gripperRotation, vr_gripperTranslation] = JointValuesToVRTranformations(theta0, theta1, theta2, theta3);
+ vr_gripperRotation, vr_gripperTranslation] = JointValuesToVRTranformations(theta0, theta1, theta2, theta3, true);
 
 
 
