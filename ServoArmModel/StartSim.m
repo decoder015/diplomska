@@ -1,7 +1,14 @@
-%%
+%% 
 clc;
 close all;
 clear all;
+
+%% Add folders to path
+path(path, '.\GUI');
+path(path, '.\SFunct');
+path(path, '.\Util');
+path(path, '.\VR3Dmodels');
+
 %% Global variables for rotation of joints 
 % used for communication between GUI and Simulink
 global joint0Val ;
@@ -19,25 +26,27 @@ joint3Val = 0;
 world = vrworld('ArmModel3D.wrl', 'new');
 open(world);
 fig = vrfigure(world);
-%% Get the robot components
-baseCube = vrnode(world, 'Base');
-foreArm  = vrnode(world, 'ForeArm');
-arm = vrnode(world, 'Arm');
-gripper = vrnode(world, 'Gripper');
 
+%% Get the robot components
+baseCube    = vrnode(world, 'Base');
+foreArm     = vrnode(world, 'ForeArm');
+arm         = vrnode(world, 'Arm');
+gripper     = vrnode(world, 'Gripper');
 baseServo01 = vrnode(world, 'Base_Servo_01');
 baseServo02 = vrnode(world, 'Base_Servo_02');
 %% Do the transformations
 % parameters in degres:
- theta0 = 0;
- theta1 = 0;
+ theta0 = 45;
+ theta1 = 90;
  theta2 = 0;
- theta3 = 45;
+ theta3 = 0;
 
 % get VR transformations
 [vr_foreArmRotation, vr_foreArmTranslation,...
  vr_armRotation,     vr_armTranslation,...
  vr_gripperRotation, vr_gripperTranslation] = JointValuesToVRTranformations(theta0, theta1, theta2, theta3);
+
+
 
 % foreArm
 foreArm.rotation = vr_foreArmRotation;
