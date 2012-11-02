@@ -222,9 +222,6 @@ function m_tboJoint1Val_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of m_tboJoint1Val as text
-%        str2double(get(hObject,'String')) returns contents of m_tboJoint1Val as a double
-
 %get vlue form slider
 global joint1Val;
 joint1Val = str2double(get(hObject,'String'));
@@ -262,8 +259,6 @@ function m_tboJoint2Val_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of m_tboJoint2Val as text
-%        str2double(get(hObject,'String')) returns contents of m_tboJoint2Val as a double
 %get vlue form slider
 global joint2Val;
 joint2Val = str2double(get(hObject,'String'));

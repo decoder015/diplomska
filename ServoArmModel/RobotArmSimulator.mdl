@@ -6,7 +6,7 @@ Model {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.43"
+    ComputedModelVersion    "1.49"
     NumModelReferences	    0
     NumTestPointedSignals   0
   }
@@ -29,9 +29,9 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "user"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Fri Nov 02 15:23:41 2012"
+  LastModifiedDate	  "Fri Nov 02 16:51:00 2012"
   RTWModifiedTimeStamp	  273770442
-  ModelVersionFormat	  "1.%<AutoIncrement:43>"
+  ModelVersionFormat	  "1.%<AutoIncrement:49>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -68,7 +68,6 @@ Model {
     $ObjectID		    1
     $ClassName		    "Simulink.SimulationData.ModelLoggingInfo"
     model_		    "RobotArmSimulator"
-    signals_		    []
     overrideMode_	    [0.0]
     Array {
       Type		      "Cell"
@@ -737,6 +736,24 @@ Model {
       IconDisplay	      "Tag"
     }
     Block {
+      BlockType		      Inport
+      Port		      "1"
+      OutputFunctionCall      off
+      OutMin		      "[]"
+      OutMax		      "[]"
+      OutDataTypeStr	      "Inherit: auto"
+      LockScale		      off
+      BusOutputAsStruct	      off
+      PortDimensions	      "-1"
+      VarSizeSig	      "Inherit"
+      SampleTime	      "-1"
+      SignalType	      "auto"
+      SamplingMode	      "auto"
+      LatchByDelayingOutsideSignal off
+      LatchInputForFeedbackSignals off
+      Interpolate	      on
+    }
+    Block {
       BlockType		      Integrator
       ExternalReset	      "none"
       InitialConditionSource  "internal"
@@ -771,10 +788,32 @@ Model {
       LockScale		      off
       RndMeth		      "Floor"
     }
+    Block {
+      BlockType		      SubSystem
+      ShowPortLabels	      "FromPortIcon"
+      Permissions	      "ReadWrite"
+      PermitHierarchicalResolution "All"
+      TreatAsAtomicUnit	      off
+      CheckFcnCallInpInsideContextMsg off
+      SystemSampleTime	      "-1"
+      RTWFcnNameOpts	      "Auto"
+      RTWFileNameOpts	      "Auto"
+      RTWMemSecFuncInitTerm   "Inherit from model"
+      RTWMemSecFuncExecute    "Inherit from model"
+      RTWMemSecDataConstants  "Inherit from model"
+      RTWMemSecDataInternal   "Inherit from model"
+      RTWMemSecDataParameters "Inherit from model"
+      SimViewingDevice	      off
+      DataTypeOverride	      "UseLocalSettings"
+      DataTypeOverrideAppliesTo	"AllNumericTypes"
+      MinMaxOverflowLogging   "UseLocalSettings"
+      Variant		      off
+      GeneratePreprocessorConditionals off
+    }
   }
   System {
     Name		    "RobotArmSimulator"
-    Location		    [99, 161, 1263, 970]
+    Location		    [134, 196, 1309, 841]
     Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -788,13 +827,33 @@ Model {
     ShowPageBoundaries	    off
     ZoomFactor		    "100"
     ReportName		    "simulink-default.rpt"
-    SIDHighWatermark	    "38"
+    SIDHighWatermark	    "44"
+    Block {
+      BlockType		      Reference
+      Name		      "Detect\nChange"
+      SID		      "44"
+      Ports		      [1, 1]
+      Position		      [495, 450, 555, 480]
+      LibraryVersion	      "1.236"
+      SourceBlock	      "simulink/Logic and Bit\nOperations/Detect\nChange"
+      SourceType	      "Detect Change"
+      ShowPortLabels	      "FromPortIcon"
+      SystemSampleTime	      "-1"
+      FunctionWithSeparateData off
+      RTWMemSecFuncInitTerm   "Inherit from model"
+      RTWMemSecFuncExecute    "Inherit from model"
+      RTWMemSecDataConstants  "Inherit from model"
+      RTWMemSecDataInternal   "Inherit from model"
+      RTWMemSecDataParameters "Inherit from model"
+      GeneratePreprocessorConditionals off
+      vinit		      "0"
+    }
     Block {
       BlockType		      Display
       Name		      "Display"
       SID		      "7"
       Ports		      [1]
-      Position		      [380, 300, 470, 330]
+      Position		      [510, 320, 600, 350]
       Decimation	      "1"
       Lockdown		      off
     }
@@ -803,7 +862,7 @@ Model {
       Name		      "Display1"
       SID		      "8"
       Ports		      [1]
-      Position		      [175, 405, 265, 435]
+      Position		      [260, 380, 350, 410]
       Decimation	      "1"
       Lockdown		      off
     }
@@ -812,7 +871,7 @@ Model {
       Name		      "Display2"
       SID		      "9"
       Ports		      [1]
-      Position		      [175, 455, 265, 485]
+      Position		      [260, 430, 350, 460]
       Decimation	      "1"
       Lockdown		      off
     }
@@ -821,16 +880,7 @@ Model {
       Name		      "Display3"
       SID		      "10"
       Ports		      [1]
-      Position		      [175, 505, 265, 535]
-      Decimation	      "1"
-      Lockdown		      off
-    }
-    Block {
-      BlockType		      Display
-      Name		      "Display5"
-      SID		      "31"
-      Ports		      [1]
-      Position		      [770, 680, 860, 710]
+      Position		      [260, 480, 350, 510]
       Decimation	      "1"
       Lockdown		      off
     }
@@ -838,7 +888,7 @@ Model {
       BlockType		      From
       Name		      "From"
       SID		      "12"
-      Position		      [45, 304, 135, 326]
+      Position		      [130, 324, 220, 346]
       BackgroundColor	      "lightBlue"
       GotoTag		      "Joint0"
     }
@@ -846,7 +896,7 @@ Model {
       BlockType		      From
       Name		      "From1"
       SID		      "16"
-      Position		      [45, 409, 135, 431]
+      Position		      [130, 384, 220, 406]
       BackgroundColor	      "lightBlue"
       GotoTag		      "Joint1"
     }
@@ -854,7 +904,7 @@ Model {
       BlockType		      From
       Name		      "From2"
       SID		      "17"
-      Position		      [45, 459, 135, 481]
+      Position		      [130, 434, 220, 456]
       BackgroundColor	      "lightBlue"
       GotoTag		      "Joint2"
     }
@@ -862,7 +912,7 @@ Model {
       BlockType		      From
       Name		      "From3"
       SID		      "18"
-      Position		      [45, 509, 135, 531]
+      Position		      [130, 484, 220, 506]
       BackgroundColor	      "lightBlue"
       GotoTag		      "Joint3"
     }
@@ -870,7 +920,7 @@ Model {
       BlockType		      From
       Name		      "From5"
       SID		      "25"
-      Position		      [315, 389, 405, 411]
+      Position		      [685, 44, 775, 66]
       BackgroundColor	      "lightBlue"
       GotoTag		      "Joint0"
     }
@@ -878,7 +928,7 @@ Model {
       BlockType		      From
       Name		      "From6"
       SID		      "26"
-      Position		      [315, 454, 405, 476]
+      Position		      [685, 114, 775, 136]
       BackgroundColor	      "lightBlue"
       GotoTag		      "Joint1"
     }
@@ -886,7 +936,7 @@ Model {
       BlockType		      From
       Name		      "From7"
       SID		      "27"
-      Position		      [315, 519, 405, 541]
+      Position		      [685, 184, 775, 206]
       BackgroundColor	      "lightBlue"
       GotoTag		      "Joint2"
     }
@@ -894,7 +944,7 @@ Model {
       BlockType		      From
       Name		      "From8"
       SID		      "28"
-      Position		      [315, 584, 405, 606]
+      Position		      [685, 254, 775, 276]
       BackgroundColor	      "lightBlue"
       GotoTag		      "Joint3"
     }
@@ -902,7 +952,7 @@ Model {
       BlockType		      Goto
       Name		      "Goto"
       SID		      "11"
-      Position		      [290, 48, 405, 72]
+      Position		      [400, 53, 515, 77]
       BackgroundColor	      "orange"
       GotoTag		      "Joint0"
       TagVisibility	      "local"
@@ -911,7 +961,7 @@ Model {
       BlockType		      Goto
       Name		      "Goto1"
       SID		      "13"
-      Position		      [290, 98, 405, 122]
+      Position		      [400, 103, 515, 127]
       BackgroundColor	      "orange"
       GotoTag		      "Joint1"
       TagVisibility	      "local"
@@ -920,7 +970,7 @@ Model {
       BlockType		      Goto
       Name		      "Goto2"
       SID		      "14"
-      Position		      [290, 148, 405, 172]
+      Position		      [400, 153, 515, 177]
       BackgroundColor	      "orange"
       GotoTag		      "Joint2"
       TagVisibility	      "local"
@@ -929,7 +979,7 @@ Model {
       BlockType		      Goto
       Name		      "Goto3"
       SID		      "15"
-      Position		      [290, 198, 405, 222]
+      Position		      [400, 203, 515, 227]
       BackgroundColor	      "orange"
       GotoTag		      "Joint3"
       TagVisibility	      "local"
@@ -939,31 +989,14 @@ Model {
       Name		      "Integrator"
       SID		      "37"
       Ports		      [1, 1]
-      Position		      [185, 300, 215, 330]
-    }
-    Block {
-      BlockType		      M-S-Function
-      Name		      "Level-2 MATLAB\nS-Function"
-      SID		      "24"
-      Ports		      [4, 8]
-      Position		      [430, 363, 685, 632]
-      FunctionName	      "SFunctJointAnglesToVRRotations"
-      MaskDisplay	      "port_label('output', 1, 'ForeArm.rotation');\nport_label('output', 2, 'ForeArm.translation');"
-      "\nport_label('output', 3, 'Arm.rotation')\nport_label('output', 4, 'ForeArm.translation')\nport_label('output', "
-      "5, 'Gripper.rotation');\nport_label('output', 6, 'Gripper.translation');\nport_label('output', 7, 'BaseServos.ro"
-      "tation');"
-      MaskIconFrame	      on
-      MaskIconOpaque	      on
-      MaskIconRotate	      "none"
-      MaskPortRotate	      "default"
-      MaskIconUnits	      "autoscale"
+      Position		      [305, 320, 335, 350]
     }
     Block {
       BlockType		      M-S-Function
       Name		      "Output From GUI Joint Jog"
       SID		      "4"
       Ports		      [0, 4]
-      Position		      [15, 37, 225, 233]
+      Position		      [125, 42, 335, 238]
       BackgroundColor	      "green"
       FunctionName	      "SFunctGUIJointJog"
       MaskDisplay	      "port_label('output', 1, 'Joint Jog 0')\nport_label('output', 2, 'Joint Jog 1')\nport_label('o"
@@ -979,39 +1012,197 @@ Model {
       Name		      "Saturation"
       SID		      "38"
       Ports		      [1, 1]
-      Position		      [290, 300, 320, 330]
+      Position		      [375, 320, 405, 350]
       InputPortMap	      "u0"
       UpperLimit	      "90"
       LowerLimit	      "90"
     }
     Block {
-      BlockType		      Reference
-      Name		      "VR Sink"
-      SID		      "1"
-      Ports		      [7]
-      Position		      [875, 343, 1150, 647]
-      LibraryVersion	      "1.241"
-      SourceBlock	      "vrlib/VR Sink"
-      SourceType	      "Virtual Reality Sink"
-      SampleTime	      "0.01"
-      ViewEnable	      on
-      RemoteChange	      off
-      RemoteView	      on
-      FieldsWritten	      "ForeArm.rotation.4.1.1.double#ForeArm.translation.3.1.1.double#Arm.rotation.4.1.1.double#Ar"
-      "m.translation.3.1.1.double#Gripper.rotation.4.1.1.double#Gripper.translation.3.1.1.double#BaseServos.rotation.4."
-      "1.1.double"
-      WorldFileName	      "ArmModel3D.wrl"
-      AutoView		      off
-      VideoDimensions	      "[]"
-      FigureProperties	      "{'Position', 'Name', 'Viewpoint', 'CameraBound', 'CameraDirection', 'CameraPosition', 'C"
-      "ameraUpVector', 'ZoomFactor', 'Antialiasing', 'Headlight', 'Lighting', 'NavPanel', 'StatusBar', 'ToolBar', 'Text"
-      "ures', 'Transparency', 'Wireframe', 'NavZones', 'NavMode', 'NavSpeed', 'Record2DCompressMethod', 'Record2DCompre"
-      "ssQuality', 'Record2D', 'Record2DFileName', 'Record2DFPS'; [5.0000000000000000e+000  9.2000000000000000e+001  5."
-      "7600000000000000e+002  3.8000000000000000e+002], '', 'CameraZ1', 'on', [0.0000000000000000e+000  0.0000000000000"
-      "000e+000 -1.0000000000000000e+000], [0.0000000000000000e+000  0.0000000000000000e+000  0.0000000000000000e+000],"
-      " [0.0000000000000000e+000  1.0000000000000000e+000  0.0000000000000000e+000], [1.0000000000000000e+000], 'on', '"
-      "on', 'on', 'halfbar', 'on', 'on', 'on', 'on', 'off', 'off', 'examine', 'normal', 'auto', [7.5000000000000000e+00"
-      "1], 'off', '%f_anim_%n.avi', [1.5000000000000000e+001]} "
+      BlockType		      SubSystem
+      Name		      "Virtual reallity"
+      SID		      "39"
+      Ports		      [4]
+      Position		      [845, 23, 1090, 297]
+      ForegroundColor	      "blue"
+      MinAlgLoopOccurrences   off
+      PropExecContextOutsideSubsystem off
+      RTWSystemCode	      "Auto"
+      FunctionWithSeparateData off
+      Opaque		      off
+      RequestExecContextInheritance off
+      MaskHideContents	      off
+      System {
+	Name			"Virtual reallity"
+	Location		[382, 393, 1212, 822]
+	Open			off
+	ModelBrowserVisibility	off
+	ModelBrowserWidth	200
+	ScreenColor		"white"
+	PaperOrientation	"landscape"
+	PaperPositionMode	"auto"
+	PaperType		"usletter"
+	PaperUnits		"inches"
+	TiledPaperMargins	[0.500000, 0.500000, 0.500000, 0.500000]
+	TiledPageScale		1
+	ShowPageBoundaries	off
+	ZoomFactor		"100"
+	Block {
+	  BlockType		  Inport
+	  Name			  "In1"
+	  SID			  "40"
+	  Position		  [25, 78, 55, 92]
+	  IconDisplay		  "Port number"
+	}
+	Block {
+	  BlockType		  Inport
+	  Name			  "In2"
+	  SID			  "41"
+	  Position		  [25, 143, 55, 157]
+	  Port			  "2"
+	  IconDisplay		  "Port number"
+	}
+	Block {
+	  BlockType		  Inport
+	  Name			  "In3"
+	  SID			  "42"
+	  Position		  [25, 208, 55, 222]
+	  Port			  "3"
+	  IconDisplay		  "Port number"
+	}
+	Block {
+	  BlockType		  Inport
+	  Name			  "In4"
+	  SID			  "43"
+	  Position		  [25, 273, 55, 287]
+	  Port			  "4"
+	  IconDisplay		  "Port number"
+	}
+	Block {
+	  BlockType		  Display
+	  Name			  "Display5"
+	  SID			  "31"
+	  Ports			  [1]
+	  Position		  [440, 375, 530, 405]
+	  Decimation		  "1"
+	  Lockdown		  off
+	}
+	Block {
+	  BlockType		  M-S-Function
+	  Name			  "Level-2 MATLAB\nS-Function"
+	  SID			  "24"
+	  Ports			  [4, 8]
+	  Position		  [80, 48, 335, 317]
+	  FunctionName		  "SFunctJointAnglesToVRRotations"
+	  MaskDisplay		  "port_label('output', 1, 'ForeArm.rotation');\nport_label('output', 2, 'ForeArm.translation');\nport"
+	  "_label('output', 3, 'Arm.rotation')\nport_label('output', 4, 'ForeArm.translation')\nport_label('output', 5, 'Gripp"
+	  "er.rotation');\nport_label('output', 6, 'Gripper.translation');\nport_label('output', 7, 'BaseServos.rotation');"
+	  MaskIconFrame		  on
+	  MaskIconOpaque	  on
+	  MaskIconRotate	  "none"
+	  MaskPortRotate	  "default"
+	  MaskIconUnits		  "autoscale"
+	}
+	Block {
+	  BlockType		  Reference
+	  Name			  "VR Sink"
+	  SID			  "1"
+	  Ports			  [7]
+	  Position		  [530, 28, 805, 332]
+	  LibraryVersion	  "1.241"
+	  SourceBlock		  "vrlib/VR Sink"
+	  SourceType		  "Virtual Reality Sink"
+	  SampleTime		  "0.01"
+	  ViewEnable		  on
+	  RemoteChange		  off
+	  RemoteView		  on
+	  FieldsWritten		  "ForeArm.rotation.4.1.1.double#ForeArm.translation.3.1.1.double#Arm.rotation.4.1.1.double#Arm.tran"
+	  "slation.3.1.1.double#Gripper.rotation.4.1.1.double#Gripper.translation.3.1.1.double#BaseServos.rotation.4.1.1.doubl"
+	  "e"
+	  WorldFileName		  "ArmModel3D.wrl"
+	  AutoView		  off
+	  VideoDimensions	  "[]"
+	}
+	Line {
+	  SrcBlock		  "Level-2 MATLAB\nS-Function"
+	  SrcPort		  7
+	  Points		  [40, 0; 0, 45]
+	  DstBlock		  "VR Sink"
+	  DstPort		  7
+	}
+	Line {
+	  SrcBlock		  "Level-2 MATLAB\nS-Function"
+	  SrcPort		  8
+	  Points		  [20, 0; 0, 85]
+	  DstBlock		  "Display5"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "Level-2 MATLAB\nS-Function"
+	  SrcPort		  1
+	  Points		  [175, 0]
+	  DstBlock		  "VR Sink"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "Level-2 MATLAB\nS-Function"
+	  SrcPort		  2
+	  Points		  [175, 0]
+	  DstBlock		  "VR Sink"
+	  DstPort		  2
+	}
+	Line {
+	  SrcBlock		  "Level-2 MATLAB\nS-Function"
+	  SrcPort		  3
+	  Points		  [175, 0]
+	  DstBlock		  "VR Sink"
+	  DstPort		  3
+	}
+	Line {
+	  SrcBlock		  "Level-2 MATLAB\nS-Function"
+	  SrcPort		  4
+	  Points		  [175, 0]
+	  DstBlock		  "VR Sink"
+	  DstPort		  4
+	}
+	Line {
+	  SrcBlock		  "Level-2 MATLAB\nS-Function"
+	  SrcPort		  5
+	  Points		  [65, 0; 0, 25]
+	  DstBlock		  "VR Sink"
+	  DstPort		  5
+	}
+	Line {
+	  SrcBlock		  "Level-2 MATLAB\nS-Function"
+	  SrcPort		  6
+	  Points		  [55, 0; 0, 35]
+	  DstBlock		  "VR Sink"
+	  DstPort		  6
+	}
+	Line {
+	  SrcBlock		  "In1"
+	  SrcPort		  1
+	  DstBlock		  "Level-2 MATLAB\nS-Function"
+	  DstPort		  1
+	}
+	Line {
+	  SrcBlock		  "In2"
+	  SrcPort		  1
+	  DstBlock		  "Level-2 MATLAB\nS-Function"
+	  DstPort		  2
+	}
+	Line {
+	  SrcBlock		  "In3"
+	  SrcPort		  1
+	  DstBlock		  "Level-2 MATLAB\nS-Function"
+	  DstPort		  3
+	}
+	Line {
+	  SrcBlock		  "In4"
+	  SrcPort		  1
+	  DstBlock		  "Level-2 MATLAB\nS-Function"
+	  DstPort		  4
+	}
+      }
     }
     Line {
       SrcBlock		      "Output From GUI Joint Jog"
@@ -1064,40 +1255,26 @@ Model {
     Line {
       SrcBlock		      "From5"
       SrcPort		      1
-      DstBlock		      "Level-2 MATLAB\nS-Function"
+      DstBlock		      "Virtual reallity"
       DstPort		      1
     }
     Line {
       SrcBlock		      "From6"
       SrcPort		      1
-      DstBlock		      "Level-2 MATLAB\nS-Function"
+      DstBlock		      "Virtual reallity"
       DstPort		      2
     }
     Line {
       SrcBlock		      "From7"
       SrcPort		      1
-      DstBlock		      "Level-2 MATLAB\nS-Function"
+      DstBlock		      "Virtual reallity"
       DstPort		      3
     }
     Line {
       SrcBlock		      "From8"
       SrcPort		      1
-      DstBlock		      "Level-2 MATLAB\nS-Function"
+      DstBlock		      "Virtual reallity"
       DstPort		      4
-    }
-    Line {
-      SrcBlock		      "Level-2 MATLAB\nS-Function"
-      SrcPort		      7
-      Points		      [120, 0; 0, 45]
-      DstBlock		      "VR Sink"
-      DstPort		      7
-    }
-    Line {
-      SrcBlock		      "Level-2 MATLAB\nS-Function"
-      SrcPort		      8
-      Points		      [30, 0; 0, 75]
-      DstBlock		      "Display5"
-      DstPort		      1
     }
     Line {
       SrcBlock		      "Saturation"
@@ -1110,48 +1287,6 @@ Model {
       SrcPort		      1
       DstBlock		      "Saturation"
       DstPort		      1
-    }
-    Line {
-      SrcBlock		      "Level-2 MATLAB\nS-Function"
-      SrcPort		      1
-      Points		      [170, 0]
-      DstBlock		      "VR Sink"
-      DstPort		      1
-    }
-    Line {
-      SrcBlock		      "Level-2 MATLAB\nS-Function"
-      SrcPort		      2
-      Points		      [170, 0]
-      DstBlock		      "VR Sink"
-      DstPort		      2
-    }
-    Line {
-      SrcBlock		      "Level-2 MATLAB\nS-Function"
-      SrcPort		      3
-      Points		      [170, 0]
-      DstBlock		      "VR Sink"
-      DstPort		      3
-    }
-    Line {
-      SrcBlock		      "Level-2 MATLAB\nS-Function"
-      SrcPort		      4
-      Points		      [170, 0]
-      DstBlock		      "VR Sink"
-      DstPort		      4
-    }
-    Line {
-      SrcBlock		      "Level-2 MATLAB\nS-Function"
-      SrcPort		      5
-      Points		      [145, 0; 0, 25]
-      DstBlock		      "VR Sink"
-      DstPort		      5
-    }
-    Line {
-      SrcBlock		      "Level-2 MATLAB\nS-Function"
-      SrcPort		      6
-      Points		      [135, 0; 0, 35]
-      DstBlock		      "VR Sink"
-      DstPort		      6
     }
   }
 }
