@@ -185,9 +185,23 @@ function m_tboJoint0Val_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of m_tboJoint0Val as text
-%        str2double(get(hObject,'String')) returns contents of m_tboJoint0Val as a double
+%get vlue form slider
+global joint0Val;
+joint0Val = str2double(get(hObject,'String'));
 
+% set limit to +/-90 deg
+if(joint0Val > 90 )
+    joint0Val = 90;
+    set(handles.m_tboJoint0Val, 'String', joint0Val);
+end
+
+if(joint0Val < -90)
+    joint0Val = -90;
+    set(handles.m_tboJoint0Val, 'String', joint0Val);
+end
+
+% set value to tboJoint0Val text edit control using handles!!!
+set(handles.m_sliderJoint0, 'Value', joint0Val);
 
 % --- Executes during object creation, after setting all properties.
 function m_tboJoint0Val_CreateFcn(hObject, eventdata, handles)
@@ -211,6 +225,23 @@ function m_tboJoint1Val_Callback(hObject, eventdata, handles)
 % Hints: get(hObject,'String') returns contents of m_tboJoint1Val as text
 %        str2double(get(hObject,'String')) returns contents of m_tboJoint1Val as a double
 
+%get vlue form slider
+global joint1Val;
+joint1Val = str2double(get(hObject,'String'));
+
+% set limit to +/-90 deg
+if(joint1Val > 90 )
+    joint1Val = 90;
+    set(handles.m_tboJoint1Val, 'String', joint1Val);
+end
+
+if(joint1Val < -90)
+    joint1Val = -90;
+    set(handles.m_tboJoint1Val, 'String', joint1Val);
+end
+
+% set value to tboJoint0Val text edit control using handles!!!
+set(handles.m_sliderJoint1, 'Value', joint1Val);
 
 % --- Executes during object creation, after setting all properties.
 function m_tboJoint1Val_CreateFcn(hObject, eventdata, handles)
@@ -233,7 +264,23 @@ function m_tboJoint2Val_Callback(hObject, eventdata, handles)
 
 % Hints: get(hObject,'String') returns contents of m_tboJoint2Val as text
 %        str2double(get(hObject,'String')) returns contents of m_tboJoint2Val as a double
+%get vlue form slider
+global joint2Val;
+joint2Val = str2double(get(hObject,'String'));
 
+% set limit to +/-90 deg
+if(joint2Val > 90 )
+    joint2Val = 90;
+    set(handles.m_tboJoint2Val, 'String', joint2Val);
+end
+
+if(joint2Val < -90)
+    joint2Val = -90;
+    set(handles.m_tboJoint2Val, 'String', joint2Val);
+end
+
+% set value to tboJoint0Val text edit control using handles!!!
+set(handles.m_sliderJoint2, 'Value', joint2Val);
 
 % --- Executes during object creation, after setting all properties.
 function m_tboJoint2Val_CreateFcn(hObject, eventdata, handles)
@@ -254,9 +301,23 @@ function m_tboJoint3Val_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of m_tboJoint3Val as text
-%        str2double(get(hObject,'String')) returns contents of m_tboJoint3Val as a double
+%get vlue form slider
+global joint3Val;
+joint3Val = str2double(get(hObject,'String'));
 
+% set limit to +/-90 deg
+if(joint3Val > 90 )
+    joint3Val = 90;
+    set(handles.m_tboJoint0Val, 'String', joint3Val);
+end
+
+if(joint3Val < -90)
+    joint3Val = -90;
+    set(handles.m_tboJoint0Val, 'String', joint3Val);
+end
+
+% set value to tboJoint0Val text edit control using handles!!!
+set(handles.m_sliderJoint3, 'Value', joint3Val);
 
 % --- Executes during object creation, after setting all properties.
 function m_tboJoint3Val_CreateFcn(hObject, eventdata, handles)

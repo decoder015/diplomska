@@ -86,12 +86,6 @@ VR_center = [0,0,0,1];
 % angle
 theta0 = joint0Val;
 
-%rotate around X+ axe for 90 deg to get 
-% Z+ up for joint0 rotation
-%Joint0Frame = Joint0Frame * rothx(-90) ;
-%fprintf('Joint 0 frame:\n');
-%disp(Joint0Frame);
-
 % base servo rotations
 tmpRot = roty(theta0, 'deg');
 baseServosRotation = vrrotmat2vec(tmpRot);
@@ -127,9 +121,6 @@ if(debugMode)
     fprintf('VR_rotation');
     disp(vrrotmat2vec( t2r(VR_Joint0Frame) ) );
 end
-%Joint0Frame = Joint0Frame * rothx(90) ;
-%fprintf('Joint 0 frame:\n');
-%disp(Joint0Frame);
 %% Rotate Joint1
 %*****************************************************************
 %                         Joint1                                 
@@ -236,7 +227,7 @@ VR_Joint3Position = GetTranslationFromFrame(VR_Joint3Frame);
 VR_Joint3Translation = (-1)* VR_Joint3Position(1:3) + Joint3Offset;
 
 % get axis angle representation from rotation matrix
-gripperRotation = vrrotmat2vec( t2r(VR_Joint3Frame) ); %t2r(Joint2Frame) 
+gripperRotation = vrrotmat2vec( t2r(VR_Joint3Frame) );
 gripperTranslation =VR_Joint3Translation;
 
 if(debugMode)
@@ -256,5 +247,4 @@ if(debugMode)
     fprintf('VR_Joint3Translation:\n');
     disp(VR_Joint3Translation);
 end
-
 end
