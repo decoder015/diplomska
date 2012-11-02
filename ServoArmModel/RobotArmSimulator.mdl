@@ -6,7 +6,7 @@ Model {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.49"
+    ComputedModelVersion    "1.81"
     NumModelReferences	    0
     NumTestPointedSignals   0
   }
@@ -29,9 +29,9 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "user"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Fri Nov 02 16:51:00 2012"
-  RTWModifiedTimeStamp	  273770442
-  ModelVersionFormat	  "1.%<AutoIncrement:49>"
+  LastModifiedDate	  "Fri Nov 02 21:58:30 2012"
+  RTWModifiedTimeStamp	  273793615
+  ModelVersionFormat	  "1.%<AutoIncrement:81>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -68,6 +68,7 @@ Model {
     $ObjectID		    1
     $ClassName		    "Simulink.SimulationData.ModelLoggingInfo"
     model_		    "RobotArmSimulator"
+    signals_		    []
     overrideMode_	    [0.0]
     Array {
       Type		      "Cell"
@@ -754,39 +755,34 @@ Model {
       Interpolate	      on
     }
     Block {
-      BlockType		      Integrator
-      ExternalReset	      "none"
-      InitialConditionSource  "internal"
-      InitialCondition	      "0"
-      LimitOutput	      off
-      UpperSaturationLimit    "inf"
-      LowerSaturationLimit    "-inf"
-      ShowSaturationPort      off
-      ShowStatePort	      off
-      AbsoluteTolerance	      "auto"
-      IgnoreLimit	      off
-      ZeroCross		      on
-      ContinuousStateAttributes	"''"
-    }
-    Block {
       BlockType		      M-S-Function
       FunctionName	      "matlabfile"
       DisplayMFileStacktrace  on
     }
     Block {
-      BlockType		      Saturate
-      UpperLimitSource	      "Dialog"
-      UpperLimit	      "0.5"
-      LowerLimitSource	      "Dialog"
-      LowerLimit	      "-0.5"
+      BlockType		      RateLimiter
+      RisingSlewLimit	      "1"
+      FallingSlewLimit	      "-1"
+      SampleTimeMode	      "continuous"
+      InitialCondition	      "0"
       LinearizeAsGain	      on
-      ZeroCross		      on
+    }
+    Block {
+      BlockType		      Scope
+      ModelBased	      off
+      TickLabels	      "OneTimeTick"
+      ZoomMode		      "on"
+      Grid		      "on"
+      TimeRange		      "auto"
+      YMin		      "-5"
+      YMax		      "5"
+      SaveToWorkspace	      off
+      SaveName		      "ScopeData"
+      LimitDataPoints	      on
+      MaxDataPoints	      "5000"
+      Decimation	      "1"
+      SampleInput	      off
       SampleTime	      "-1"
-      OutMin		      "[]"
-      OutMax		      "[]"
-      OutDataTypeStr	      "Inherit: Same as input"
-      LockScale		      off
-      RndMeth		      "Floor"
     }
     Block {
       BlockType		      SubSystem
@@ -813,7 +809,7 @@ Model {
   }
   System {
     Name		    "RobotArmSimulator"
-    Location		    [134, 196, 1309, 841]
+    Location		    [2, 82, 1339, 744]
     Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -827,42 +823,13 @@ Model {
     ShowPageBoundaries	    off
     ZoomFactor		    "100"
     ReportName		    "simulink-default.rpt"
-    SIDHighWatermark	    "44"
-    Block {
-      BlockType		      Reference
-      Name		      "Detect\nChange"
-      SID		      "44"
-      Ports		      [1, 1]
-      Position		      [495, 450, 555, 480]
-      LibraryVersion	      "1.236"
-      SourceBlock	      "simulink/Logic and Bit\nOperations/Detect\nChange"
-      SourceType	      "Detect Change"
-      ShowPortLabels	      "FromPortIcon"
-      SystemSampleTime	      "-1"
-      FunctionWithSeparateData off
-      RTWMemSecFuncInitTerm   "Inherit from model"
-      RTWMemSecFuncExecute    "Inherit from model"
-      RTWMemSecDataConstants  "Inherit from model"
-      RTWMemSecDataInternal   "Inherit from model"
-      RTWMemSecDataParameters "Inherit from model"
-      GeneratePreprocessorConditionals off
-      vinit		      "0"
-    }
-    Block {
-      BlockType		      Display
-      Name		      "Display"
-      SID		      "7"
-      Ports		      [1]
-      Position		      [510, 320, 600, 350]
-      Decimation	      "1"
-      Lockdown		      off
-    }
+    SIDHighWatermark	    "88"
     Block {
       BlockType		      Display
       Name		      "Display1"
       SID		      "8"
       Ports		      [1]
-      Position		      [260, 380, 350, 410]
+      Position		      [350, 610, 440, 640]
       Decimation	      "1"
       Lockdown		      off
     }
@@ -871,7 +838,7 @@ Model {
       Name		      "Display2"
       SID		      "9"
       Ports		      [1]
-      Position		      [260, 430, 350, 460]
+      Position		      [345, 700, 435, 730]
       Decimation	      "1"
       Lockdown		      off
     }
@@ -880,7 +847,16 @@ Model {
       Name		      "Display3"
       SID		      "10"
       Ports		      [1]
-      Position		      [260, 480, 350, 510]
+      Position		      [345, 800, 435, 830]
+      Decimation	      "1"
+      Lockdown		      off
+    }
+    Block {
+      BlockType		      Display
+      Name		      "Display5"
+      SID		      "78"
+      Ports		      [1]
+      Position		      [385, 480, 475, 510]
       Decimation	      "1"
       Lockdown		      off
     }
@@ -888,7 +864,7 @@ Model {
       BlockType		      From
       Name		      "From"
       SID		      "12"
-      Position		      [130, 324, 220, 346]
+      Position		      [85, 484, 175, 506]
       BackgroundColor	      "lightBlue"
       GotoTag		      "Joint0"
     }
@@ -896,15 +872,31 @@ Model {
       BlockType		      From
       Name		      "From1"
       SID		      "16"
-      Position		      [130, 384, 220, 406]
+      Position		      [105, 614, 195, 636]
       BackgroundColor	      "lightBlue"
       GotoTag		      "Joint1"
     }
     Block {
       BlockType		      From
+      Name		      "From10"
+      SID		      "87"
+      Position		      [730, 679, 820, 701]
+      BackgroundColor	      "lightBlue"
+      GotoTag		      "ServoJoint2"
+    }
+    Block {
+      BlockType		      From
+      Name		      "From11"
+      SID		      "88"
+      Position		      [730, 749, 820, 771]
+      BackgroundColor	      "lightBlue"
+      GotoTag		      "ServoJoint3"
+    }
+    Block {
+      BlockType		      From
       Name		      "From2"
       SID		      "17"
-      Position		      [130, 434, 220, 456]
+      Position		      [105, 704, 195, 726]
       BackgroundColor	      "lightBlue"
       GotoTag		      "Joint2"
     }
@@ -912,9 +904,17 @@ Model {
       BlockType		      From
       Name		      "From3"
       SID		      "18"
-      Position		      [130, 484, 220, 506]
+      Position		      [105, 804, 195, 826]
       BackgroundColor	      "lightBlue"
       GotoTag		      "Joint3"
+    }
+    Block {
+      BlockType		      From
+      Name		      "From4"
+      SID		      "85"
+      Position		      [730, 539, 820, 561]
+      BackgroundColor	      "lightBlue"
+      GotoTag		      "ServoJoint0"
     }
     Block {
       BlockType		      From
@@ -922,7 +922,7 @@ Model {
       SID		      "25"
       Position		      [685, 44, 775, 66]
       BackgroundColor	      "lightBlue"
-      GotoTag		      "Joint0"
+      GotoTag		      "ServoJoint0"
     }
     Block {
       BlockType		      From
@@ -930,7 +930,7 @@ Model {
       SID		      "26"
       Position		      [685, 114, 775, 136]
       BackgroundColor	      "lightBlue"
-      GotoTag		      "Joint1"
+      GotoTag		      "ServoJoint1"
     }
     Block {
       BlockType		      From
@@ -938,7 +938,7 @@ Model {
       SID		      "27"
       Position		      [685, 184, 775, 206]
       BackgroundColor	      "lightBlue"
-      GotoTag		      "Joint2"
+      GotoTag		      "ServoJoint2"
     }
     Block {
       BlockType		      From
@@ -946,7 +946,15 @@ Model {
       SID		      "28"
       Position		      [685, 254, 775, 276]
       BackgroundColor	      "lightBlue"
-      GotoTag		      "Joint3"
+      GotoTag		      "ServoJoint3"
+    }
+    Block {
+      BlockType		      From
+      Name		      "From9"
+      SID		      "86"
+      Position		      [730, 609, 820, 631]
+      BackgroundColor	      "lightBlue"
+      GotoTag		      "ServoJoint1"
     }
     Block {
       BlockType		      Goto
@@ -985,11 +993,40 @@ Model {
       TagVisibility	      "local"
     }
     Block {
-      BlockType		      Integrator
-      Name		      "Integrator"
-      SID		      "37"
-      Ports		      [1, 1]
-      Position		      [305, 320, 335, 350]
+      BlockType		      Goto
+      Name		      "Goto4"
+      SID		      "82"
+      Position		      [375, 558, 490, 582]
+      BackgroundColor	      "orange"
+      GotoTag		      "ServoJoint1"
+      TagVisibility	      "local"
+    }
+    Block {
+      BlockType		      Goto
+      Name		      "Goto5"
+      SID		      "77"
+      Position		      [370, 418, 485, 442]
+      BackgroundColor	      "orange"
+      GotoTag		      "ServoJoint0"
+      TagVisibility	      "local"
+    }
+    Block {
+      BlockType		      Goto
+      Name		      "Goto6"
+      SID		      "83"
+      Position		      [375, 663, 490, 687]
+      BackgroundColor	      "orange"
+      GotoTag		      "ServoJoint2"
+      TagVisibility	      "local"
+    }
+    Block {
+      BlockType		      Goto
+      Name		      "Goto7"
+      SID		      "84"
+      Position		      [375, 758, 490, 782]
+      BackgroundColor	      "orange"
+      GotoTag		      "ServoJoint3"
+      TagVisibility	      "local"
     }
     Block {
       BlockType		      M-S-Function
@@ -1008,21 +1045,72 @@ Model {
       MaskIconUnits	      "autoscale"
     }
     Block {
-      BlockType		      Saturate
-      Name		      "Saturation"
-      SID		      "38"
-      Ports		      [1, 1]
-      Position		      [375, 320, 405, 350]
-      InputPortMap	      "u0"
-      UpperLimit	      "90"
-      LowerLimit	      "90"
+      BlockType		      RateLimiter
+      Name		      "Rate Limiter"
+      SID		      "76"
+      Position		      [240, 480, 270, 510]
+      RisingSlewLimit	      "50"
+      FallingSlewLimit	      "-50"
+      SampleTimeMode	      "inherited"
+    }
+    Block {
+      BlockType		      RateLimiter
+      Name		      "Rate Limiter1"
+      SID		      "79"
+      Position		      [250, 610, 280, 640]
+      RisingSlewLimit	      "50"
+      FallingSlewLimit	      "-50"
+      SampleTimeMode	      "inherited"
+    }
+    Block {
+      BlockType		      RateLimiter
+      Name		      "Rate Limiter2"
+      SID		      "80"
+      Position		      [250, 700, 280, 730]
+      RisingSlewLimit	      "50"
+      FallingSlewLimit	      "-50"
+      SampleTimeMode	      "inherited"
+    }
+    Block {
+      BlockType		      RateLimiter
+      Name		      "Rate Limiter3"
+      SID		      "81"
+      Position		      [250, 800, 280, 830]
+      RisingSlewLimit	      "50"
+      FallingSlewLimit	      "-50"
+      SampleTimeMode	      "inherited"
+    }
+    Block {
+      BlockType		      Scope
+      Name		      "Scope2"
+      SID		      "75"
+      Ports		      [4]
+      Position		      [960, 515, 1125, 795]
+      BackgroundColor	      "lightBlue"
+      Floating		      off
+      Location		      [5, 47, 1371, 762]
+      Open		      on
+      NumInputPorts	      "4"
+      List {
+	ListType		AxesTitles
+	axes1			"%<SignalLabel>"
+	axes2			"%<SignalLabel>"
+	axes3			"%<SignalLabel>"
+	axes4			"%<SignalLabel>"
+      }
+      YMin		      "15.5~-5~-5~-5"
+      YMax		      "18.5~5~5~5"
+      SaveName		      "ScopeData2"
+      DataFormat	      "StructureWithTime"
+      LimitDataPoints	      off
+      SampleTime	      "0"
     }
     Block {
       BlockType		      SubSystem
       Name		      "Virtual reallity"
       SID		      "39"
       Ports		      [4]
-      Position		      [845, 23, 1090, 297]
+      Position		      [1035, 23, 1280, 297]
       ForegroundColor	      "blue"
       MinAlgLoopOccurrences   off
       PropExecContextOutsideSubsystem off
@@ -1033,8 +1121,8 @@ Model {
       MaskHideContents	      off
       System {
 	Name			"Virtual reallity"
-	Location		[382, 393, 1212, 822]
-	Open			off
+	Location		[0, 50, 1358, 764]
+	Open			on
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
 	ScreenColor		"white"
@@ -1121,6 +1209,7 @@ Model {
 	  WorldFileName		  "ArmModel3D.wrl"
 	  AutoView		  off
 	  VideoDimensions	  "[]"
+	  FigureProperties	  "{}"
 	}
 	Line {
 	  SrcBlock		  "Level-2 MATLAB\nS-Function"
@@ -1213,7 +1302,7 @@ Model {
     Line {
       SrcBlock		      "From"
       SrcPort		      1
-      DstBlock		      "Integrator"
+      DstBlock		      "Rate Limiter"
       DstPort		      1
     }
     Line {
@@ -1237,19 +1326,19 @@ Model {
     Line {
       SrcBlock		      "From1"
       SrcPort		      1
-      DstBlock		      "Display1"
+      DstBlock		      "Rate Limiter1"
       DstPort		      1
     }
     Line {
       SrcBlock		      "From2"
       SrcPort		      1
-      DstBlock		      "Display2"
+      DstBlock		      "Rate Limiter2"
       DstPort		      1
     }
     Line {
       SrcBlock		      "From3"
       SrcPort		      1
-      DstBlock		      "Display3"
+      DstBlock		      "Rate Limiter3"
       DstPort		      1
     }
     Line {
@@ -1277,16 +1366,84 @@ Model {
       DstPort		      4
     }
     Line {
-      SrcBlock		      "Saturation"
+      SrcBlock		      "Rate Limiter1"
       SrcPort		      1
-      DstBlock		      "Display"
+      Points		      [30, 0]
+      Branch {
+	DstBlock		"Display1"
+	DstPort			1
+      }
+      Branch {
+	Points			[0, -55]
+	DstBlock		"Goto4"
+	DstPort			1
+      }
+    }
+    Line {
+      SrcBlock		      "Rate Limiter2"
+      SrcPort		      1
+      Points		      [25, 0]
+      Branch {
+	DstBlock		"Display2"
+	DstPort			1
+      }
+      Branch {
+	Points			[0, -40]
+	DstBlock		"Goto6"
+	DstPort			1
+      }
+    }
+    Line {
+      SrcBlock		      "Rate Limiter3"
+      SrcPort		      1
+      Points		      [25, 0]
+      Branch {
+	DstBlock		"Display3"
+	DstPort			1
+      }
+      Branch {
+	Points			[0, -45]
+	DstBlock		"Goto7"
+	DstPort			1
+      }
+    }
+    Line {
+      SrcBlock		      "Rate Limiter"
+      SrcPort		      1
+      Points		      [65, 0]
+      Branch {
+	DstBlock		"Display5"
+	DstPort			1
+      }
+      Branch {
+	Points			[0, -65]
+	DstBlock		"Goto5"
+	DstPort			1
+      }
+    }
+    Line {
+      SrcBlock		      "From4"
+      SrcPort		      1
+      DstBlock		      "Scope2"
       DstPort		      1
     }
     Line {
-      SrcBlock		      "Integrator"
+      SrcBlock		      "From9"
       SrcPort		      1
-      DstBlock		      "Saturation"
-      DstPort		      1
+      DstBlock		      "Scope2"
+      DstPort		      2
+    }
+    Line {
+      SrcBlock		      "From10"
+      SrcPort		      1
+      DstBlock		      "Scope2"
+      DstPort		      3
+    }
+    Line {
+      SrcBlock		      "From11"
+      SrcPort		      1
+      DstBlock		      "Scope2"
+      DstPort		      4
     }
   }
 }
