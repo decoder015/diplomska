@@ -32,21 +32,23 @@ baseCube    = vrnode(world, 'Base');
 foreArm     = vrnode(world, 'ForeArm');
 arm         = vrnode(world, 'Arm');
 gripper     = vrnode(world, 'Gripper');
-baseServo01 = vrnode(world, 'Base_Servo_01');
+baseServos = vrnode(world, 'BaseServos');
 baseServo02 = vrnode(world, 'Base_Servo_02');
 %% Do the transformations
 % parameters in degres:
- theta0 = 45;
- theta1 = 90;
+ theta0 =45;
+ theta1 = 0;
  theta2 = 0;
  theta3 = 0;
 
 % get VR transformations
-[vr_foreArmRotation, vr_foreArmTranslation,...
- vr_armRotation,     vr_armTranslation,...
- vr_gripperRotation, vr_gripperTranslation] = JointValuesToVRTranformations(theta0, theta1, theta2, theta3, true);
+[ vr_baseServosRotation, ... 
+  vr_foreArmRotation, vr_foreArmTranslation, ...
+  vr_armRotation,     vr_armTranslation, ...
+  vr_gripperRotation, vr_gripperTranslation] = JointValuesToVRTranformations(theta0, theta1, theta2, theta3, true);
 
-
+% base servs rotation
+ baseServos.rotation = vr_baseServosRotation;
 
 % foreArm
 foreArm.rotation = vr_foreArmRotation;
