@@ -1,4 +1,5 @@
-function [foreArmRotation foreArmTranslation ...
+function [baseServosRotation ...          
+          foreArmRotation foreArmTranslation ...
           armRotation armTranslation ... 
           gripperRotation gripperTranslation] = JointValuesToVRTranformations(joint0Val, joint1Val, joint2Val, joint3Val, debugMode)
 %% Kinematic model in meters
@@ -90,6 +91,10 @@ theta0 = joint0Val;
 %Joint0Frame = Joint0Frame * rothx(-90) ;
 %fprintf('Joint 0 frame:\n');
 %disp(Joint0Frame);
+
+% base servo rotations
+tmpRot = roty(theta0, 'deg');
+baseServosRotation = vrrotmat2vec(tmpRot);
 
 % rotation by angle of theta in degrees
 Joint0Frame = Joint0Frame * rothy(theta0);

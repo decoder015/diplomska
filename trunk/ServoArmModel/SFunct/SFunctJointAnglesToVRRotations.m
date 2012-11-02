@@ -56,9 +56,10 @@ function Output(block)
   joint3Val = block.InputPort(4).Data;
   
   % get VR transformations 
-  [vr_foreArmRotation, vr_foreArmTranslation,...
-   vr_armRotation,     vr_armTranslation,...
-   vr_gripperRotation, vr_gripperTranslation] = JointValuesToVRTranformations(joint0Val, joint1Val, joint2Val, joint3Val, false);
+  [ vr_BaseServosRotation, ...
+    vr_foreArmRotation, vr_foreArmTranslation,...
+    vr_armRotation,     vr_armTranslation,...
+    vr_gripperRotation, vr_gripperTranslation] = JointValuesToVRTranformations(joint0Val, joint1Val, joint2Val, joint3Val, false);
 
   
   % set output
@@ -68,7 +69,7 @@ function Output(block)
   block.OutputPort(4).Data = vr_armTranslation;
   
   block.OutputPort(5).Data = vr_gripperRotation; 
-  block.OutputPort(6).Data = vr_gripperTranslation;
-  block.OutputPort(7).Data = [0,0,0,0];
+  block.OutputPort(6).Data = vr_gripperTranslation;  
+  block.OutputPort(7).Data = vr_BaseServosRotation;
   block.OutputPort(8).Data = [0,0,0];
 %endfunction
