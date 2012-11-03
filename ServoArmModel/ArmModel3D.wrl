@@ -125,6 +125,7 @@ NavigationInfo {
 	visibilityLimit	25.4
 }
 DEF RoboticArm Transform {
+	rotation	0 1 0  1.5708
 	children [ 
 	    DEF ForeArm Transform {
 		    children [ 

@@ -35,33 +35,37 @@ gripper     = vrnode(world, 'Gripper');
 baseServos = vrnode(world, 'BaseServos');
 baseServo02 = vrnode(world, 'Base_Servo_02');
 %% Do the transformations
-% parameters in degres:
- theta0 =45;
- theta1 = 0;
- theta2 = 0;
- theta3 = 0;
+ handle = UIJointJog ;
 
-% get VR transformations
-[ vr_baseServosRotation, ... 
-  vr_foreArmRotation, vr_foreArmTranslation, ...
-  vr_armRotation,     vr_armTranslation, ...
-  vr_gripperRotation, vr_gripperTranslation] = JointValuesToVRTranformations(theta0, theta1, theta2, theta3, true);
-
-% base servs rotation
- baseServos.rotation = vr_baseServosRotation;
-
-% foreArm
-foreArm.rotation = vr_foreArmRotation;
-foreArm.translation = vr_foreArmTranslation;
-
-% arm
-arm.rotation = vr_armRotation;
-arm.translation = vr_armTranslation;
-
-% gripper
-% get axis angle representation from rotation matrix
-gripper.rotation = vr_gripperRotation;
-gripper.translation =vr_gripperTranslation;
-
-% redraw 3D env
-vrdrawnow
+while(1)
+    % parameters in degres:
+    theta0 = (-1) * joint0Val;
+    theta1 = (-1) * joint1Val;
+    theta2 =        joint2Val;
+    theta3 = (-1) * joint3Val;
+    
+    % get VR transformations
+    [ vr_baseServosRotation, ...
+        vr_foreArmRotation, vr_foreArmTranslation, ...
+        vr_armRotation,     vr_armTranslation, ...
+        vr_gripperRotation, vr_gripperTranslation] = JointValuesToVRTranformations(theta0, theta1, theta2, theta3, false);
+    
+    % base servs rotation
+    baseServos.rotation = vr_baseServosRotation;
+    
+    % foreArm
+    foreArm.rotation = vr_foreArmRotation;
+    foreArm.translation = vr_foreArmTranslation;
+    
+    % arm
+    arm.rotation = vr_armRotation;
+    arm.translation = vr_armTranslation;
+    
+    % gripper
+    % get axis angle representation from rotation matrix
+    gripper.rotation = vr_gripperRotation;
+    gripper.translation =vr_gripperTranslation;
+    
+    % redraw 3D env
+    vrdrawnow  ;
+end

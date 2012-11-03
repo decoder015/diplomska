@@ -22,7 +22,7 @@ function varargout = UIJointJog(varargin)
 
 % Edit the above text to modify the response to help UIJointJog
 
-% Last Modified by GUIDE v2.5 20-Oct-2012 17:16:28
+% Last Modified by GUIDE v2.5 03-Nov-2012 19:02:49
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -85,6 +85,12 @@ joint2Val = get(hObject,'Value');
 
 % set value to tboJoint0Val text edit control using handles!!!
 set(handles.m_tboJoint2Val, 'String', joint2Val);
+
+toRobot = get(handles.m_cboToRobot, 'Value');
+%fprintf ('to robot: %d\n', toRobot);
+if(toRobot)
+        RotateServo('COM13', 2, joint2Val);
+end
 %*********************************END*********************************
 
 % --- Executes during object creation, after setting all properties.
@@ -111,6 +117,12 @@ joint1Val = get(hObject,'Value');
 
 % set value to tboJoint0Val text edit control using handles!!!
 set(handles.m_tboJoint1Val, 'String', joint1Val);
+
+toRobot = get(handles.m_cboToRobot, 'Value');
+%fprintf ('to robot: %d\n', toRobot);
+if(toRobot)
+        RotateServo('COM13', 1, joint1Val);
+end
 %*********************************END*********************************
 
 
@@ -138,6 +150,12 @@ joint0Val = get(hObject,'Value');
 
 % set value to tboJoint0Val text edit control using handles!!!
 set(handles.m_tboJoint0Val, 'String', joint0Val);
+
+toRobot = get(handles.m_cboToRobot, 'Value');
+%sfprintf ('to robot: %d\n', toRobot);
+if(toRobot)
+        RotateServo('COM13', 0, joint0Val);
+end
 %*********************************END*********************************
 
 % --- Executes during object creation, after setting all properties.
@@ -164,6 +182,13 @@ joint3Val = get(hObject,'Value');
 
 % set value to tboJoint0Val text edit control using handles!!!
 set(handles.m_tboJoint3Val, 'String', joint3Val);
+
+toRobot = get(handles.m_cboToRobot, 'Value');
+%fprintf ('to robot: %d\n', toRobot);
+if(toRobot)
+        RotateServo('COM13', 3, joint3Val);
+end
+
 %*********************************END*********************************
 
 
@@ -190,18 +215,25 @@ global joint0Val;
 joint0Val = str2double(get(hObject,'String'));
 
 % set limit to +/-90 deg
-if(joint0Val > 90 )
-    joint0Val = 90;
+if(joint0Val > 45 )
+    joint0Val = 45;
     set(handles.m_tboJoint0Val, 'String', joint0Val);
 end
 
-if(joint0Val < -90)
-    joint0Val = -90;
+if(joint0Val < -45)
+    joint0Val = -45;
     set(handles.m_tboJoint0Val, 'String', joint0Val);
 end
 
 % set value to tboJoint0Val text edit control using handles!!!
 set(handles.m_sliderJoint0, 'Value', joint0Val);
+
+toRobot = get(handles.m_cboToRobot, 'Value');
+%fprintf ('to robot: %d\n', toRobot);
+if(toRobot)
+        RotateServo('COM13', 0, joint0Val);
+end
+%*********************************END*********************************
 
 % --- Executes during object creation, after setting all properties.
 function m_tboJoint0Val_CreateFcn(hObject, eventdata, handles)
@@ -227,18 +259,24 @@ global joint1Val;
 joint1Val = str2double(get(hObject,'String'));
 
 % set limit to +/-90 deg
-if(joint1Val > 90 )
-    joint1Val = 90;
+if(joint1Val > 45 )
+    joint1Val = 45;
     set(handles.m_tboJoint1Val, 'String', joint1Val);
 end
 
-if(joint1Val < -90)
-    joint1Val = -90;
+if(joint1Val < -45)
+    joint1Val = -45;
     set(handles.m_tboJoint1Val, 'String', joint1Val);
 end
 
 % set value to tboJoint0Val text edit control using handles!!!
 set(handles.m_sliderJoint1, 'Value', joint1Val);
+
+toRobot = get(handles.m_cboToRobot, 'Value');
+%fprintf ('to robot: %d\n', toRobot);
+if(toRobot)
+        RotateServo('COM13', 1, joint1Val);
+end
 
 % --- Executes during object creation, after setting all properties.
 function m_tboJoint1Val_CreateFcn(hObject, eventdata, handles)
@@ -264,18 +302,24 @@ global joint2Val;
 joint2Val = str2double(get(hObject,'String'));
 
 % set limit to +/-90 deg
-if(joint2Val > 90 )
-    joint2Val = 90;
+if(joint2Val > 45 )
+    joint2Val = 45;
     set(handles.m_tboJoint2Val, 'String', joint2Val);
 end
 
-if(joint2Val < -90)
-    joint2Val = -90;
+if(joint2Val < -45)
+    joint2Val = -45;
     set(handles.m_tboJoint2Val, 'String', joint2Val);
 end
 
 % set value to tboJoint0Val text edit control using handles!!!
 set(handles.m_sliderJoint2, 'Value', joint2Val);
+
+toRobot = get(handles.m_cboToRobot, 'Value');
+%fprintf ('to robot: %d\n', toRobot);
+if(toRobot)
+        RotateServo('COM13', 2, joint2Val);
+end
 
 % --- Executes during object creation, after setting all properties.
 function m_tboJoint2Val_CreateFcn(hObject, eventdata, handles)
@@ -301,18 +345,24 @@ global joint3Val;
 joint3Val = str2double(get(hObject,'String'));
 
 % set limit to +/-90 deg
-if(joint3Val > 90 )
-    joint3Val = 90;
+if(joint3Val > 45 )
+    joint3Val = 45;
     set(handles.m_tboJoint0Val, 'String', joint3Val);
 end
 
-if(joint3Val < -90)
-    joint3Val = -90;
+if(joint3Val < -45)
+    joint3Val = -45;
     set(handles.m_tboJoint0Val, 'String', joint3Val);
 end
 
 % set value to tboJoint0Val text edit control using handles!!!
 set(handles.m_sliderJoint3, 'Value', joint3Val);
+
+toRobot = get(handles.m_cboToRobot, 'Value');
+%fprintf ('to robot: %d\n', toRobot);
+if(toRobot)
+        RotateServo('COM13', 3, joint3Val);
+end
 
 % --- Executes during object creation, after setting all properties.
 function m_tboJoint3Val_CreateFcn(hObject, eventdata, handles)
@@ -325,3 +375,12 @@ function m_tboJoint3Val_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
+
+
+% --- Executes on button press in m_cboToRobot.
+function m_cboToRobot_Callback(hObject, eventdata, handles)
+% hObject    handle to m_cboToRobot (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of m_cboToRobot
