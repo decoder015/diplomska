@@ -32,7 +32,7 @@ function setup(block)
   block.OutputPort(8).Dimensions = 3; %translation x, y, z
   
   %% Set block sample time to inherited
-  block.SampleTimes = [0 0];
+  block.SampleTimes = [-1 0];
   
    %% Register parameters
   block.NumDialogPrms = 0;
