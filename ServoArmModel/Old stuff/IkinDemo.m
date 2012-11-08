@@ -26,6 +26,7 @@ Target = [
 sol=sixlink.ikine(Target, zeros(1,6), [1 1 1 1 1 1]);
 fprintf('Joint angles:\n');
 disp(radtodeg(sol));
+figure(5);
 sixlink.plot(sol);
 %twolink.ikine(TCP, zeros(1,5), [1 1 1 1 1 0]);
 %twolink.fkine(TCP)Qsol
