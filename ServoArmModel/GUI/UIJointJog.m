@@ -22,7 +22,7 @@ function varargout = UIJointJog(varargin)
 
 % Edit the above text to modify the response to help UIJointJog
 
-% Last Modified by GUIDE v2.5 08-Nov-2012 22:24:45
+% Last Modified by GUIDE v2.5 09-Nov-2012 10:10:57
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -406,18 +406,27 @@ L(3) = Link([ 0     0     0.8   0],     'standard');
 L(4) = Link([ 0     0.0   0    pi/2],   'standard');
 L(5) = Link([ 0     0.3   0    pi/2],   'standard');
 L(6) = Link([ 0     0.0   0.0  0],      'standard');
-sixlink = SerialLink(L, 'name', 'Six Link')
+sixlink = SerialLink(L, 'name', 'Six Link');
 %%
 
-Target = [
-          1,    0,  0,  1;
-          0,    1,  0,  1.0;
-          0,    0,  1,  1;
-          0,    0,  0,  1
-          ];
-sol=sixlink.ikine(Target, zeros(1,6), [1 1 1 1 1 1]);
-fprintf('Joint angles:\n');
-disp(radtodeg(sol));
+%get RX RY RZ from GUI
+rx = str2double( get(handles.m_tboRx, 'String') );
+ry = str2double( get(handles.m_tboRy, 'String') );
+rz = str2double( get(handles.m_tboRz, 'String') );
+
+%get X Y Z from GUI
+x = str2double( get(handles.m_tboX, 'String') );
+y = str2double( get(handles.m_tboY, 'String') );
+z = str2double( get(handles.m_tboZ, 'String') );
+
+%Set taget frame
+target = RPY2TR(rx,ry,rz);
+target(1,4) = x;
+target(2,4) = y;
+target(3,4) = z;
+sol=sixlink.ikine(target, zeros(1,6), [1 1 1 1 1 1]);
+%fprintf('Joint angles:\n');
+%disp(radtodeg(sol));
 sixlink.plot(sol);
 
 % Create frequency plot in proper axes
@@ -426,21 +435,21 @@ sixlink.plot(sol);
 %z=1:1:10;
 %plot(handles.kinamatic,x, y);
 %h1=sixlink.plot(sol);
+%====================END=============================
 
 
-
-function edit5_Callback(hObject, eventdata, handles)
-% hObject    handle to edit5 (see GCBO)
+function m_tboZ_Callback(hObject, eventdata, handles)
+% hObject    handle to m_tboZ (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of edit5 as text
-%        str2double(get(hObject,'String')) returns contents of edit5 as a double
+% Hints: get(hObject,'String') returns contents of m_tboZ as text
+%        str2double(get(hObject,'String')) returns contents of m_tboZ as a double
 
 
 % --- Executes during object creation, after setting all properties.
-function edit5_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to edit5 (see GCBO)
+function m_tboZ_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to m_tboZ (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -452,18 +461,18 @@ end
 
 
 
-function edit6_Callback(hObject, eventdata, handles)
-% hObject    handle to edit6 (see GCBO)
+function m_tboY_Callback(hObject, eventdata, handles)
+% hObject    handle to m_tboY (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of edit6 as text
-%        str2double(get(hObject,'String')) returns contents of edit6 as a double
+% Hints: get(hObject,'String') returns contents of m_tboY as text
+%        str2double(get(hObject,'String')) returns contents of m_tboY as a double
 
 
 % --- Executes during object creation, after setting all properties.
-function edit6_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to edit6 (see GCBO)
+function m_tboY_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to m_tboY (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -475,18 +484,18 @@ end
 
 
 
-function edit7_Callback(hObject, eventdata, handles)
-% hObject    handle to edit7 (see GCBO)
+function m_tboX_Callback(hObject, eventdata, handles)
+% hObject    handle to m_tboX (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of edit7 as text
-%        str2double(get(hObject,'String')) returns contents of edit7 as a double
+% Hints: get(hObject,'String') returns contents of m_tboX as text
+%        str2double(get(hObject,'String')) returns contents of m_tboX as a double
 
 
 % --- Executes during object creation, after setting all properties.
-function edit7_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to edit7 (see GCBO)
+function m_tboX_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to m_tboX (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -498,18 +507,18 @@ end
 
 
 
-function edit8_Callback(hObject, eventdata, handles)
-% hObject    handle to edit8 (see GCBO)
+function m_tboRz_Callback(hObject, eventdata, handles)
+% hObject    handle to m_tboRz (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of edit8 as text
-%        str2double(get(hObject,'String')) returns contents of edit8 as a double
+% Hints: get(hObject,'String') returns contents of m_tboRz as text
+%        str2double(get(hObject,'String')) returns contents of m_tboRz as a double
 
 
 % --- Executes during object creation, after setting all properties.
-function edit8_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to edit8 (see GCBO)
+function m_tboRz_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to m_tboRz (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -521,18 +530,18 @@ end
 
 
 
-function edit9_Callback(hObject, eventdata, handles)
-% hObject    handle to edit9 (see GCBO)
+function m_tboRy_Callback(hObject, eventdata, handles)
+% hObject    handle to m_tboRy (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of edit9 as text
-%        str2double(get(hObject,'String')) returns contents of edit9 as a double
+% Hints: get(hObject,'String') returns contents of m_tboRy as text
+%        str2double(get(hObject,'String')) returns contents of m_tboRy as a double
 
 
 % --- Executes during object creation, after setting all properties.
-function edit9_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to edit9 (see GCBO)
+function m_tboRy_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to m_tboRy (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -544,18 +553,18 @@ end
 
 
 
-function edit10_Callback(hObject, eventdata, handles)
-% hObject    handle to edit10 (see GCBO)
+function m_tboRx_Callback(hObject, eventdata, handles)
+% hObject    handle to m_tboRx (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of edit10 as text
-%        str2double(get(hObject,'String')) returns contents of edit10 as a double
+% Hints: get(hObject,'String') returns contents of m_tboRx as text
+%        str2double(get(hObject,'String')) returns contents of m_tboRx as a double
 
 
 % --- Executes during object creation, after setting all properties.
-function edit10_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to edit10 (see GCBO)
+function m_tboRx_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to m_tboRx (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -564,3 +573,10 @@ function edit10_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
+
+
+% --------------------------------------------------------------------
+function Untitled_1_Callback(hObject, eventdata, handles)
+% hObject    handle to Untitled_1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
