@@ -54,14 +54,16 @@ function Output(block)
   %fprintf('Servo 2: %d\n', tmp_joint2Val);
   %fprintf('Servo 3: %d\n', tmp_joint3Val);
   
-  serialPort = evalin('base', 'serialPort');
-  
-  %send commands to servo
-  
-  %if(sendCommand)
+  %get robot com port status
+  robotOnline = evalin('base', 'robotOnline');
+  if(robotOnline)
+      serialPort = evalin('base', 'serialPort');
+      %send commands to servo
+      %if(sendCommand)
       RotateServo(serialPort, 0, tmp_joint0Val);
       RotateServo(serialPort, 1, tmp_joint1Val);
       RotateServo(serialPort, 2, tmp_joint2Val);
       RotateServo(serialPort, 3, tmp_joint3Val);
- % end
+      %end
+  end
 %endfunction

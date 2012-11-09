@@ -6,7 +6,7 @@ Model {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.125"
+    ComputedModelVersion    "1.127"
     NumModelReferences	    0
     NumTestPointedSignals   0
   }
@@ -32,20 +32,21 @@ Model {
   MinMaxOverflowArchiveMode "Overwrite"
   MaxMDLFileLineLength	  120
   StartFcn		  "path(path,'\\GUI');\npath(path,'\\Util');\npath(path,'\\SFunct');\n\n% global vars \nglobal joint0Val ;"
-  "\nglobal joint1Val ;\nglobal joint2Val ;\nglobal joint3Val ;\n\n\n%% Open serial port\nglobal serialPort;\nserialPor"
-  "t=serial('COM13', 'BaudRate', 9600, 'DataBits',8);\nserialPort.terminator = 'CR';\nfopen(serialPort);\n\n\n%init\njo"
-  "int0Val = 0;\njoint1Val = 0;\njoint2Val = 0;\njoint3Val = 0;\nopenPort = 1;\nclosePort = 0;\n%Show joint jog\nUIJoin"
-  "tJog"
-  StopFcn		  "%% close serial port\nserialPort = evalin('base', 'serialPort');\nfclose(serialPort);\n"
+  "\nglobal joint1Val ;\nglobal joint2Val ;\nglobal joint3Val ;\nglobal robotOnline;\n\n% 1 = ON\n% 0 =  OFF\n\nrobotOn"
+  "line = 0;\n\n%% Open serial port\nif(robotOnline)\n global serialPort;\n serialPort=serial('COM13', 'BaudRate', 9600"
+  ", 'DataBits',8);\n serialPort.terminator = 'CR';\n fopen(serialPort);\nend\n\n%init\njoint0Val = 0;\njoint1Val = 0;\n"
+  "joint2Val = 0;\njoint3Val = 0;\nopenPort = 1;\nclosePort = 0\n;\n%Show joint jog\nUIJointJog"
+  StopFcn		  "%% close serial port\nif(robotOnline)\nserialPort = evalin('base', 'serialPort');\nfclose(serialPort);\n"
+  "end\n"
   Created		  "Wed Oct 17 23:51:18 2012"
   Creator		  "Owner"
   UpdateHistory		  "UpdateHistoryNever"
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "user"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Sun Nov 04 18:14:47 2012"
-  RTWModifiedTimeStamp	  273947660
-  ModelVersionFormat	  "1.%<AutoIncrement:125>"
+  LastModifiedDate	  "Fri Nov 09 10:03:05 2012"
+  RTWModifiedTimeStamp	  274356141
+  ModelVersionFormat	  "1.%<AutoIncrement:127>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -857,7 +858,7 @@ Model {
   }
   System {
     Name		    "RobotArmSimulator"
-    Location		    [2, 78, 1347, 748]
+    Location		    [2, 78, 1261, 987]
     Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
