@@ -6,7 +6,7 @@ Model {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.127"
+    ComputedModelVersion    "1.132"
     NumModelReferences	    0
     NumTestPointedSignals   0
   }
@@ -33,7 +33,7 @@ Model {
   MaxMDLFileLineLength	  120
   StartFcn		  "path(path,'\\GUI');\npath(path,'\\Util');\npath(path,'\\SFunct');\n\n% global vars \nglobal joint0Val ;"
   "\nglobal joint1Val ;\nglobal joint2Val ;\nglobal joint3Val ;\nglobal robotOnline;\n\n% 1 = ON\n% 0 =  OFF\n\nrobotOn"
-  "line = 0;\n\n%% Open serial port\nif(robotOnline)\n global serialPort;\n serialPort=serial('COM13', 'BaudRate', 9600"
+  "line = 1;\n\n%% Open serial port\nif(robotOnline)\n global serialPort;\n serialPort=serial('COM13', 'BaudRate', 9600"
   ", 'DataBits',8);\n serialPort.terminator = 'CR';\n fopen(serialPort);\nend\n\n%init\njoint0Val = 0;\njoint1Val = 0;\n"
   "joint2Val = 0;\njoint3Val = 0;\nopenPort = 1;\nclosePort = 0\n;\n%Show joint jog\nUIJointJog"
   StopFcn		  "%% close serial port\nif(robotOnline)\nserialPort = evalin('base', 'serialPort');\nfclose(serialPort);\n"
@@ -44,9 +44,9 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "user"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Fri Nov 09 10:03:05 2012"
-  RTWModifiedTimeStamp	  274356141
-  ModelVersionFormat	  "1.%<AutoIncrement:127>"
+  LastModifiedDate	  "Sun Nov 11 14:09:06 2012"
+  RTWModifiedTimeStamp	  274543740
+  ModelVersionFormat	  "1.%<AutoIncrement:132>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -83,6 +83,7 @@ Model {
     $ObjectID		    2
     $ClassName		    "Simulink.SimulationData.ModelLoggingInfo"
     model_		    "RobotArmSimulator"
+    signals_		    []
     overrideMode_	    [0.0]
     Array {
       Type		      "Cell"
@@ -858,7 +859,7 @@ Model {
   }
   System {
     Name		    "RobotArmSimulator"
-    Location		    [2, 78, 1261, 987]
+    Location		    [2, 82, 1339, 744]
     Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -878,7 +879,7 @@ Model {
       Name		      "Detect\nChange"
       SID		      "100"
       Ports		      [1, 1]
-      Position		      [605, 902, 675, 928]
+      Position		      [215, 1097, 285, 1123]
       LibraryVersion	      "1.236"
       SourceBlock	      "simulink/Logic and Bit\nOperations/Detect\nChange"
       SourceType	      "Detect Change"
@@ -898,7 +899,7 @@ Model {
       Name		      "Detect\nChange1"
       SID		      "101"
       Ports		      [1, 1]
-      Position		      [610, 970, 670, 1000]
+      Position		      [220, 1165, 280, 1195]
       LibraryVersion	      "1.236"
       SourceBlock	      "simulink/Logic and Bit\nOperations/Detect\nChange"
       SourceType	      "Detect Change"
@@ -918,7 +919,7 @@ Model {
       Name		      "Detect\nChange2"
       SID		      "102"
       Ports		      [1, 1]
-      Position		      [610, 1040, 670, 1070]
+      Position		      [220, 1235, 280, 1265]
       LibraryVersion	      "1.236"
       SourceBlock	      "simulink/Logic and Bit\nOperations/Detect\nChange"
       SourceType	      "Detect Change"
@@ -938,7 +939,7 @@ Model {
       Name		      "Detect\nChange3"
       SID		      "103"
       Ports		      [1, 1]
-      Position		      [610, 1110, 670, 1140]
+      Position		      [220, 1305, 280, 1335]
       LibraryVersion	      "1.236"
       SourceBlock	      "simulink/Logic and Bit\nOperations/Detect\nChange"
       SourceType	      "Detect Change"
@@ -958,7 +959,7 @@ Model {
       Name		      "Display1"
       SID		      "8"
       Ports		      [1]
-      Position		      [350, 610, 440, 640]
+      Position		      [355, 495, 445, 525]
       Decimation	      "1"
       Lockdown		      off
     }
@@ -967,7 +968,7 @@ Model {
       Name		      "Display2"
       SID		      "9"
       Ports		      [1]
-      Position		      [350, 700, 440, 730]
+      Position		      [355, 585, 445, 615]
       Decimation	      "1"
       Lockdown		      off
     }
@@ -976,7 +977,7 @@ Model {
       Name		      "Display3"
       SID		      "10"
       Ports		      [1]
-      Position		      [350, 800, 440, 830]
+      Position		      [355, 685, 445, 715]
       Decimation	      "1"
       Lockdown		      off
     }
@@ -985,7 +986,7 @@ Model {
       Name		      "Display4"
       SID		      "111"
       Ports		      [1]
-      Position		      [1005, 1025, 1095, 1055]
+      Position		      [615, 1220, 705, 1250]
       Decimation	      "1"
       Lockdown		      off
     }
@@ -994,7 +995,7 @@ Model {
       Name		      "Display5"
       SID		      "78"
       Ports		      [1]
-      Position		      [350, 480, 440, 510]
+      Position		      [355, 365, 445, 395]
       Decimation	      "1"
       Lockdown		      off
     }
@@ -1002,7 +1003,7 @@ Model {
       BlockType		      From
       Name		      "From"
       SID		      "12"
-      Position		      [95, 484, 185, 506]
+      Position		      [100, 369, 190, 391]
       BackgroundColor	      "lightBlue"
       GotoTag		      "Joint0"
     }
@@ -1010,7 +1011,7 @@ Model {
       BlockType		      From
       Name		      "From1"
       SID		      "16"
-      Position		      [105, 614, 195, 636]
+      Position		      [110, 499, 200, 521]
       BackgroundColor	      "lightBlue"
       GotoTag		      "Joint1"
     }
@@ -1018,7 +1019,7 @@ Model {
       BlockType		      From
       Name		      "From10"
       SID		      "87"
-      Position		      [1055, 1399, 1145, 1421]
+      Position		      [935, 804, 1025, 826]
       BackgroundColor	      "lightBlue"
       GotoTag		      "ServoJoint2"
     }
@@ -1026,7 +1027,7 @@ Model {
       BlockType		      From
       Name		      "From11"
       SID		      "88"
-      Position		      [1055, 1454, 1145, 1476]
+      Position		      [935, 859, 1025, 881]
       BackgroundColor	      "lightBlue"
       GotoTag		      "ServoJoint3"
     }
@@ -1066,7 +1067,7 @@ Model {
       BlockType		      From
       Name		      "From16"
       SID		      "106"
-      Position		      [450, 904, 540, 926]
+      Position		      [60, 1099, 150, 1121]
       BackgroundColor	      "lightBlue"
       GotoTag		      "ServoJoint0"
     }
@@ -1074,7 +1075,7 @@ Model {
       BlockType		      From
       Name		      "From17"
       SID		      "107"
-      Position		      [450, 974, 540, 996]
+      Position		      [60, 1169, 150, 1191]
       BackgroundColor	      "lightBlue"
       GotoTag		      "ServoJoint1"
     }
@@ -1082,7 +1083,7 @@ Model {
       BlockType		      From
       Name		      "From18"
       SID		      "108"
-      Position		      [450, 1044, 540, 1066]
+      Position		      [60, 1239, 150, 1261]
       BackgroundColor	      "lightBlue"
       GotoTag		      "ServoJoint2"
     }
@@ -1090,7 +1091,7 @@ Model {
       BlockType		      From
       Name		      "From19"
       SID		      "109"
-      Position		      [450, 1114, 540, 1136]
+      Position		      [60, 1309, 150, 1331]
       BackgroundColor	      "lightBlue"
       GotoTag		      "ServoJoint3"
     }
@@ -1098,7 +1099,7 @@ Model {
       BlockType		      From
       Name		      "From2"
       SID		      "17"
-      Position		      [105, 704, 195, 726]
+      Position		      [110, 589, 200, 611]
       BackgroundColor	      "lightBlue"
       GotoTag		      "Joint2"
     }
@@ -1106,7 +1107,7 @@ Model {
       BlockType		      From
       Name		      "From3"
       SID		      "18"
-      Position		      [105, 804, 195, 826]
+      Position		      [110, 689, 200, 711]
       BackgroundColor	      "lightBlue"
       GotoTag		      "Joint3"
     }
@@ -1114,7 +1115,7 @@ Model {
       BlockType		      From
       Name		      "From4"
       SID		      "85"
-      Position		      [1055, 1289, 1145, 1311]
+      Position		      [935, 694, 1025, 716]
       BackgroundColor	      "lightBlue"
       GotoTag		      "ServoJoint0"
     }
@@ -1154,7 +1155,7 @@ Model {
       BlockType		      From
       Name		      "From9"
       SID		      "86"
-      Position		      [1055, 1344, 1145, 1366]
+      Position		      [935, 749, 1025, 771]
       BackgroundColor	      "lightBlue"
       GotoTag		      "ServoJoint1"
     }
@@ -1228,7 +1229,7 @@ Model {
       BlockType		      Goto
       Name		      "Goto4"
       SID		      "82"
-      Position		      [375, 558, 490, 582]
+      Position		      [380, 443, 495, 467]
       BackgroundColor	      "orange"
       GotoTag		      "ServoJoint1"
       TagVisibility	      "local"
@@ -1237,7 +1238,7 @@ Model {
       BlockType		      Goto
       Name		      "Goto5"
       SID		      "77"
-      Position		      [375, 418, 490, 442]
+      Position		      [380, 303, 495, 327]
       BackgroundColor	      "orange"
       GotoTag		      "ServoJoint0"
       TagVisibility	      "local"
@@ -1246,7 +1247,7 @@ Model {
       BlockType		      Goto
       Name		      "Goto6"
       SID		      "83"
-      Position		      [375, 663, 490, 687]
+      Position		      [380, 548, 495, 572]
       BackgroundColor	      "orange"
       GotoTag		      "ServoJoint2"
       TagVisibility	      "local"
@@ -1255,7 +1256,7 @@ Model {
       BlockType		      Goto
       Name		      "Goto7"
       SID		      "84"
-      Position		      [375, 758, 490, 782]
+      Position		      [380, 643, 495, 667]
       BackgroundColor	      "orange"
       GotoTag		      "ServoJoint3"
       TagVisibility	      "local"
@@ -1265,7 +1266,7 @@ Model {
       Name		      "Logical\nOperator"
       SID		      "110"
       Ports		      [4, 1]
-      Position		      [755, 875, 815, 1165]
+      Position		      [365, 1070, 425, 1360]
       Operator		      "OR"
       Inputs		      "4"
       AllPortsSameDT	      off
@@ -1276,7 +1277,7 @@ Model {
       Name		      "Logical\nOperator1"
       SID		      "117"
       Ports		      [2, 1]
-      Position		      [905, 1002, 935, 1073]
+      Position		      [515, 1197, 545, 1268]
       AllPortsSameDT	      off
       OutDataTypeStr	      "boolean"
     }
@@ -1301,7 +1302,7 @@ Model {
       Name		      "Pulse\nGenerator"
       SID		      "115"
       Ports		      [0, 1]
-      Position		      [795, 1274, 825, 1306]
+      Position		      [405, 1469, 435, 1501]
       PulseType		      "Time based"
       Period		      "1"
       PulseWidth	      "0.25"
@@ -1310,7 +1311,7 @@ Model {
       BlockType		      RateLimiter
       Name		      "Rate Limiter"
       SID		      "76"
-      Position		      [240, 480, 270, 510]
+      Position		      [245, 365, 275, 395]
       RisingSlewLimit	      "50"
       FallingSlewLimit	      "-50"
       SampleTimeMode	      "inherited"
@@ -1319,7 +1320,7 @@ Model {
       BlockType		      RateLimiter
       Name		      "Rate Limiter1"
       SID		      "79"
-      Position		      [250, 610, 280, 640]
+      Position		      [255, 495, 285, 525]
       RisingSlewLimit	      "50"
       FallingSlewLimit	      "-50"
     }
@@ -1327,7 +1328,7 @@ Model {
       BlockType		      RateLimiter
       Name		      "Rate Limiter2"
       SID		      "80"
-      Position		      [250, 700, 280, 730]
+      Position		      [255, 585, 285, 615]
       RisingSlewLimit	      "50"
       FallingSlewLimit	      "-50"
       SampleTimeMode	      "inherited"
@@ -1336,7 +1337,7 @@ Model {
       BlockType		      RateLimiter
       Name		      "Rate Limiter3"
       SID		      "81"
-      Position		      [250, 800, 280, 830]
+      Position		      [255, 685, 285, 715]
       RisingSlewLimit	      "50"
       FallingSlewLimit	      "-50"
       SampleTimeMode	      "inherited"
@@ -1363,7 +1364,7 @@ Model {
       Name		      "Scope"
       SID		      "116"
       Ports		      [1]
-      Position		      [950, 1274, 980, 1306]
+      Position		      [560, 1469, 590, 1501]
       Floating		      off
       Location		      [1, 52, 1367, 767]
       Open		      off
@@ -1380,7 +1381,7 @@ Model {
       Name		      "Scope1"
       SID		      "118"
       Ports		      [1]
-      Position		      [1040, 1089, 1070, 1121]
+      Position		      [650, 1284, 680, 1316]
       Floating		      off
       Location		      [1, 52, 1367, 767]
       Open		      off
@@ -1398,7 +1399,7 @@ Model {
       Name		      "Scope2"
       SID		      "75"
       Ports		      [4]
-      Position		      [1200, 1276, 1320, 1489]
+      Position		      [1080, 681, 1200, 894]
       BackgroundColor	      "lightBlue"
       Floating		      off
       Location		      [5, 47, 1371, 762]
