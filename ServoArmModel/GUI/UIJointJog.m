@@ -22,7 +22,7 @@ function varargout = UIJointJog(varargin)
 
 % Edit the above text to modify the response to help UIJointJog
 
-% Last Modified by GUIDE v2.5 11-Nov-2012 12:20:23
+% Last Modified by GUIDE v2.5 11-Nov-2012 20:50:01
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -85,6 +85,10 @@ global joint2Val;
 global joint3Val;
 global sixlink;
 
+global joint4Val_t;
+global joint5Val_t;
+global joint6Val_t;
+
 sixlink = ikinsolver();
 
 %get vlue form slider
@@ -94,8 +98,16 @@ joint2Val = get(hObject,'Value');
 set(handles.m_tboJoint2Val, 'String', joint2Val);
 
 %plot 
-jointsInRad= joints2solver(joint0Val, joint1Val, joint2Val, joint3Val);
+jointsInRad= joints2solver(joint0Val, joint1Val, joint2Val, joint3Val,...
+                           joint4Val_t, joint5Val_t, joint6Val_t);
 sixlink.plot(jointsInRad);
+
+%set actual joint values in label
+jval = radtodeg(jointsInRad);
+strJoints = sprintf('J1:%6.4f, J2:%6.4f, J3:%6.4f, J4:%6.4f, J5:%6.4f, J%6:6.4f, J7:%6.4f',...
+            jval(1), jval(2), jval(3), jval(4), jval(5), jval(6));
+set(handles.m_lblJointJog, 'String', strJoints);
+
 
 %get TCP
 tcp = sixlink.fkine(jointsInRad);
@@ -128,6 +140,10 @@ global joint2Val;
 global joint3Val;
 global sixlink;
 
+global joint4Val_t;
+global joint5Val_t;
+global joint6Val_t;
+
 clear sixlink;
 sixlink = ikinsolver();
 
@@ -138,8 +154,16 @@ joint1Val = get(hObject,'Value');
 set(handles.m_tboJoint1Val, 'String', joint1Val);
 
 %plot 
-jointsInRad= joints2solver(joint0Val, joint1Val, joint2Val, joint3Val);
+jointsInRad= joints2solver(joint0Val, joint1Val, joint2Val, joint3Val,...
+                           joint4Val_t, joint5Val_t, joint6Val_t);
 sixlink.plot(jointsInRad);
+
+%set actual joint values in label
+jval = radtodeg(jointsInRad);
+strJoints = sprintf('J1:%6.4f, J2:%6.4f, J3:%6.4f, J4:%6.4f, J5:%6.4f, J%6:6.4f, J7:%6.4f',...
+            jval(1), jval(2), jval(3), jval(4), jval(5), jval(6),0);
+set(handles.m_lblJointJog, 'String', strJoints);
+
 
 %get TCP
 tcp = sixlink.fkine(jointsInRad);
@@ -173,6 +197,12 @@ global joint2Val;
 global joint3Val;
 global sixlink;
 
+global joint4Val_t;
+global joint5Val_t;
+global joint6Val_t;
+
+
+
 clear sixlink;
 sixlink = ikinsolver();
 
@@ -182,9 +212,18 @@ joint0Val = get(hObject,'Value');
 % set value to tboJoint0Val text edit control using handles!!!
 set(handles.m_tboJoint0Val, 'String', joint0Val);
 
+
 %plot 
-jointsInRad= joints2solver(joint0Val, joint1Val, joint2Val, joint3Val);
+jointsInRad= joints2solver(joint0Val, joint1Val, joint2Val, joint3Val,...
+                           joint4Val_t, joint5Val_t, joint6Val_t);
+                       
 sixlink.plot(jointsInRad);
+
+%set actual joint values in label
+jval = radtodeg(jointsInRad);
+strJoints = sprintf('J1:%6.4f, J2:%6.4f, J3:%6.4f, J4:%6.4f, J5:%6.4f, J%6:6.4f, J7:%6.4f',...
+            jval(1), jval(2), jval(3), jval(4), jval(5), jval(6));
+set(handles.m_lblJointJog, 'String', strJoints);
 
 %get TCP
 tcp = sixlink.fkine(jointsInRad);
@@ -217,6 +256,11 @@ global joint2Val;
 global joint3Val;
 global sixlink;
 
+global joint4Val_t;
+global joint5Val_t;
+global joint6Val_t;
+
+clear sixlink;
 sixlink = ikinsolver();
 
 %get vlue form slider
@@ -225,9 +269,16 @@ joint3Val = get(hObject,'Value');
 % set value to tboJoint0Val text edit control using handles!!!
 set(handles.m_tboJoint3Val, 'String', joint3Val);
 
-jointsInRad= joints2solver(joint0Val, joint1Val, joint2Val, joint3Val);
-figure(1);
+jointsInRad= joints2solver(joint0Val, joint1Val, joint2Val, joint3Val,...
+                           joint4Val_t, joint5Val_t, joint6Val_t);
 sixlink.plot(jointsInRad);
+
+%set actual joint values in label
+jval = radtodeg(jointsInRad);
+strJoints = sprintf('J1:%6.4f, J2:%6.4f, J3:%6.4f, J4:%6.4f, J5:%6.4f, J%6:6.4f, J7:%6.4f',...
+            jval(1), jval(2), jval(3), jval(4), jval(5), jval(6));
+set(handles.m_lblJointJog, 'String', strJoints);
+
 
 %get TCP
 tcp = sixlink.fkine(jointsInRad);
@@ -438,26 +489,6 @@ function pushbutton1_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 %%
-%-------------------------------------------------------
-%                     IkinDemo
-%-------------------------------------------------------
-%% Robot configuration
-%           [theta, d,      a,   alpha]
-%L(1) = Link([ 0,     0.6,   0.0,   pi/2],  'standard');
-%L(2) = Link([ 0,     0.0,   1.0,   0],     'standard');
-%L(3) = Link([ 0,     0.0,   1.0,   0],    'standard');
-%L(4) = Link([ 0,     0.0,   0.0,   pi/2],  'standard');
-%L(5) = Link([ 0,     0.9,   0.0,   pi/2],   'standard');
-%L(6) = Link([ 0,     0.0,   0.0,   pi/2],    'standard');
-%L(7) = Link([ 0,     0.0,   0.0,   0],    'standard');
-%sixlink = SerialLink(L, 'name', 'Six Link');
-%set joint limits
-%JointLimits = [-45, 45; -45, 45; -45, 45; -45, 45; -90, 90; -90, 90; -90, 90];
-%sixlink.qlim = degtorad(JointLimits);
-
-%%
-
-
 %get RX RY RZ from GUI
 rx = str2double( get(handles.m_tboRx, 'String') );
 ry = str2double( get(handles.m_tboRy, 'String') );
@@ -472,20 +503,31 @@ y = str2double( get(handles.m_tboY, 'String') );
 z = str2double( get(handles.m_tboZ, 'String') );
 
 %Set taget frame
-target = RPY2TR(rx,ry,rz);
+target = rpy2tr(rx,ry,rz);
 target(1,4) = x;
 target(2,4) = y;
 target(3,4) = z;
-
+fprintf('target:\n');
+disp(target);
 global joint0Val;
 global joint1Val;
 global joint2Val;
 global joint3Val;
 global sixlink;
 
-%find inverse
+
+clear sixlink;
 sixlink = ikinsolver();
-sol=sixlink.ikine(target); 
+
+%find inverse
+sol=sixlink.ikine(target, 'tol', 0.1, 'pinv'); 
+%use options with bigger tollerance and pinv!!!!
+
+dsol = radtodeg(sol);
+strJoints = sprintf('J1:%4.2f, J2:%4.2f, J3:%4.2f, J4:%4.2f, J5:%4.2f, J6:%4.2f, J7:%4.2f',...
+        dsol(1), dsol(2), dsol(3), dsol(4), dsol(5), dsol(6),0);
+set(handles.m_lblJointValues, 'String', strJoints);
+
 if( ~isnan(sol) )
     joint0Val = radtodeg(sol(1));
     joint1Val = radtodeg(sol(2));
@@ -493,7 +535,7 @@ if( ~isnan(sol) )
     joint3Val = radtodeg(sol(4));
     sixlink.plot(sol); %'workspace', W
 else
-    sixlink.plot([0, 0 ,0, 0, 0, 0, 0]);
+    sixlink.plot([0, 0 ,0, 0, 0, 0]);
 end
 
 
@@ -509,14 +551,7 @@ set(handles.m_tboJoint2Val, 'String', joint2Val);
 % set value to tboJoint0Val text edit control using handles!!!
 set(handles.m_tboJoint3Val, 'String', joint3Val);
 
-
-%ang = [joint0Val, joint1Val, joint2Val,joint3Val, 0, 0];
-%sixlink.plot(degtorad(ang));
-%sixlink.fkine(ang)
-
 %====================END=============================
-
-
 function m_tboZ_Callback(hObject, eventdata, handles)
 % hObject    handle to m_tboZ (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -669,18 +704,18 @@ function figure1_CreateFcn(hObject, eventdata, handles)
 
 
 
-function edit11_Callback(hObject, eventdata, handles)
-% hObject    handle to edit11 (see GCBO)
+function m_tboJoint4Val_Callback(hObject, eventdata, handles)
+% hObject    handle to m_tboJoint4Val (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of edit11 as text
-%        str2double(get(hObject,'String')) returns contents of edit11 as a double
+% Hints: get(hObject,'String') returns contents of m_tboJoint4Val as text
+%        str2double(get(hObject,'String')) returns contents of m_tboJoint4Val as a double
 
 
 % --- Executes during object creation, after setting all properties.
-function edit11_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to edit11 (see GCBO)
+function m_tboJoint4Val_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to m_tboJoint4Val (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -692,18 +727,51 @@ end
 
 
 % --- Executes on slider movement.
-function slider5_Callback(hObject, eventdata, handles)
-% hObject    handle to slider5 (see GCBO)
+function m_sliderJoint4_Callback(hObject, eventdata, handles)
+% hObject    handle to m_sliderJoint4 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+global joint0Val;
+global joint1Val;
+global joint2Val;
+global joint3Val;
+global sixlink;
 
-% Hints: get(hObject,'Value') returns position of slider
-%        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
+global joint4Val_t;
+global joint5Val_t;
+global joint6Val_t;
+
+clear sixlink;
+sixlink = ikinsolver();
+
+%get vlue form slider
+joint4Val_t = get(hObject,'Value');
+
+% set value to tboJoint0Val text edit control using handles!!!
+set(handles.m_tboJoint4Val, 'String', joint4Val_t);
+
+jointsInRad= joints2solver(joint0Val, joint1Val, joint2Val, joint3Val,...
+                           joint4Val_t, joint5Val_t, joint6Val_t);
+sixlink.plot(jointsInRad);
+
+%set actual joint values in label
+jval = radtodeg(jointsInRad);
+strJoints = sprintf('J1:%6.4f, J2:%6.4f, J3:%6.4f, J4:%6.4f, J5:%6.4f, J%6:6.4f, J7:%6.4f',...
+            jval(1), jval(2), jval(3), jval(4), jval(5), jval(6));
+set(handles.m_lblJointJog, 'String', strJoints);
+
+
+%get TCP
+tcp = sixlink.fkine(jointsInRad);
+[strPos, strOrnt]=tcp2str(tcp);
+set(handles.m_lblPosition,    'String', strPos);
+set(handles.m_lblOrientation, 'String', strOrnt);
+%*********************************END*********************************
 
 
 % --- Executes during object creation, after setting all properties.
-function slider5_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to slider5 (see GCBO)
+function m_sliderJoint4_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to m_sliderJoint4 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -714,18 +782,18 @@ end
 
 
 
-function edit12_Callback(hObject, eventdata, handles)
-% hObject    handle to edit12 (see GCBO)
+function m_tboJoint5Val_Callback(hObject, eventdata, handles)
+% hObject    handle to m_tboJoint5Val (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of edit12 as text
-%        str2double(get(hObject,'String')) returns contents of edit12 as a double
+% Hints: get(hObject,'String') returns contents of m_tboJoint5Val as text
+%        str2double(get(hObject,'String')) returns contents of m_tboJoint5Val as a double
 
 
 % --- Executes during object creation, after setting all properties.
-function edit12_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to edit12 (see GCBO)
+function m_tboJoint5Val_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to m_tboJoint5Val (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -737,18 +805,50 @@ end
 
 
 % --- Executes on slider movement.
-function slider6_Callback(hObject, eventdata, handles)
-% hObject    handle to slider6 (see GCBO)
+function m_sliderJoint5_Callback(hObject, eventdata, handles)
+% hObject    handle to m_sliderJoint5 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+global joint0Val;
+global joint1Val;
+global joint2Val;
+global joint3Val;
+global sixlink;
 
-% Hints: get(hObject,'Value') returns position of slider
-%        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
+global joint4Val_t;
+global joint5Val_t;
+global joint6Val_t;
+
+clear sixlink;
+sixlink = ikinsolver();
+
+%get vlue form slider
+joint5Val_t = get(hObject,'Value');
+
+% set value to tboJoint0Val text edit control using handles!!!
+set(handles.m_tboJoint5Val, 'String', joint5Val_t);
+
+jointsInRad= joints2solver(joint0Val, joint1Val, joint2Val, joint3Val,...
+                           joint4Val_t, joint5Val_t, joint6Val_t);
+sixlink.plot(jointsInRad);
+
+%set actual joint values in label
+jval = radtodeg(jointsInRad);
+strJoints = sprintf('J1:%6.4f, J2:%6.4f, J3:%6.4f, J4:%6.4f, J5:%6.4f, J%6:6.4f, J7:%6.4f',...
+            jval(1), jval(2), jval(3), jval(4), jval(5), jval(6));
+set(handles.m_lblJointJog, 'String', strJoints);
+
+%get TCP
+tcp = sixlink.fkine(jointsInRad);
+[strPos, strOrnt]=tcp2str(tcp);
+set(handles.m_lblPosition,    'String', strPos);
+set(handles.m_lblOrientation, 'String', strOrnt);
+%*********************************END*********************************
 
 
 % --- Executes during object creation, after setting all properties.
-function slider6_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to slider6 (see GCBO)
+function m_sliderJoint5_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to m_sliderJoint5 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -759,18 +859,18 @@ end
 
 
 
-function edit13_Callback(hObject, eventdata, handles)
-% hObject    handle to edit13 (see GCBO)
+function m_tboJoint6Val_Callback(hObject, eventdata, handles)
+% hObject    handle to m_tboJoint6Val (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: get(hObject,'String') returns contents of edit13 as text
-%        str2double(get(hObject,'String')) returns contents of edit13 as a double
+% Hints: get(hObject,'String') returns contents of m_tboJoint6Val as text
+%        str2double(get(hObject,'String')) returns contents of m_tboJoint6Val as a double
 
 
 % --- Executes during object creation, after setting all properties.
-function edit13_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to edit13 (see GCBO)
+function m_tboJoint6Val_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to m_tboJoint6Val (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -782,18 +882,50 @@ end
 
 
 % --- Executes on slider movement.
-function slider7_Callback(hObject, eventdata, handles)
-% hObject    handle to slider7 (see GCBO)
+function m_sliderJoint6_Callback(hObject, eventdata, handles)
+% hObject    handle to m_sliderJoint6 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+global joint0Val;
+global joint1Val;
+global joint2Val;
+global joint3Val;
+global sixlink;
 
-% Hints: get(hObject,'Value') returns position of slider
-%        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
+global joint4Val_t;
+global joint5Val_t;
+global joint6Val_t;
 
+clear sixlink;
+sixlink = ikinsolver();
+
+%get vlue form slider
+joint6Val_t = get(hObject,'Value');
+
+% set value to tboJoint6Val text edit control using handles!!!
+set(handles.m_tboJoint6Val, 'String', joint6Val_t);
+
+jointsInRad= joints2solver(joint0Val, joint1Val, joint2Val, joint3Val,...
+                           joint4Val_t, joint5Val_t, joint6Val_t);
+sixlink.plot(jointsInRad);
+
+%set actual joint values in label
+jval = radtodeg(jointsInRad);
+strJoints = sprintf('J1:%6.4f, J2:%6.4f, J3:%6.4f, J4:%6.4f, J5:%6.4f, J%6:6.4f, J7:%6.4f',...
+            jval(1), jval(2), jval(3), jval(4), jval(5), jval(6));
+set(handles.m_lblJointJog, 'String', strJoints);
+
+
+%get TCP
+tcp = sixlink.fkine(jointsInRad);
+[strPos, strOrnt]=tcp2str(tcp);
+set(handles.m_lblPosition,    'String', strPos);
+set(handles.m_lblOrientation, 'String', strOrnt);
+%*********************************END*********************************
 
 % --- Executes during object creation, after setting all properties.
-function slider7_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to slider7 (see GCBO)
+function m_sliderJoint6_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to m_sliderJoint6 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 

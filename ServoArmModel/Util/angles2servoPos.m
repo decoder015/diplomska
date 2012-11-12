@@ -4,11 +4,11 @@
 % -90 = 255;
 function [servoPos]=angles2servoPos(angle)
 
-
+%convert angle to servo positons
 servoPos = floor((127/45)*angle + 127);
 
 if(servoPos > 255)
-   servoPos = 255;
+    servoPos = 255;
 end
 
 if(servoPos < 0)
