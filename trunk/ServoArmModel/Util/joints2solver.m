@@ -1,3 +1,5 @@
-function [joints]=joints2solver(joint0, joint1, joint2, joint3)
-    joints = degtorad([joint0, 90-joint1, 90+joint2, 90+joint3, 0, 0, 0]);
+function [joints]=joints2solver(joint0, joint1, joint2, joint3,...
+                                joint4, joint5, joint6)
+    joints = [joint0, 90-joint1, 90+joint2, joint3, joint4, joint5]; %, joint6                       
+    joints = degtorad(joints);
 end

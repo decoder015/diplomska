@@ -1,5 +1,5 @@
 function [strPos, strOrnt]=tcp2str(tcp)
-rpy = TR2RPY(tcp);
+rpy = tr2rpy(tcp);
 rpy =radtodeg(rpy);
 pos = GetTranslationFromFrame(tcp);
 
