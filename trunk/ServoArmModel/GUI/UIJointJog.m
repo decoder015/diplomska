@@ -104,10 +104,8 @@ sixlink.plot(jointsInRad);
 
 %set actual joint values in label
 jval = radtodeg(jointsInRad);
-strJoints = sprintf('J1:%6.4f, J2:%6.4f, J3:%6.4f, J4:%6.4f, J5:%6.4f, J%6:6.4f, J7:%6.4f',...
-            jval(1), jval(2), jval(3), jval(4), jval(5), jval(6));
+strJoints = joints2str( jval(1), jval(2), jval(3), jval(4), jval(5), jval(6));
 set(handles.m_lblJointJog, 'String', strJoints);
-
 
 %get TCP
 tcp = sixlink.fkine(jointsInRad);
@@ -156,12 +154,12 @@ set(handles.m_tboJoint1Val, 'String', joint1Val);
 %plot 
 jointsInRad= joints2solver(joint0Val, joint1Val, joint2Val, joint3Val,...
                            joint4Val_t, joint5Val_t, joint6Val_t);
+                       
 sixlink.plot(jointsInRad);
 
 %set actual joint values in label
 jval = radtodeg(jointsInRad);
-strJoints = sprintf('J1:%6.4f, J2:%6.4f, J3:%6.4f, J4:%6.4f, J5:%6.4f, J%6:6.4f, J7:%6.4f',...
-            jval(1), jval(2), jval(3), jval(4), jval(5), jval(6),0);
+strJoints = joints2str(jval(1), jval(2), jval(3), jval(4), jval(5), jval(6));
 set(handles.m_lblJointJog, 'String', strJoints);
 
 
@@ -221,8 +219,7 @@ sixlink.plot(jointsInRad);
 
 %set actual joint values in label
 jval = radtodeg(jointsInRad);
-strJoints = sprintf('J1:%6.4f, J2:%6.4f, J3:%6.4f, J4:%6.4f, J5:%6.4f, J%6:6.4f, J7:%6.4f',...
-            jval(1), jval(2), jval(3), jval(4), jval(5), jval(6));
+strJoints = joints2str(jval(1), jval(2), jval(3), jval(4), jval(5), jval(6));
 set(handles.m_lblJointJog, 'String', strJoints);
 
 %get TCP
@@ -275,8 +272,7 @@ sixlink.plot(jointsInRad);
 
 %set actual joint values in label
 jval = radtodeg(jointsInRad);
-strJoints = sprintf('J1:%6.4f, J2:%6.4f, J3:%6.4f, J4:%6.4f, J5:%6.4f, J%6:6.4f, J7:%6.4f',...
-            jval(1), jval(2), jval(3), jval(4), jval(5), jval(6));
+strJoints = joints2str( jval(1), jval(2), jval(3), jval(4), jval(5), jval(6));
 set(handles.m_lblJointJog, 'String', strJoints);
 
 
@@ -489,6 +485,16 @@ function pushbutton1_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 %%
+
+global joint0Val;
+global joint1Val;
+global joint2Val;
+global joint3Val;
+global sixlink;
+
+clear sixlink;
+sixlink = ikinsolver();
+
 %get RX RY RZ from GUI
 rx = str2double( get(handles.m_tboRx, 'String') );
 ry = str2double( get(handles.m_tboRy, 'String') );
@@ -507,25 +513,31 @@ target = rpy2tr(rx,ry,rz);
 target(1,4) = x;
 target(2,4) = y;
 target(3,4) = z;
+
 fprintf('target:\n');
 disp(target);
-global joint0Val;
-global joint1Val;
-global joint2Val;
-global joint3Val;
-global sixlink;
-
-
-clear sixlink;
-sixlink = ikinsolver();
 
 %find inverse
-sol=sixlink.ikine(target, 'tol', 0.1, 'pinv'); 
 %use options with bigger tollerance and pinv!!!!
+sol = sixlink.ikine(target, 'tol', 0.01);  
 
+% try to find inverse with pinv
+if( ~isnan(sol) )
+    sixlink.ikine(target, 'tol', 0.01, 'pinv'); 
+end    
+
+% find min rotations in case where angles are more then 360 deg
+fprintf('Angles before:\n');
+
+disp(radtodeg(sol));
+sol = minRot(sol);
+
+fprintf('Angles after:\n');
+disp(radtodeg(sol));
+
+% set joint angles in label
 dsol = radtodeg(sol);
-strJoints = sprintf('J1:%4.2f, J2:%4.2f, J3:%4.2f, J4:%4.2f, J5:%4.2f, J6:%4.2f, J7:%4.2f',...
-        dsol(1), dsol(2), dsol(3), dsol(4), dsol(5), dsol(6),0);
+strJoints = joints2str(dsol(1), dsol(2), dsol(3), dsol(4), dsol(5), dsol(6));
 set(handles.m_lblJointValues, 'String', strJoints);
 
 if( ~isnan(sol) )
@@ -756,14 +768,14 @@ sixlink.plot(jointsInRad);
 
 %set actual joint values in label
 jval = radtodeg(jointsInRad);
-strJoints = sprintf('J1:%6.4f, J2:%6.4f, J3:%6.4f, J4:%6.4f, J5:%6.4f, J%6:6.4f, J7:%6.4f',...
-            jval(1), jval(2), jval(3), jval(4), jval(5), jval(6));
+strJoints = joints2str(jval(1), jval(2), jval(3), jval(4), jval(5), jval(6));
 set(handles.m_lblJointJog, 'String', strJoints);
-
 
 %get TCP
 tcp = sixlink.fkine(jointsInRad);
-[strPos, strOrnt]=tcp2str(tcp);
+
+%get positon and orientation in strings
+[strPos, strOrnt] = tcp2str(tcp);
 set(handles.m_lblPosition,    'String', strPos);
 set(handles.m_lblOrientation, 'String', strOrnt);
 %*********************************END*********************************
@@ -828,18 +840,19 @@ joint5Val_t = get(hObject,'Value');
 % set value to tboJoint0Val text edit control using handles!!!
 set(handles.m_tboJoint5Val, 'String', joint5Val_t);
 
-jointsInRad= joints2solver(joint0Val, joint1Val, joint2Val, joint3Val,...
-                           joint4Val_t, joint5Val_t, joint6Val_t);
+jointsInRad = joints2solver(joint0Val, joint1Val, joint2Val, joint3Val,...
+                            joint4Val_t, joint5Val_t, joint6Val_t);
 sixlink.plot(jointsInRad);
 
 %set actual joint values in label
 jval = radtodeg(jointsInRad);
-strJoints = sprintf('J1:%6.4f, J2:%6.4f, J3:%6.4f, J4:%6.4f, J5:%6.4f, J%6:6.4f, J7:%6.4f',...
-            jval(1), jval(2), jval(3), jval(4), jval(5), jval(6));
+strJoints = joints2str( jval(1), jval(2), jval(3), jval(4), jval(5), jval(6));
 set(handles.m_lblJointJog, 'String', strJoints);
 
 %get TCP
 tcp = sixlink.fkine(jointsInRad);
+
+
 [strPos, strOrnt]=tcp2str(tcp);
 set(handles.m_lblPosition,    'String', strPos);
 set(handles.m_lblOrientation, 'String', strOrnt);
@@ -911,8 +924,7 @@ sixlink.plot(jointsInRad);
 
 %set actual joint values in label
 jval = radtodeg(jointsInRad);
-strJoints = sprintf('J1:%6.4f, J2:%6.4f, J3:%6.4f, J4:%6.4f, J5:%6.4f, J%6:6.4f, J7:%6.4f',...
-            jval(1), jval(2), jval(3), jval(4), jval(5), jval(6));
+strJoints = joints2str(jval(1), jval(2), jval(3), jval(4), jval(5), jval(6));
 set(handles.m_lblJointJog, 'String', strJoints);
 
 
