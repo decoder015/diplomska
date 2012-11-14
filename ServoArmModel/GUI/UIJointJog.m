@@ -541,10 +541,18 @@ strJoints = joints2str(dsol(1), dsol(2), dsol(3), dsol(4), dsol(5), dsol(6));
 set(handles.m_lblJointValues, 'String', strJoints);
 
 if( ~isnan(sol) )
-    joint0Val = radtodeg(sol(1));
-    joint1Val = radtodeg(sol(2));
-    joint2Val = radtodeg(sol(3));
-    joint3Val = radtodeg(sol(4));
+    
+    % kinematic model angles to linx robot angles
+    linxJoints = kin2linx(sol(1), sol(2), sol(3), sol(4)); 
+    
+    %set linx joint limits if solution is above joint limits
+    linxJoints = linxJointLimis(linxJoints(1), linxJoints(2), ...
+                                linxJoints(3), linxJoints(4));
+                            
+    joint0Val = radtodeg(linxJoints(1));
+    joint1Val = radtodeg(linxJoints(2));
+    joint2Val = radtodeg(linxJoints(3));
+    joint3Val = radtodeg(linxJoints(4));    
     sixlink.plot(sol); %'workspace', W
 else
     sixlink.plot([0, 0 ,0, 0, 0, 0]);
