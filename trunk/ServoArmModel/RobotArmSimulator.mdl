@@ -6,7 +6,7 @@ Model {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.135"
+    ComputedModelVersion    "1.141"
     NumModelReferences	    0
     NumTestPointedSignals   0
   }
@@ -45,9 +45,9 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "kristijan"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Mon Nov 12 09:55:59 2012"
-  RTWModifiedTimeStamp	  274614953
-  ModelVersionFormat	  "1.%<AutoIncrement:135>"
+  LastModifiedDate	  "Wed Nov 14 09:59:48 2012"
+  RTWModifiedTimeStamp	  274787618
+  ModelVersionFormat	  "1.%<AutoIncrement:141>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -859,7 +859,7 @@ Model {
   }
   System {
     Name		    "RobotArmSimulator"
-    Location		    [2, 82, 1331, 739]
+    Location		    [2, 74, 1261, 946]
     Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -873,7 +873,7 @@ Model {
     ShowPageBoundaries	    off
     ZoomFactor		    "100"
     ReportName		    "simulink-default.rpt"
-    SIDHighWatermark	    "121"
+    SIDHighWatermark	    "125"
     Block {
       BlockType		      Reference
       Name		      "Detect\nChange"
@@ -1123,7 +1123,7 @@ Model {
       BlockType		      From
       Name		      "From5"
       SID		      "25"
-      Position		      [860, 44, 950, 66]
+      Position		      [785, 44, 875, 66]
       BackgroundColor	      "lightBlue"
       GotoTag		      "ServoJoint0"
     }
@@ -1131,7 +1131,7 @@ Model {
       BlockType		      From
       Name		      "From6"
       SID		      "26"
-      Position		      [860, 114, 950, 136]
+      Position		      [785, 114, 875, 136]
       BackgroundColor	      "lightBlue"
       GotoTag		      "ServoJoint1"
     }
@@ -1139,7 +1139,7 @@ Model {
       BlockType		      From
       Name		      "From7"
       SID		      "27"
-      Position		      [860, 184, 950, 206]
+      Position		      [785, 184, 875, 206]
       BackgroundColor	      "lightBlue"
       GotoTag		      "ServoJoint2"
     }
@@ -1147,7 +1147,7 @@ Model {
       BlockType		      From
       Name		      "From8"
       SID		      "28"
-      Position		      [860, 254, 950, 276]
+      Position		      [785, 254, 875, 276]
       BackgroundColor	      "lightBlue"
       GotoTag		      "ServoJoint3"
     }
@@ -1184,6 +1184,35 @@ Model {
       Name		      "Gain2"
       SID		      "121"
       Position		      [920, 530, 950, 560]
+      ParamDataTypeStr	      "Inherit: Inherit via internal rule"
+      OutDataTypeStr	      "Inherit: Inherit via internal rule"
+      SaturateOnIntegerOverflow	off
+    }
+    Block {
+      BlockType		      Gain
+      Name		      "Gain3"
+      SID		      "124"
+      Position		      [945, 180, 975, 210]
+      Gain		      "-1"
+      ParamDataTypeStr	      "Inherit: Inherit via internal rule"
+      OutDataTypeStr	      "Inherit: Inherit via internal rule"
+      SaturateOnIntegerOverflow	off
+    }
+    Block {
+      BlockType		      Gain
+      Name		      "Gain4"
+      SID		      "123"
+      Position		      [945, 250, 975, 280]
+      Gain		      "-1"
+      ParamDataTypeStr	      "Inherit: Inherit via internal rule"
+      OutDataTypeStr	      "Inherit: Inherit via internal rule"
+      SaturateOnIntegerOverflow	off
+    }
+    Block {
+      BlockType		      Gain
+      Name		      "Gain5"
+      SID		      "125"
+      Position		      [920, 480, 950, 510]
       Gain		      "-1"
       ParamDataTypeStr	      "Inherit: Inherit via internal rule"
       OutDataTypeStr	      "Inherit: Inherit via internal rule"
@@ -1286,7 +1315,7 @@ Model {
       Name		      "Output From GUI Joint Jog"
       SID		      "4"
       Ports		      [0, 4]
-      Position		      [50, 46, 340, 219]
+      Position		      [90, 37, 335, 228]
       BackgroundColor	      "green"
       FunctionName	      "SFunctGUIJointJog"
       MaskDisplay	      "port_label('output', 1, 'Joint Jog 0')\nport_label('output', 2, 'Joint Jog 1')\nport_label('o"
@@ -1366,7 +1395,7 @@ Model {
       Ports		      [1]
       Position		      [560, 1469, 590, 1501]
       Floating		      off
-      Location		      [1, 52, 1367, 767]
+      Location		      [1, 48, 1367, 727]
       Open		      off
       NumInputPorts	      "1"
       List {
@@ -1383,7 +1412,7 @@ Model {
       Ports		      [1]
       Position		      [650, 1284, 680, 1316]
       Floating		      off
-      Location		      [1, 52, 1367, 767]
+      Location		      [5, 47, 1367, 762]
       Open		      off
       NumInputPorts	      "1"
       List {
@@ -1442,7 +1471,7 @@ Model {
       MaskIconUnits	      "autoscale"
       System {
 	Name			"Virtual reallity"
-	Location		[0, 82, 1346, 739]
+	Location		[-118, 124, 1228, 781]
 	Open			off
 	ModelBrowserVisibility	off
 	ModelBrowserWidth	200
@@ -1677,14 +1706,14 @@ Model {
     Line {
       SrcBlock		      "From7"
       SrcPort		      1
-      DstBlock		      "Virtual reallity"
-      DstPort		      3
+      DstBlock		      "Gain3"
+      DstPort		      1
     }
     Line {
       SrcBlock		      "From8"
       SrcPort		      1
-      DstBlock		      "Virtual reallity"
-      DstPort		      4
+      DstBlock		      "Gain4"
+      DstPort		      1
     }
     Line {
       SrcBlock		      "Rate Limiter1"
@@ -1781,8 +1810,8 @@ Model {
     Line {
       SrcBlock		      "From14"
       SrcPort		      1
-      DstBlock		      "Robot Controller"
-      DstPort		      3
+      DstBlock		      "Gain5"
+      DstPort		      1
     }
     Line {
       SrcBlock		      "From15"
@@ -1890,6 +1919,24 @@ Model {
 	DstBlock		"Scope1"
 	DstPort			1
       }
+    }
+    Line {
+      SrcBlock		      "Gain3"
+      SrcPort		      1
+      DstBlock		      "Virtual reallity"
+      DstPort		      3
+    }
+    Line {
+      SrcBlock		      "Gain4"
+      SrcPort		      1
+      DstBlock		      "Virtual reallity"
+      DstPort		      4
+    }
+    Line {
+      SrcBlock		      "Gain5"
+      SrcPort		      1
+      DstBlock		      "Robot Controller"
+      DstPort		      3
     }
   }
 }
