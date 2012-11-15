@@ -1,0 +1,15 @@
+You cannot reverse the step in general: depth and scale information is lost when 3D points are projected onto a 2D image. However if, as you indicate, all your 3D points are on the Z=0 plane, then getting them back from their projections is trivial: compute the inverse Ki = K^-1 of the camera matrix, and apply it to the image points in homogeneous coordinates.
+
+P_camera = Ki * [u, v, 1]'
+
+where [u, v] are the image coordinates, and the apostrophe denotes transposition. The 3D points you want lie on the rays from the camera centre to the P_camera's. Express both in world coordinates:
+
+P_world = [R|t]_camera_to_world * [P_camera, 1]'
+
+C_world = [R|t]_camera_to_world * [0, 0, 0, 1]'
+
+where [R|t] is the 4x4 coordinate transform. Now, the set of points on each ray is expressed as
+
+P = C_world + lambda * P_world;
+
+where lambda is a scalar (the coordinate along the ray). You can now impose the condition that P(3) = 0 to find the value of lambda that places your points on the Z = 0 plane.
