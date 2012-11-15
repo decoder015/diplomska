@@ -79,6 +79,11 @@ function m_btnStart_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
+imgObj = imread('Objects1.png');
+
+global refImg;
+detectObjects(refImg, imgObj, handles.m_axesObjects);
+%******************************END*****************************************
 
 % --- Executes on button press in m_btnCaptureRefImage.
 function m_btnCaptureRefImage_Callback(hObject, eventdata, handles)
@@ -86,17 +91,23 @@ function m_btnCaptureRefImage_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
+%global stopCapture;
 %open video
-cam =  videoinput('winvideo', 1, 'RGB24_640x480');
+%cam =  videoinput('winvideo', 1, 'RGB24_640x480');
+%pause(3);
+%for i=1:1:10000
+%    refImg = getsnapshot(cam);
+%    hImage = image(refImg, 'parent', handles.m_axesRefImg);
+%    imshow(refImg, 'parent', handles.m_axesRefImg);
+%    pause(0.05);
+%end
+%delete(cam);
+%clear cam;
 
-pause(3);
 global refImg;
-refImg = getsnapshot(cam);
-
-%hImage = image(img, 'parent', handles.m_axesRefImg);
+refImg = imread('Blank1.png');
+%hImage = image(refImg, 'parent', handles.m_axesRefImg);
 imshow(refImg, 'parent', handles.m_axesRefImg);
-delete(cam);
-clear cam;
 %****************************END*******************************************
 
 
@@ -112,6 +123,20 @@ function m_btnStop_Callback(hObject, eventdata, handles)
 % hObject    handle to m_btnStop (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+global stopCapture;
+stopCapture = 0;
+
+filename = 'viptraffic.avi';
+hvfr = vision.VideoFileReader(filename, 'ImageColorSpace', 'RGB');
+
+  fg_image = step(hfdet, y); % Detect foreground
+
+  hfdet = vision.ForegroundDetector('NumTrainingFrames', 5, ...     
+                                    'InitialVariance', (30/255)^2);
+     % initial standard deviation of 30/255
+    % only 5 because of short video
+%****************************END*******************************************
 
 
 % --- Executes on button press in checkbox1.
