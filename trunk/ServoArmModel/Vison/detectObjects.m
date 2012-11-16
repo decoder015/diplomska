@@ -14,18 +14,36 @@ function [objects] = detectObjects(imgBlank, imgObjects, display)
 % OFF = 0;
 debugMode = 1;
 
+%region of interest
+%      x,    y   x    y
+roi = [50, 0, 540, 480];
+
+%imgBlank = imcrop(imgBlank, roi);
+%imgObjects = imcrop(imgObjects, roi);
+
 % calc difference
+
+imgBlank = rgb2gray(imgBlank);
+
+imgObjects = rgb2gray(imgObjects);
+
 imgDif = imgBlank - imgObjects;
 
 % convert it to gray scale image
-imgGray = rgb2gray(imgDif);
+%imgGray = imgDif; %rgb2gray(imgDif);
 
-threshold = 30;
+imgGray = wiener2(imgDif,[5,5]);
+
+
+threshold = 65;
 % create bit map: Above tresholod are 1's
-binary_image = imgGray > threshold;
+binary_image = imgDif > threshold;
 
 % fill empty holles
 filled = imfill(binary_image, 'holes');
+
+%remove blobs smaller then 100px
+filled = bwareaopen(filled, 200);
 
 %clean border
 filled = imclearborder(filled);
@@ -38,6 +56,8 @@ blobMeasurements = regionprops(imgLbl, 'all');
 
 imshow(imgObjects, 'parent', display);
 minBlobArea = 100;
+
+shrinkAreaFactor = 0.9;
 for i=1:1:length(blobMeasurements)    
     %filter blobs
     if(blobMeasurements(i).Area > minBlobArea )       
@@ -46,8 +66,8 @@ for i=1:1:length(blobMeasurements)
         %boxw =blobMeasurements(i).BoundingBox(2);
         %disp(blobMeasurements(i).BoundingBox);
         %get width and height of bounding box
-        w = blobMeasurements(i).BoundingBox(3);
-        h = blobMeasurements(i).BoundingBox(4);        
+        w = blobMeasurements(i).BoundingBox(3) * shrinkAreaFactor;
+        h = blobMeasurements(i).BoundingBox(4) * shrinkAreaFactor;        
         %fprintf('Blob area:\n')
         %disp(blobMeasurements(i).Area);
         %fprintf('Box width');
@@ -72,12 +92,12 @@ if(debugMode)
     imshow(imgGray);
     
     subplot(3,3,5);
-    imshow(binary_image);
+    imshow(binary_image);   
     
     subplot(3,3,6);
-    imshow( label2rgb(imgLbl) );
+    imshow(filled);
     
     subplot(3,3,7);
-    imshow(filled)
+    imshow( label2rgb(imgLbl) );
 end
 end
