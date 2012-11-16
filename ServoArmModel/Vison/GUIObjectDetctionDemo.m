@@ -22,7 +22,7 @@ function varargout = GUIObjectDetctionDemo(varargin)
 
 % Edit the above text to modify the response to help GUIObjectDetctionDemo
 
-% Last Modified by GUIDE v2.5 15-Nov-2012 00:19:43
+% Last Modified by GUIDE v2.5 16-Nov-2012 22:09:45
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -73,15 +73,23 @@ function varargout = GUIObjectDetctionDemo_OutputFcn(hObject, eventdata, handles
 varargout{1} = handles.output;
 
 
-% --- Executes on button press in m_btnStart.
-function m_btnStart_Callback(hObject, eventdata, handles)
-% hObject    handle to m_btnStart (see GCBO)
+% --- Executes on button press in m_btnDetect.
+function m_btnDetect_Callback(hObject, eventdata, handles)
+% hObject    handle to m_btnDetect (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-imgObj = imread('Objects1.png');
-
+% global vars
+global cam;
 global refImg;
+
+%get image form camera
+imgObj = getsnapshot(cam);
+
+%stop recording
+stop(cam);
+delete(cam);
+
 detectObjects(refImg, imgObj, handles.m_axesObjects);
 %******************************END*****************************************
 
@@ -91,25 +99,24 @@ function m_btnCaptureRefImage_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-%global stopCapture;
-%open video
-%cam =  videoinput('winvideo', 1, 'RGB24_640x480');
-%pause(3);
-%for i=1:1:10000
-%    refImg = getsnapshot(cam);
-%    hImage = image(refImg, 'parent', handles.m_axesRefImg);
-%    imshow(refImg, 'parent', handles.m_axesRefImg);
-%    pause(0.05);
-%end
-%delete(cam);
-%clear cam;
-
+% global vars
+global cam;
 global refImg;
-refImg = imread('Blank1.png');
-%hImage = image(refImg, 'parent', handles.m_axesRefImg);
-imshow(refImg, 'parent', handles.m_axesRefImg);
-%****************************END*******************************************
 
+%get image form camera
+refImg = getsnapshot(cam);
+
+%stop recording
+stop(cam);
+delete(cam);
+
+%show captured image
+imshow(refImg, 'parent', handles.m_axesRefImg,  'InitialMagnification', 'fit');
+
+%enable/disable buttons
+set(handles.m_btnCaptureRefImage, 'Enable', 'Off');
+set(handles.m_btnCamPreview, 'Enable', 'on');
+%****************************END*******************************************
 
 % --- Executes during object deletion, before destroying properties.
 function m_axesRefImg_DeleteFcn(hObject, eventdata, handles)
@@ -118,24 +125,26 @@ function m_axesRefImg_DeleteFcn(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 
-% --- Executes on button press in m_btnStop.
-function m_btnStop_Callback(hObject, eventdata, handles)
-% hObject    handle to m_btnStop (see GCBO)
+% --- Executes on button press in m_getNewImage.
+function m_getNewImage_Callback(hObject, eventdata, handles)
+% hObject    handle to m_getNewImage (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-global stopCapture;
-stopCapture = 0;
+%global vars
+global cam;
 
-filename = 'viptraffic.avi';
-hvfr = vision.VideoFileReader(filename, 'ImageColorSpace', 'RGB');
+%get video object
+cam =  videoinput('winvideo', 1, 'RGB24_640x480');
 
-  fg_image = step(hfdet, y); % Detect foreground
+%get video resolution
+vidRes = get(cam, 'VideoResolution');
+nBands = get(cam, 'NumberOfBands');
 
-  hfdet = vision.ForegroundDetector('NumTrainingFrames', 5, ...     
-                                    'InitialVariance', (30/255)^2);
-     % initial standard deviation of 30/255
-    % only 5 because of short video
+%set image handle to gui axes
+emptyImg = zeros(vidRes(2),vidRes(1), nBands);
+hImage = image(emptyImg, 'Parent', handles.m_axesObjects);
+preview(cam, hImage);
 %****************************END*******************************************
 
 
@@ -146,3 +155,33 @@ function checkbox1_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % Hint: get(hObject,'Value') returns toggle state of checkbox1
+
+
+% --- Executes on mouse press over axes background.
+function m_axesObjects_ButtonDownFcn(hObject, eventdata, handles)
+% hObject    handle to m_axesObjects (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --- Executes on button press in m_btnCamPreview.
+function m_btnCamPreview_Callback(hObject, eventdata, handles)
+% hObject    handle to m_btnCamPreview (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+%open video
+global cam;
+cam =  videoinput('winvideo', 1, 'RGB24_640x480');
+
+%get video resolution
+vidRes = get(cam, 'VideoResolution');
+nBands = get(cam, 'NumberOfBands');
+
+%set handle to 
+emptyImg = zeros(vidRes(2),vidRes(1), nBands);
+hImage = image(emptyImg, 'Parent', handles.m_axesRefImg);
+preview(cam, hImage);
+
+set(handles.m_btnCaptureRefImage, 'Enable', 'On');
+set(handles.m_btnCamPreview, 'Enable', 'off');
+%******************************END*****************************************
