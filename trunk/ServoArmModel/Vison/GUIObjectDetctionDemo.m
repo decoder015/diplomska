@@ -22,7 +22,7 @@ function varargout = GUIObjectDetctionDemo(varargin)
 
 % Edit the above text to modify the response to help GUIObjectDetctionDemo
 
-% Last Modified by GUIDE v2.5 16-Nov-2012 22:09:45
+% Last Modified by GUIDE v2.5 18-Nov-2012 01:12:53
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -111,7 +111,7 @@ stop(cam);
 delete(cam);
 
 %show captured image
-imshow(refImg, 'parent', handles.m_axesRefImg,  'InitialMagnification', 'fit');
+imshow(refImg, 'parent', handles.m_axesRefImg);
 
 %enable/disable buttons
 set(handles.m_btnCaptureRefImage, 'Enable', 'Off');
@@ -185,3 +185,32 @@ preview(cam, hImage);
 set(handles.m_btnCaptureRefImage, 'Enable', 'On');
 set(handles.m_btnCamPreview, 'Enable', 'off');
 %******************************END*****************************************
+
+
+% --- Executes on mouse press over axes background.
+function m_axesRefImg_ButtonDownFcn(hObject, eventdata, handles)
+% hObject    handle to m_axesRefImg (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+hold on;
+[x, y] = ginput(1);
+fprintf('x=%d, y=%d',x,y);
+hold off;
+
+
+% --------------------------------------------------------------------
+function uipanel1_ButtonDownFcn(hObject, eventdata, handles)
+% hObject    handle to uipanel1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+hold on;
+[x, y] = ginput(1);
+x = floor(x);
+y = floor(y);
+world = cam2world(x,y);
+fprintf('panel x=%4.1f, y=%4.1f\n',x,y)
+
+fprintf('wx:%6.4f wy:%6.4f, wz:%6.4f\n',world(1),world(2),world(3));
+hold off;
