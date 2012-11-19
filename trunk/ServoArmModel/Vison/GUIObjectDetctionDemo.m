@@ -86,15 +86,20 @@ global objImg;
 img_cord = detectObjects(refImg, objImg, handles.m_axesObjects);
 
 disp(img_cord);
-
+str = '';
 for i=1:1:length(img_cord)
     %format: img_x,         img_y cord
     tmp = cam2world(img_cord(i,1), img_cord(i,2));
     world_cord(i,1) = tmp(1);
     world_cord(i,2) = tmp(2);
+    
+    tmp_str = sprintf('X:%3.1f, Y:%3.1f\n', world_cord(i,1), world_cord(i,2));
+    str = [str, {tmp_str}];
+    set(handles.m_lboTargetsCord, 'String', str);
+    %str = strcat(str,tmp_str);
 end
-str = sprintf('X:%6.4f, Y:%6.4f', world_cord(1,1), world_cord(1,2));
-set(handles.m_lboTargetsCord, 'String', str);
+
+
 %******************************END*****************************************
 
 % --- Executes on button press in m_btnCaptureRefImage.
