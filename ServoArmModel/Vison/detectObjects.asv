@@ -1,14 +1,14 @@
 %**************************************************************************
 %               Detect objects using background subtraction
 %
-%---Input parameters-------------------------------------------------------
+%   Input parameters 
 %
 %   imgBlank:   an image without objects
 %   imgObjects: an image with objects
 %   treshold:   gray sclate treshold to create bit map
 %   blobSize:   use only clusters with size greater then blobSize
 %
-% --Output parameters-----------------------------------------------------
+%   %Output parameters
 %
 %   objects: matrix N x 2 where n is number of detected objects.
 %            first colum is x cord in immage, second column is y cord
