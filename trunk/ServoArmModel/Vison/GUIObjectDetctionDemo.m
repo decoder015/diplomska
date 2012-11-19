@@ -22,7 +22,7 @@ function varargout = GUIObjectDetctionDemo(varargin)
 
 % Edit the above text to modify the response to help GUIObjectDetctionDemo
 
-% Last Modified by GUIDE v2.5 19-Nov-2012 15:55:52
+% Last Modified by GUIDE v2.5 19-Nov-2012 23:04:08
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -83,20 +83,21 @@ function m_btnDetect_Callback(hObject, eventdata, handles)
 global refImg;
 global objImg;
 
-img_cord = detectObjects(refImg, objImg, handles.m_axesObjects);
+[img_cord, objImg]= detectObjects(refImg, objImg, handles.m_axesObjects);
 
 disp(img_cord);
 str = '';
-for i=1:1:length(img_cord)
+[m, n] = size(img_cord);
+for i=1:1:m
     %format: img_x,         img_y cord
     tmp = cam2world(img_cord(i,1), img_cord(i,2));
     world_cord(i,1) = tmp(1);
     world_cord(i,2) = tmp(2);
     
+    % add values in combo
     tmp_str = sprintf('X:%3.1f, Y:%3.1f\n', world_cord(i,1), world_cord(i,2));
     str = [str, {tmp_str}];
-    set(handles.m_lboTargetsCord, 'String', str);
-    %str = strcat(str,tmp_str);
+    set(handles.m_lboTargetsCord, 'String', str);   
 end
 
 
@@ -276,22 +277,38 @@ set(handles.m_btnDetect, 'Enable', 'On');
 %*********************************END**************************************
 
 
-% --- Executes on button press in pushbutton15.
-function pushbutton15_Callback(hObject, eventdata, handles)
-% hObject    handle to pushbutton15 (see GCBO)
+% --- Executes on button press in m_btnCamPreviewObjects.
+function m_btnCamPreviewObjects_Callback(hObject, eventdata, handles)
+% hObject    handle to m_btnCamPreviewObjects (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+%open video
+global cam;
+cam =  videoinput('winvideo', 1, 'RGB24_640x480');
 
+%get video resolution
+vidRes = get(cam, 'VideoResolution');
+nBands = get(cam, 'NumberOfBands');
 
-% --- Executes on button press in m_btnCaptureObjImg.
-function m_btnCaptureObjImg_Callback(hObject, eventdata, handles)
-% hObject    handle to m_btnCaptureObjImg (see GCBO)
+%set handle to 
+emptyImg = zeros(vidRes(2),vidRes(1), nBands);
+hImage = image(emptyImg, 'Parent', handles.m_axesObjects);
+preview(cam, hImage);
+
+%enable disable GUI buttons
+set(handles.m_btnCaptureObjects,    'Enable', 'On');
+set(handles.m_btnCamPreviewObjects, 'Enable', 'off');
+set(handles.m_btnDetect,            'Enable', 'Off');
+%*******************************END****************************************
+
+% --- Executes on button press in m_btnCaptureObjects.
+function m_btnCaptureObjects_Callback(hObject, eventdata, handles)
+% hObject    handle to m_btnCaptureObjects (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
 %global vriables
 global cam;
-global refImg;
 global objImg;
 
 %get image form camera
@@ -300,6 +317,14 @@ objImg = getsnapshot(cam);
 %stop recording
 stop(cam);
 delete(cam);
+
+%show captured image
+imshow(objImg, 'parent', handles.m_axesObjects);
+
+%enable disable GUI buttons
+set(handles.m_btnCaptureObjects,    'Enable', 'Off');
+set(handles.m_btnCamPreviewObjects, 'Enable', 'On');
+set(handles.m_btnDetect,            'Enable', 'On');
 %*********************************END**************************************
 
 
@@ -324,3 +349,24 @@ function m_lboTargetsCord_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
+
+
+% --- Executes on button press in m_btnEnlarge.
+function m_btnEnlarge_Callback(hObject, eventdata, handles)
+% hObject    handle to m_btnEnlarge (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+global objImg;
+
+figure(1);
+imshow(objImg);
+
+
+% --------------------------------------------------------------------
+function uipanel2_ButtonDownFcn(hObject, eventdata, handles)
+% hObject    handle to uipanel2 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+ [x, y] = ginput(1);
+    w = cam2world(x,y);
+    fprintf('wx:%6.4f wy:%6.4f wz:%6.4f\n', w(1), w(2), w(3));
