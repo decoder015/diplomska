@@ -22,7 +22,7 @@ function varargout = GUIObjectDetctionDemo(varargin)
 
 % Edit the above text to modify the response to help GUIObjectDetctionDemo
 
-% Last Modified by GUIDE v2.5 19-Nov-2012 15:55:52
+% Last Modified by GUIDE v2.5 19-Nov-2012 14:01:02
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -81,20 +81,15 @@ function m_btnDetect_Callback(hObject, eventdata, handles)
 
 % global vars
 global refImg;
-global objImg;
+global imgObj;
 
-img_cord = detectObjects(refImg, objImg, handles.m_axesObjects);
+figure(2);
+subplot(2,2,1)
+imshow(refImg);
+subplot(2,2,2);
+imgshow(imgObj);
 
-disp(img_cord);
-
-for i=1:1:length(img_cord)
-    %format: img_x,         img_y cord
-    tmp = cam2world(img_cord(i,1), img_cord(i,2));
-    world_cord(i,1) = tmp(1);
-    world_cord(i,2) = tmp(2);
-end
-str = sprintf('X:%6.4f, Y:%6.4f', world_cord(1,1), world_cord(1,2));
-set(handles.m_lboTargetsCord, 'String', str);
+detectObjects(refImg, imgObj, handles.m_axesObjects);
 %******************************END*****************************************
 
 % --- Executes on button press in m_btnCaptureRefImage.
@@ -249,7 +244,10 @@ function m_btnObjBrowse_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-global objImg;
+global imgObj;
+
+global imgRef;
+
 
 % show file dialog
 filter  = {'*.png'; '*.jpg'; '*.bmp'; '*.*'};
@@ -260,10 +258,10 @@ title   = 'Slect image with objects';
 fullPath = strcat(pathName, fileName);
 
 %read reference image
-objImg = imread(fullPath);
+imgObj = imread(fullPath);
 
 %display image
-imshow(objImg, 'Parent', handles.m_axesObjects);
+imshow(imgObj, 'Parent', handles.m_axesObjects);
 set(handles.m_lblObjImg, 'String', sprintf('File name:%s', fileName) );
 
 %enable detect objects button
@@ -298,19 +296,19 @@ delete(cam);
 %*********************************END**************************************
 
 
-% --- Executes on selection change in m_lboTargetsCord.
-function m_lboTargetsCord_Callback(hObject, eventdata, handles)
-% hObject    handle to m_lboTargetsCord (see GCBO)
+% --- Executes on selection change in listbox1.
+function listbox1_Callback(hObject, eventdata, handles)
+% hObject    handle to listbox1 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: contents = cellstr(get(hObject,'String')) returns m_lboTargetsCord contents as cell array
-%        contents{get(hObject,'Value')} returns selected item from m_lboTargetsCord
+% Hints: contents = cellstr(get(hObject,'String')) returns listbox1 contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from listbox1
 
 
 % --- Executes during object creation, after setting all properties.
-function m_lboTargetsCord_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to m_lboTargetsCord (see GCBO)
+function listbox1_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to listbox1 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 

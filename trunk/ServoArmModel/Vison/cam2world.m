@@ -16,10 +16,12 @@ kk = [ 1384.80667, 0*1384.80667,  376.73942;
         0,          1382.12856,   252.51461;
         0,          0,            1;  
      ];
-%%Camera resolution
+%% Camera resolution
 resx = 640;
 resy = 480;
-%% get ray projections
+%% Get ray projections
+x = floor(x);
+y = floor(y);
 P_camera = inv(kk) * [x, y, 1]';
 
 % calculate camera frame offset
@@ -28,9 +30,12 @@ P_camera = P_camera - camCenterOffset;
 
 % cam frame cord at res_x/ res_y/ is 0,0 alog x by 3 cm is 0.0477
 % wx * L = 3cm L = 3/wx
-lamda_X = 3/0.0477;
+lamda_X  = 3/0.0477;
+lamda_Y  = 3/0.033;
 
 world = P_camera;
 
-world(1) = world(1) * lamda;
+world(1) = world(1) * lamda_X;
+world(2) = world(2) * lamda_Y;
+world(3) = 0;
 end
