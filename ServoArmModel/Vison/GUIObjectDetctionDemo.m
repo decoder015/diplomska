@@ -22,7 +22,7 @@ function varargout = GUIObjectDetctionDemo(varargin)
 
 % Edit the above text to modify the response to help GUIObjectDetctionDemo
 
-% Last Modified by GUIDE v2.5 19-Nov-2012 23:04:08
+% Last Modified by GUIDE v2.5 20-Nov-2012 09:34:09
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -83,24 +83,41 @@ function m_btnDetect_Callback(hObject, eventdata, handles)
 global refImg;
 global objImg;
 
+global target;
+
+%get coridnates in image, 
+%and image with bounding boxes around detected objects
 [img_cord, objImg]= detectObjects(refImg, objImg, handles.m_axesObjects);
 
+fprintf('Object cordinates in picture:\n');
 disp(img_cord);
+
 str = '';
 [m, n] = size(img_cord);
-for i=1:1:m
+for i=1:1:m    
+    %convert picure points to world frame points
     %format: img_x,         img_y cord
     tmp = cam2world(img_cord(i,1), img_cord(i,2));
     world_cord(i,1) = tmp(1);
     world_cord(i,2) = tmp(2);
+    world_cord(i,3) = tmp(3);
     
-    % add values in combo
-    tmp_str = sprintf('X:%3.1f, Y:%3.1f\n', world_cord(i,1), world_cord(i,2));
+    % add object positions in combo
+    tmp_str = sprintf('X:%3.1f, Y:%3.1f\n, Z:%3.1f', ...
+                      world_cord(i,1), world_cord(i,2), world_cord(i,3));
+    
+    %add world cordinates in combo
     str = [str, {tmp_str}];
     set(handles.m_lboTargetsCord, 'String', str);   
 end
 
+% get postion on first object
+point_world =  cam2world(img_cord(1,1), img_cord(1,2));
 
+fprintf('point world:\n');
+disp(point_world);
+
+target = world2robotfr([point_world,1]);
 %******************************END*****************************************
 
 % --- Executes on button press in m_btnCaptureRefImage.
@@ -135,26 +152,80 @@ function m_axesRefImg_DeleteFcn(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 
-% --- Executes on button press in m_getNewImage.
-function m_getNewImage_Callback(hObject, eventdata, handles)
-% hObject    handle to m_getNewImage (see GCBO)
+% --- Executes on button press in m_jumpToLoc.
+function m_jumpToLoc_Callback(hObject, eventdata, handles)
+% hObject    handle to m_jumpToLoc (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-%global vars
-global cam;
+global joint0Val;
+global joint1Val;
+global joint2Val;
+global joint3Val;
+global sixlink;
+global target
 
-%get video object
-cam =  videoinput('winvideo', 1, 'RGB24_640x480');
+clear sixlink;
+sixlink = ikinsolver();
 
-%get video resolution
-vidRes = get(cam, 'VideoResolution');
-nBands = get(cam, 'NumberOfBands');
+%get RX RY RZ from GUI
+rx = 0;
+ry = 0;
+rz = 0;
+rx=degtorad(rx);
+ry=degtorad(ry);
+rz=degtorad(rz);
 
-%set image handle to gui axes
-emptyImg = zeros(vidRes(2),vidRes(1), nBands);
-hImage = image(emptyImg, 'Parent', handles.m_axesObjects);
-preview(cam, hImage);
+%get X Y Z from target vector
+x = target(1)/10;
+y = target(2)/10;
+z = target(3)/10;
+
+%Set taget frame
+target_fr = rpy2tr(rx,ry,rz);
+target_fr(1,4) = x;
+target_fr(2,4) = y;
+target_fr(3,4) = z;
+
+fprintf('target:\n');
+disp(target_fr);
+
+%find inverse
+%use options with bigger tollerance and pinv!!!!
+%tollerance is set to 0.01;
+sol = sixlink.ikine(target_fr, 'tol', 0.01);  
+
+% try to find inverse with pinv
+if( ~isnan(sol) )
+    %sixlink.ikine(target, 'tol', 0.01, 'pinv');
+    
+    % find min angle in case where angles are more then 360 deg    
+    sol = minRot(sol); 
+    
+    % set joint angles in label
+    dsol = radtodeg(sol);
+    strJoints = joints2str(dsol(1), dsol(2), dsol(3), dsol(4), dsol(5), dsol(6));
+    set(handles.m_lblJointValues, 'String', strJoints);
+    
+    % kinematic model angles to linx robot angles
+    linxJoints = kin2linx(sol(1), sol(2), sol(3), sol(4));
+    
+    %set linx joint limits if solution is above joint limits
+    %linxJoints = linxJointLimis(linxJoints(1), linxJoints(2), ...
+    %                            linxJoints(3), linxJoints(4));
+    
+    joint0Val = radtodeg(linxJoints(1));
+    joint1Val = radtodeg(linxJoints(2));
+    joint2Val = radtodeg(linxJoints(3));
+    joint3Val = radtodeg(linxJoints(4));
+    sixlink.plot(sol);
+else
+    get(handles.m_axesRobotKinematics);
+    linxJoints = kin2linx(0, 0, 0, 0);
+    %sixlink.plot([linxJoints(1), linxJoints(2), linxJoints(3), linxJoints(4), 0, 0]);
+    
+    sixlink.plot([0, 0, 0, 0, 0, 0]);
+end
 %****************************END*******************************************
 
 
@@ -245,7 +316,7 @@ fullPath = strcat(pathName, fileName);
 %read reference image
 refImg = imread(fullPath);
 imshow(refImg, 'Parent', handles.m_axesRefImg);
-set(handles.m_lblRefImg,'String',sprintf('File name:%s', fileName));
+set(handles.m_lblRefImg, 'String', sprintf('File name:%s', fileName));
 %*****************************END******************************************
 
 
@@ -370,3 +441,10 @@ function uipanel2_ButtonDownFcn(hObject, eventdata, handles)
  [x, y] = ginput(1);
     w = cam2world(x,y);
     fprintf('wx:%6.4f wy:%6.4f wz:%6.4f\n', w(1), w(2), w(3));
+
+
+% --- Executes on button press in pushbutton18.
+function pushbutton18_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton18 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)

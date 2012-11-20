@@ -22,7 +22,7 @@ function varargout = GUIObjectDetctionDemo(varargin)
 
 % Edit the above text to modify the response to help GUIObjectDetctionDemo
 
-% Last Modified by GUIDE v2.5 19-Nov-2012 14:01:02
+% Last Modified by GUIDE v2.5 20-Nov-2012 09:34:09
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -81,15 +81,39 @@ function m_btnDetect_Callback(hObject, eventdata, handles)
 
 % global vars
 global refImg;
-global imgObj;
+global objImg;
 
-figure(2);
-subplot(2,2,1)
-imshow(refImg);
-subplot(2,2,2);
-imgshow(imgObj);
+global target;
 
-detectObjects(refImg, imgObj, handles.m_axesObjects);
+%get coridnates in image, 
+%and image with bounding boxes around detected objects
+[img_cord, objImg]= detectObjects(refImg, objImg, handles.m_axesObjects);
+
+fprintf('Object cordinates in picture:\n');
+disp(img_cord);
+
+str = '';
+[m, n] = size(img_cord);
+for i=1:1:m    
+    %convert picure points to world frame points
+    %format: img_x,         img_y cord
+    tmp = cam2world(img_cord(i,1), img_cord(i,2));
+    world_cord(i,1) = tmp(1);
+    world_cord(i,2) = tmp(2);
+    
+    % add values in combo
+    tmp_str = sprintf('world X:%3.1f, Y:%3.1f\n', world_cord(i,1), world_cord(i,2));
+    
+    %add world cordinates in combo
+    str = [str, {tmp_str}];
+    set(handles.m_lboTargetsCord, 'String', str);   
+end
+
+% get first pos
+point_world =  cam2world(img_cord(1,1), img_cord(1,2));
+
+target = 
+
 %******************************END*****************************************
 
 % --- Executes on button press in m_btnCaptureRefImage.
@@ -124,26 +148,76 @@ function m_axesRefImg_DeleteFcn(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 
-% --- Executes on button press in m_getNewImage.
-function m_getNewImage_Callback(hObject, eventdata, handles)
-% hObject    handle to m_getNewImage (see GCBO)
+% --- Executes on button press in m_jumpToLoc.
+function m_jumpToLoc_Callback(hObject, eventdata, handles)
+% hObject    handle to m_jumpToLoc (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-%global vars
-global cam;
+global joint0Val;
+global joint1Val;
+global joint2Val;
+global joint3Val;
+global sixlink;
 
-%get video object
-cam =  videoinput('winvideo', 1, 'RGB24_640x480');
+clear sixlink;
+sixlink = ikinsolver();
 
-%get video resolution
-vidRes = get(cam, 'VideoResolution');
-nBands = get(cam, 'NumberOfBands');
+%get RX RY RZ from GUI
+rx = 0;
+ry = 0;
+rz = 0;
+rx=degtorad(rx);
+ry=degtorad(ry);
+rz=degtorad(rz);
 
-%set image handle to gui axes
-emptyImg = zeros(vidRes(2),vidRes(1), nBands);
-hImage = image(emptyImg, 'Parent', handles.m_axesObjects);
-preview(cam, hImage);
+%get X Y Z from GUI
+x = 0;
+y = 0;
+z = 0;
+
+%Set taget frame
+target = rpy2tr(rx,ry,rz);
+target(1,4) = x;
+target(2,4) = y;
+target(3,4) = z;
+
+fprintf('target:\n');
+disp(target);
+
+%find inverse
+%use options with bigger tollerance and pinv!!!!
+sol = sixlink.ikine(target, 'tol', 0.01);  
+
+% try to find inverse with pinv
+if( ~isnan(sol) )
+    %sixlink.ikine(target, 'tol', 0.01, 'pinv');
+    
+    % find min angle in case where angles are more then 360 deg    
+    sol = minRot(sol); 
+    
+    % set joint angles in label
+    dsol = radtodeg(sol);
+    strJoints = joints2str(dsol(1), dsol(2), dsol(3), dsol(4), dsol(5), dsol(6));
+    set(handles.m_lblJointValues, 'String', strJoints);
+    
+    % kinematic model angles to linx robot angles
+    linxJoints = kin2linx(sol(1), sol(2), sol(3), sol(4));
+    
+    %set linx joint limits if solution is above joint limits
+    linxJoints = linxJointLimis(linxJoints(1), linxJoints(2), ...
+                                linxJoints(3), linxJoints(4));
+    
+    joint0Val = radtodeg(linxJoints(1));
+    joint1Val = radtodeg(linxJoints(2));
+    joint2Val = radtodeg(linxJoints(3));
+    joint3Val = radtodeg(linxJoints(4));
+    sixlink.plot(sol);
+else
+    linxJoints = kin2linx(0, 0, 0, 0);
+    %sixlink.plot([linxJoints(1), linxJoints(2), linxJoints(3), linxJoints(4), 0, 0]);
+    sixlink.plot([0, 0, 0, 0, 0, 0]);
+end
 %****************************END*******************************************
 
 
@@ -234,7 +308,7 @@ fullPath = strcat(pathName, fileName);
 %read reference image
 refImg = imread(fullPath);
 imshow(refImg, 'Parent', handles.m_axesRefImg);
-set(handles.m_lblRefImg,'String',sprintf('File name:%s', fileName));
+set(handles.m_lblRefImg, 'String', sprintf('File name:%s', fileName));
 %*****************************END******************************************
 
 
@@ -244,10 +318,7 @@ function m_btnObjBrowse_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-global imgObj;
-
-global imgRef;
-
+global objImg;
 
 % show file dialog
 filter  = {'*.png'; '*.jpg'; '*.bmp'; '*.*'};
@@ -258,10 +329,10 @@ title   = 'Slect image with objects';
 fullPath = strcat(pathName, fileName);
 
 %read reference image
-imgObj = imread(fullPath);
+objImg = imread(fullPath);
 
 %display image
-imshow(imgObj, 'Parent', handles.m_axesObjects);
+imshow(objImg, 'Parent', handles.m_axesObjects);
 set(handles.m_lblObjImg, 'String', sprintf('File name:%s', fileName) );
 
 %enable detect objects button
@@ -269,22 +340,38 @@ set(handles.m_btnDetect, 'Enable', 'On');
 %*********************************END**************************************
 
 
-% --- Executes on button press in pushbutton15.
-function pushbutton15_Callback(hObject, eventdata, handles)
-% hObject    handle to pushbutton15 (see GCBO)
+% --- Executes on button press in m_btnCamPreviewObjects.
+function m_btnCamPreviewObjects_Callback(hObject, eventdata, handles)
+% hObject    handle to m_btnCamPreviewObjects (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+%open video
+global cam;
+cam =  videoinput('winvideo', 1, 'RGB24_640x480');
 
+%get video resolution
+vidRes = get(cam, 'VideoResolution');
+nBands = get(cam, 'NumberOfBands');
 
-% --- Executes on button press in m_btnCaptureObjImg.
-function m_btnCaptureObjImg_Callback(hObject, eventdata, handles)
-% hObject    handle to m_btnCaptureObjImg (see GCBO)
+%set handle to 
+emptyImg = zeros(vidRes(2),vidRes(1), nBands);
+hImage = image(emptyImg, 'Parent', handles.m_axesObjects);
+preview(cam, hImage);
+
+%enable disable GUI buttons
+set(handles.m_btnCaptureObjects,    'Enable', 'On');
+set(handles.m_btnCamPreviewObjects, 'Enable', 'off');
+set(handles.m_btnDetect,            'Enable', 'Off');
+%*******************************END****************************************
+
+% --- Executes on button press in m_btnCaptureObjects.
+function m_btnCaptureObjects_Callback(hObject, eventdata, handles)
+% hObject    handle to m_btnCaptureObjects (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
 %global vriables
 global cam;
-global refImg;
 global objImg;
 
 %get image form camera
@@ -293,22 +380,30 @@ objImg = getsnapshot(cam);
 %stop recording
 stop(cam);
 delete(cam);
+
+%show captured image
+imshow(objImg, 'parent', handles.m_axesObjects);
+
+%enable disable GUI buttons
+set(handles.m_btnCaptureObjects,    'Enable', 'Off');
+set(handles.m_btnCamPreviewObjects, 'Enable', 'On');
+set(handles.m_btnDetect,            'Enable', 'On');
 %*********************************END**************************************
 
 
-% --- Executes on selection change in listbox1.
-function listbox1_Callback(hObject, eventdata, handles)
-% hObject    handle to listbox1 (see GCBO)
+% --- Executes on selection change in m_lboTargetsCord.
+function m_lboTargetsCord_Callback(hObject, eventdata, handles)
+% hObject    handle to m_lboTargetsCord (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-% Hints: contents = cellstr(get(hObject,'String')) returns listbox1 contents as cell array
-%        contents{get(hObject,'Value')} returns selected item from listbox1
+% Hints: contents = cellstr(get(hObject,'String')) returns m_lboTargetsCord contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from m_lboTargetsCord
 
 
 % --- Executes during object creation, after setting all properties.
-function listbox1_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to listbox1 (see GCBO)
+function m_lboTargetsCord_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to m_lboTargetsCord (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
@@ -317,3 +412,31 @@ function listbox1_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
+
+
+% --- Executes on button press in m_btnEnlarge.
+function m_btnEnlarge_Callback(hObject, eventdata, handles)
+% hObject    handle to m_btnEnlarge (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+global objImg;
+
+figure(1);
+imshow(objImg);
+
+
+% --------------------------------------------------------------------
+function uipanel2_ButtonDownFcn(hObject, eventdata, handles)
+% hObject    handle to uipanel2 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+ [x, y] = ginput(1);
+    w = cam2world(x,y);
+    fprintf('wx:%6.4f wy:%6.4f wz:%6.4f\n', w(1), w(2), w(3));
+
+
+% --- Executes on button press in pushbutton18.
+function pushbutton18_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton18 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)

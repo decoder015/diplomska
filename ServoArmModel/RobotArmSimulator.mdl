@@ -6,7 +6,7 @@ Model {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.141"
+    ComputedModelVersion    "1.143"
     NumModelReferences	    0
     NumTestPointedSignals   0
   }
@@ -36,7 +36,7 @@ Model {
   "6Val_t;\n\nglobal robotOnline;\n\n% 1 = ON\n% 0 =  OFF\n\nrobotOnline = 0;\n\n%% Open serial port\nif(robotOnline)\n"
   " global serialPort;\n serialPort=serial('COM3', 'BaudRate', 9600, 'DataBits',8);\n serialPort.terminator = 'CR';\n f"
   "open(serialPort);\nend\n\n%init\njoint0Val = 0;\njoint1Val = 0;\njoint2Val = 0;\njoint3Val = 0;\njoint4Val_t = 0;\nj"
-  "oint5Val_t = 0;\njoint6Val_t = 0;\n\n%Show joint jog\nUIJointJog"
+  "oint5Val_t = 0;\njoint6Val_t = 0;\n\n%Show joint jog\n%UIJointJog\n\nGUIObjectDetctionDemo"
   StopFcn		  "%% close serial port\nif(robotOnline)\nserialPort = evalin('base', 'serialPort');\nfclose(serialPort);\n"
   "end\n"
   Created		  "Wed Oct 17 23:51:18 2012"
@@ -45,9 +45,9 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "kristijan"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Wed Nov 14 09:59:48 2012"
-  RTWModifiedTimeStamp	  274787618
-  ModelVersionFormat	  "1.%<AutoIncrement:141>"
+  LastModifiedDate	  "Tue Nov 20 14:31:48 2012"
+  RTWModifiedTimeStamp	  275322309
+  ModelVersionFormat	  "1.%<AutoIncrement:143>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -84,6 +84,7 @@ Model {
     $ObjectID		    2
     $ClassName		    "Simulink.SimulationData.ModelLoggingInfo"
     model_		    "RobotArmSimulator"
+    signals_		    []
     overrideMode_	    [0.0]
     Array {
       Type		      "Cell"
@@ -859,7 +860,7 @@ Model {
   }
   System {
     Name		    "RobotArmSimulator"
-    Location		    [2, 74, 1261, 946]
+    Location		    [2, 82, 1261, 954]
     Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -879,7 +880,7 @@ Model {
       Name		      "Detect\nChange"
       SID		      "100"
       Ports		      [1, 1]
-      Position		      [215, 1097, 285, 1123]
+      Position		      [205, 852, 275, 878]
       LibraryVersion	      "1.236"
       SourceBlock	      "simulink/Logic and Bit\nOperations/Detect\nChange"
       SourceType	      "Detect Change"
@@ -899,7 +900,7 @@ Model {
       Name		      "Detect\nChange1"
       SID		      "101"
       Ports		      [1, 1]
-      Position		      [220, 1165, 280, 1195]
+      Position		      [210, 920, 270, 950]
       LibraryVersion	      "1.236"
       SourceBlock	      "simulink/Logic and Bit\nOperations/Detect\nChange"
       SourceType	      "Detect Change"
@@ -919,7 +920,7 @@ Model {
       Name		      "Detect\nChange2"
       SID		      "102"
       Ports		      [1, 1]
-      Position		      [220, 1235, 280, 1265]
+      Position		      [210, 990, 270, 1020]
       LibraryVersion	      "1.236"
       SourceBlock	      "simulink/Logic and Bit\nOperations/Detect\nChange"
       SourceType	      "Detect Change"
@@ -939,7 +940,7 @@ Model {
       Name		      "Detect\nChange3"
       SID		      "103"
       Ports		      [1, 1]
-      Position		      [220, 1305, 280, 1335]
+      Position		      [210, 1060, 270, 1090]
       LibraryVersion	      "1.236"
       SourceBlock	      "simulink/Logic and Bit\nOperations/Detect\nChange"
       SourceType	      "Detect Change"
@@ -986,7 +987,7 @@ Model {
       Name		      "Display4"
       SID		      "111"
       Ports		      [1]
-      Position		      [615, 1220, 705, 1250]
+      Position		      [605, 975, 695, 1005]
       Decimation	      "1"
       Lockdown		      off
     }
@@ -1067,7 +1068,7 @@ Model {
       BlockType		      From
       Name		      "From16"
       SID		      "106"
-      Position		      [60, 1099, 150, 1121]
+      Position		      [50, 854, 140, 876]
       BackgroundColor	      "lightBlue"
       GotoTag		      "ServoJoint0"
     }
@@ -1075,7 +1076,7 @@ Model {
       BlockType		      From
       Name		      "From17"
       SID		      "107"
-      Position		      [60, 1169, 150, 1191]
+      Position		      [50, 924, 140, 946]
       BackgroundColor	      "lightBlue"
       GotoTag		      "ServoJoint1"
     }
@@ -1083,7 +1084,7 @@ Model {
       BlockType		      From
       Name		      "From18"
       SID		      "108"
-      Position		      [60, 1239, 150, 1261]
+      Position		      [50, 994, 140, 1016]
       BackgroundColor	      "lightBlue"
       GotoTag		      "ServoJoint2"
     }
@@ -1091,7 +1092,7 @@ Model {
       BlockType		      From
       Name		      "From19"
       SID		      "109"
-      Position		      [60, 1309, 150, 1331]
+      Position		      [50, 1064, 140, 1086]
       BackgroundColor	      "lightBlue"
       GotoTag		      "ServoJoint3"
     }
@@ -1295,7 +1296,7 @@ Model {
       Name		      "Logical\nOperator"
       SID		      "110"
       Ports		      [4, 1]
-      Position		      [365, 1070, 425, 1360]
+      Position		      [355, 825, 415, 1115]
       Operator		      "OR"
       Inputs		      "4"
       AllPortsSameDT	      off
@@ -1306,7 +1307,7 @@ Model {
       Name		      "Logical\nOperator1"
       SID		      "117"
       Ports		      [2, 1]
-      Position		      [515, 1197, 545, 1268]
+      Position		      [505, 952, 535, 1023]
       AllPortsSameDT	      off
       OutDataTypeStr	      "boolean"
     }
@@ -1331,7 +1332,7 @@ Model {
       Name		      "Pulse\nGenerator"
       SID		      "115"
       Ports		      [0, 1]
-      Position		      [405, 1469, 435, 1501]
+      Position		      [395, 1224, 425, 1256]
       PulseType		      "Time based"
       Period		      "1"
       PulseWidth	      "0.25"
@@ -1393,7 +1394,7 @@ Model {
       Name		      "Scope"
       SID		      "116"
       Ports		      [1]
-      Position		      [560, 1469, 590, 1501]
+      Position		      [550, 1224, 580, 1256]
       Floating		      off
       Location		      [1, 48, 1367, 727]
       Open		      off
@@ -1410,7 +1411,7 @@ Model {
       Name		      "Scope1"
       SID		      "118"
       Ports		      [1]
-      Position		      [650, 1284, 680, 1316]
+      Position		      [640, 1039, 670, 1071]
       Floating		      off
       Location		      [5, 47, 1367, 762]
       Open		      off
