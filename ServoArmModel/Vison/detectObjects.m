@@ -8,10 +8,12 @@
 %   treshold:   gray sclate treshold to create bit map
 %   blobSize:   use only clusters with size greater then blobSize
 %
-% --Output parameters-----------------------------------------------------
+%--Output parameters-------------------------------------------------------
 %
 %   objects: matrix N x 2 where n is number of detected objects.
 %            first colum is x cord in immage, second column is y cord
+%--Note--------------------------------------------------------------------
+% Cmera height is 67cm from Z=0 plane in 3d world
 %**************************************************************************
 function [objects, imgOut] = detectObjects(imgBlank, imgObjects, display)
 %%
@@ -77,16 +79,20 @@ for i=1:1:length(blobMeasurements)
         objects(i,2) = y;
         
         %# draw a rectangle       
-        %rectangle('Position',[x-(w/2) y-(h/2) w h], 'LineWidth',2, 'EdgeColor','r');
-        
+        %rectangle('Position',[x-(w/2) y-(h/2) w h], 'LineWidth',2, 'EdgeColor','r');        
         imgText = sprintf('x:%3.1f, y:%3.1f\n',x, y);       
         imgObjects = drawRactangleinImg(imgObjects, imgText, x, y, w, h);       
     end
     
 end
- imshow(imgObjects, 'parent', display);
- hold off;
- imgOut = imgObjects;
+
+%show detected objects
+imshow(imgObjects, 'parent', display);
+hold off;
+
+%return
+imgOut = imgObjects;
+ 
 %show debug images
 if(debugMode)
     figure(2);

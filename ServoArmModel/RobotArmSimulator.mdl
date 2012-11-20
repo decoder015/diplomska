@@ -6,7 +6,7 @@ Model {
     NumRootInports	    0
     NumRootOutports	    0
     ParameterArgumentNames  ""
-    ComputedModelVersion    "1.143"
+    ComputedModelVersion    "1.146"
     NumModelReferences	    0
     NumTestPointedSignals   0
   }
@@ -33,10 +33,10 @@ Model {
   MaxMDLFileLineLength	  120
   StartFcn		  "path(path,'\\GUI');\npath(path,'\\Util');\npath(path,'\\SFunct');\n\n% global vars \nglobal joint0Val ;"
   "\nglobal joint1Val ;\nglobal joint2Val ;\nglobal joint3Val ;\nglobal joint4Val_t;\nglobal joint5Val_t;\nglobal joint"
-  "6Val_t;\n\nglobal robotOnline;\n\n% 1 = ON\n% 0 =  OFF\n\nrobotOnline = 0;\n\n%% Open serial port\nif(robotOnline)\n"
-  " global serialPort;\n serialPort=serial('COM3', 'BaudRate', 9600, 'DataBits',8);\n serialPort.terminator = 'CR';\n f"
-  "open(serialPort);\nend\n\n%init\njoint0Val = 0;\njoint1Val = 0;\njoint2Val = 0;\njoint3Val = 0;\njoint4Val_t = 0;\nj"
-  "oint5Val_t = 0;\njoint6Val_t = 0;\n\n%Show joint jog\n%UIJointJog\n\nGUIObjectDetctionDemo"
+  "6Val_t;\n\nglobal robotOnline;\n\n% 1 = ON\n% 0 =  OFF\n\nrobotOnline =1;\n\n%% Open serial port\nif(robotOnline)\n "
+  "global serialPort;\n serialPort=serial('COM3', 'BaudRate', 9600, 'DataBits',8);\n serialPort.terminator = 'CR';\n fo"
+  "pen(serialPort);\nend\n\n%init\njoint0Val = 0;\njoint1Val = 0;\njoint2Val = 0;\njoint3Val = 0;\njoint4Val_t = 0;\njo"
+  "int5Val_t = 0;\njoint6Val_t = 0;\n\n%Show joint jog\n%UIJointJog\n\nGUIObjectDetctionDemo"
   StopFcn		  "%% close serial port\nif(robotOnline)\nserialPort = evalin('base', 'serialPort');\nfclose(serialPort);\n"
   "end\n"
   Created		  "Wed Oct 17 23:51:18 2012"
@@ -45,9 +45,9 @@ Model {
   ModifiedByFormat	  "%<Auto>"
   LastModifiedBy	  "kristijan"
   ModifiedDateFormat	  "%<Auto>"
-  LastModifiedDate	  "Tue Nov 20 14:31:48 2012"
-  RTWModifiedTimeStamp	  275322309
-  ModelVersionFormat	  "1.%<AutoIncrement:143>"
+  LastModifiedDate	  "Tue Nov 20 21:18:23 2012"
+  RTWModifiedTimeStamp	  275347096
+  ModelVersionFormat	  "1.%<AutoIncrement:146>"
   ConfigurationManager	  "None"
   SampleTimeColors	  off
   SampleTimeAnnotations	  off
@@ -737,6 +737,17 @@ Model {
   }
   BlockParameterDefaults {
     Block {
+      BlockType		      DataTypeConversion
+      OutMin		      "[]"
+      OutMax		      "[]"
+      OutDataTypeStr	      "Inherit: Inherit via back propagation"
+      LockScale		      off
+      ConvertRealWorld	      "Real World Value (RWV)"
+      RndMeth		      "Zero"
+      SaturateOnIntegerOverflow	on
+      SampleTime	      "-1"
+    }
+    Block {
       BlockType		      DiscretePulseGenerator
       PulseType		      "Sample based"
       TimeSource	      "Use simulation time"
@@ -860,7 +871,7 @@ Model {
   }
   System {
     Name		    "RobotArmSimulator"
-    Location		    [2, 82, 1261, 954]
+    Location		    [239, 82, 1498, 722]
     Open		    on
     ModelBrowserVisibility  off
     ModelBrowserWidth	    200
@@ -874,7 +885,15 @@ Model {
     ShowPageBoundaries	    off
     ZoomFactor		    "100"
     ReportName		    "simulink-default.rpt"
-    SIDHighWatermark	    "125"
+    SIDHighWatermark	    "127"
+    Block {
+      BlockType		      DataTypeConversion
+      Name		      "Data Type Conversion"
+      SID		      "127"
+      Position		      [685, 578, 760, 612]
+      RndMeth		      "Floor"
+      SaturateOnIntegerOverflow	off
+    }
     Block {
       BlockType		      Reference
       Name		      "Detect\nChange"
@@ -979,15 +998,6 @@ Model {
       SID		      "10"
       Ports		      [1]
       Position		      [355, 685, 445, 715]
-      Decimation	      "1"
-      Lockdown		      off
-    }
-    Block {
-      BlockType		      Display
-      Name		      "Display4"
-      SID		      "111"
-      Ports		      [1]
-      Position		      [605, 975, 695, 1005]
       Decimation	      "1"
       Lockdown		      off
     }
@@ -1303,15 +1313,6 @@ Model {
       OutDataTypeStr	      "boolean"
     }
     Block {
-      BlockType		      Logic
-      Name		      "Logical\nOperator1"
-      SID		      "117"
-      Ports		      [2, 1]
-      Position		      [505, 952, 535, 1023]
-      AllPortsSameDT	      off
-      OutDataTypeStr	      "boolean"
-    }
-    Block {
       BlockType		      M-S-Function
       Name		      "Output From GUI Joint Jog"
       SID		      "4"
@@ -1408,24 +1409,6 @@ Model {
     }
     Block {
       BlockType		      Scope
-      Name		      "Scope1"
-      SID		      "118"
-      Ports		      [1]
-      Position		      [640, 1039, 670, 1071]
-      Floating		      off
-      Location		      [5, 47, 1367, 762]
-      Open		      off
-      NumInputPorts	      "1"
-      List {
-	ListType		AxesTitles
-	axes1			"%<SignalLabel>"
-      }
-      SaveName		      "ScopeData1"
-      DataFormat	      "StructureWithTime"
-      SampleTime	      "0"
-    }
-    Block {
-      BlockType		      Scope
       Name		      "Scope2"
       SID		      "75"
       Ports		      [4]
@@ -1447,6 +1430,24 @@ Model {
       SaveName		      "ScopeData2"
       DataFormat	      "StructureWithTime"
       LimitDataPoints	      off
+      SampleTime	      "0"
+    }
+    Block {
+      BlockType		      Scope
+      Name		      "Scope3"
+      SID		      "126"
+      Ports		      [1]
+      Position		      [735, 904, 790, 1036]
+      Floating		      off
+      Location		      [5, 47, 1367, 762]
+      Open		      off
+      NumInputPorts	      "1"
+      List {
+	ListType		AxesTitles
+	axes1			"%<SignalLabel>"
+      }
+      SaveName		      "ScopeData3"
+      DataFormat	      "StructureWithTime"
       SampleTime	      "0"
     }
     Block {
@@ -1841,16 +1842,8 @@ Model {
     Line {
       SrcBlock		      "Pulse\nGenerator"
       SrcPort		      1
-      Points		      [40, 0]
-      Branch {
-	DstBlock		"Scope"
-	DstPort			1
-      }
-      Branch {
-	Points			[0, -235]
-	DstBlock		"Logical\nOperator1"
-	DstPort			2
-      }
+      DstBlock		      "Scope"
+      DstPort		      1
     }
     Line {
       SrcBlock		      "From16"
@@ -1902,26 +1895,6 @@ Model {
       DstPort		      4
     }
     Line {
-      SrcBlock		      "Logical\nOperator"
-      SrcPort		      1
-      DstBlock		      "Logical\nOperator1"
-      DstPort		      1
-    }
-    Line {
-      SrcBlock		      "Logical\nOperator1"
-      SrcPort		      1
-      Points		      [40, 0]
-      Branch {
-	DstBlock		"Display4"
-	DstPort			1
-      }
-      Branch {
-	Points			[0, 65]
-	DstBlock		"Scope1"
-	DstPort			1
-      }
-    }
-    Line {
       SrcBlock		      "Gain3"
       SrcPort		      1
       DstBlock		      "Virtual reallity"
@@ -1938,6 +1911,26 @@ Model {
       SrcPort		      1
       DstBlock		      "Robot Controller"
       DstPort		      3
+    }
+    Line {
+      SrcBlock		      "Logical\nOperator"
+      SrcPort		      1
+      Points		      [50, 0]
+      Branch {
+	DstBlock		"Scope3"
+	DstPort			1
+      }
+      Branch {
+	Points			[180, 0; 0, -375]
+	DstBlock		"Data Type Conversion"
+	DstPort			1
+      }
+    }
+    Line {
+      SrcBlock		      "Data Type Conversion"
+      SrcPort		      1
+      DstBlock		      "Robot Controller"
+      DstPort		      5
     }
   }
 }
