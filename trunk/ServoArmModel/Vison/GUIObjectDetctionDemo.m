@@ -42,7 +42,7 @@ else
     gui_mainfcn(gui_State, varargin{:});
 end
 % End initialization code - DO NOT EDIT
-
+%****************************END*******************************************
 
 % --- Executes just before GUIObjectDetctionDemo is made visible.
 function GUIObjectDetctionDemo_OpeningFcn(hObject, eventdata, handles, varargin)
@@ -60,7 +60,7 @@ guidata(hObject, handles);
 
 % UIWAIT makes GUIObjectDetctionDemo wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
-
+%****************************END*******************************************
 
 % --- Outputs from this function are returned to the command line.
 function varargout = GUIObjectDetctionDemo_OutputFcn(hObject, eventdata, handles) 
@@ -71,7 +71,7 @@ function varargout = GUIObjectDetctionDemo_OutputFcn(hObject, eventdata, handles
 
 % Get default command line output from handles structure
 varargout{1} = handles.output;
-
+%****************************END*******************************************
 
 % --- Executes on button press in m_btnDetect.
 function m_btnDetect_Callback(hObject, eventdata, handles)
@@ -150,7 +150,7 @@ function m_axesRefImg_DeleteFcn(hObject, eventdata, handles)
 % hObject    handle to m_axesRefImg (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-
+%****************************END*******************************************
 
 % --- Executes on button press in m_jumpToLoc.
 function m_jumpToLoc_Callback(hObject, eventdata, handles)
@@ -177,9 +177,12 @@ ry=degtorad(ry);
 rz=degtorad(rz);
 
 %get X Y Z from target vector
+% scale cordinates to fit in kinematic model
+objectOffset = 5;
+
 x = target(1)/10;
 y = target(2)/10;
-z = target(3)/10;
+z = (target(3)+objectOffset)/10;
 
 %Set taget frame
 target_fr = rpy2tr(rx,ry,rz);
@@ -195,9 +198,13 @@ disp(target_fr);
 %tollerance is set to 0.01;
 sol = sixlink.ikine(target_fr, 'tol', 0.01);  
 
+%if inverse is not found try to use different method
+if( isnan(sol) )
+     sol = sixlink.ikine(target, 'tol', 0.01, 'pinv');
+end
+
 % try to find inverse with pinv
-if( ~isnan(sol) )
-    %sixlink.ikine(target, 'tol', 0.01, 'pinv');
+if( ~isnan(sol) ) 
     
     % find min angle in case where angles are more then 360 deg    
     sol = minRot(sol); 
@@ -211,9 +218,10 @@ if( ~isnan(sol) )
     linxJoints = kin2linx(sol(1), sol(2), sol(3), sol(4));
     
     %set linx joint limits if solution is above joint limits
-    %linxJoints = linxJointLimis(linxJoints(1), linxJoints(2), ...
-    %                            linxJoints(3), linxJoints(4));
+    linxJoints = linxJointLimis(linxJoints(1), linxJoints(2), ...
+                                linxJoints(3), linxJoints(4));
     
+    %set joint values for robot
     joint0Val = radtodeg(linxJoints(1));
     joint1Val = radtodeg(linxJoints(2));
     joint2Val = radtodeg(linxJoints(3));
@@ -221,9 +229,6 @@ if( ~isnan(sol) )
     sixlink.plot(sol);
 else
     get(handles.m_axesRobotKinematics);
-    linxJoints = kin2linx(0, 0, 0, 0);
-    %sixlink.plot([linxJoints(1), linxJoints(2), linxJoints(3), linxJoints(4), 0, 0]);
-    
     sixlink.plot([0, 0, 0, 0, 0, 0]);
 end
 %****************************END*******************************************
@@ -236,14 +241,14 @@ function checkbox1_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % Hint: get(hObject,'Value') returns toggle state of checkbox1
-
+%****************************END*******************************************
 
 % --- Executes on mouse press over axes background.
 function m_axesObjects_ButtonDownFcn(hObject, eventdata, handles)
 % hObject    handle to m_axesObjects (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-
+%****************************END*******************************************
 
 % --- Executes on button press in m_btnCamPreview.
 function m_btnCamPreview_Callback(hObject, eventdata, handles)
@@ -274,11 +279,9 @@ function m_axesRefImg_ButtonDownFcn(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-hold on;
-[x, y] = ginput(1);
-fprintf('x=%d, y=%d',x,y);
-hold off;
-
+%[x, y] = ginput(1);
+%fprintf('x=%d, y=%d',x,y);
+%****************************END*******************************************
 
 % --------------------------------------------------------------------
 function uipanel1_ButtonDownFcn(hObject, eventdata, handles)
@@ -294,7 +297,7 @@ fprintf('panel x=%4.1f, y=%4.1f\n',x,y)
 
 fprintf('wx:%6.4f wy:%6.4f, wz:%6.4f\n',world(1),world(2),world(3));
 hold off;
-
+%****************************END*******************************************
 
 % --- Executes on button press in m_btnRefBrowse.
 function m_btnRefBrowse_Callback(hObject, eventdata, handles)
@@ -420,18 +423,21 @@ function m_lboTargetsCord_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
-
+%****************************END*******************************************
 
 % --- Executes on button press in m_btnEnlarge.
 function m_btnEnlarge_Callback(hObject, eventdata, handles)
 % hObject    handle to m_btnEnlarge (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+% global var
 global objImg;
 
+%show enlarged image with objects
 figure(1);
 imshow(objImg);
-
+%****************************END*******************************************
 
 % --------------------------------------------------------------------
 function uipanel2_ButtonDownFcn(hObject, eventdata, handles)
@@ -441,10 +447,11 @@ function uipanel2_ButtonDownFcn(hObject, eventdata, handles)
  [x, y] = ginput(1);
     w = cam2world(x,y);
     fprintf('wx:%6.4f wy:%6.4f wz:%6.4f\n', w(1), w(2), w(3));
-
+%****************************END*******************************************
 
 % --- Executes on button press in pushbutton18.
 function pushbutton18_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton18 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+%****************************END*******************************************
