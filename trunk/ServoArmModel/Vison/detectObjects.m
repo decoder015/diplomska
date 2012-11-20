@@ -46,7 +46,7 @@ binary_image = imgGray > threshold;
 % fill empty holles
 filled = imfill(binary_image, 'holes');
 
-%remove blobs smaller then 100px
+%remove blobs smaller then 200px
 filled = bwareaopen(filled, 200);
 
 %clean border
