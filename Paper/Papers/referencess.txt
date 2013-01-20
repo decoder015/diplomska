@@ -1,0 +1,18 @@
+﻿[1] K. C. Gupta and K. Kazerounian, “Improved numerical solutions of inverse kinematics of robots,” in  Proceedings of the 1985 IEEE International Conference on Robotics and Automation,
+vol. 2, March 1985, pp. 743–748.
+
+[2] A. Goldenberg, B. Benhabib, and R. Fenton, “A complete generalized solution to the inverse kinematics of robots,” IEEE Journal of Robotics and Automation, vol. 1, pp. 14–20, March 1985.
+
+[3] V. J. Lumelsky, “Iterative coordinate transformation procedure for one class of robots,”
+IEEE Transactions on Systems Man and Cybernetics,
+vol. 14, pp. 500–505, Jun. 1984.
+
+[4] John J. Craig, 2004, Introduction to Robotics: Mechanics and Control (3rd Edition), Prentice-Hall.  
+
+[5] M. Fedor, “Application of inverse kinematics for skeleton manipulation in real-time,” in SCCG ’03: Proceedings of the 19th spring conference on Computer graphics. New York,
+NY, USA: ACM Press, 2003, pp. 203–212.
+[6] Legnani, G.; Casolo, F.; Righettini, P.; Zappa, B. (1996). "A homogeneous matrix approach to 3D kinematics and dynamics — I. Theory". Mechanism and Machine Theory 31 (5): 573. doi:10.1016/0094-114X(95)00100-D. edit
+[6] P.I. Corke, "A Robotics Toolbox for MATLAB"
+[7]  http://www.petercorke.com/RVC/
+[8]  http://en.wikipedia.org
+[9]  Camera Calibration Toolbox for Matlab® http://www.vision.caltech.edu/bouguetj/calib_doc/
