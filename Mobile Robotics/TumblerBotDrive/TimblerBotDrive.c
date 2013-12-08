@@ -51,7 +51,14 @@ sbit m4s3 at ODR7_GPIOB_ODR_bit;
 sbit m4s4 at ODR6_GPIOB_ODR_bit;
 
 
+// step motor states
 int m1State=0;
+int m2State=0;
+int m3State=0;
+int m4State=0;
+
+enum SteppMotorDirection  {FORWARD = 0, BACKWARD =1};
+//move Motor 1 by one step
 void M1Step()
 {
      switch(m1State)
@@ -90,7 +97,7 @@ void M1Step()
      }
 }
 
-int m2State=0;
+//move Motor 2 by one step
 void M2Step()
 {
      switch(m2State)
@@ -129,7 +136,7 @@ void M2Step()
      }
 }
 
-int m3State=0;
+//move Motor 3 by one step
 void M3Step()
 {
      switch(m3State)
@@ -167,8 +174,7 @@ void M3Step()
      }
 }
 
-
-int m4State=0;
+//move Motor 4 by one step
 void M4Step()
 {
      switch(m4State)
@@ -207,9 +213,28 @@ void M4Step()
 }
 
 //sbit PA1 at ODR1_GPIOA_ODR_bit;
-
 void Wait() {
   Delay_ms(10);
+}
+
+void Motor1Move(int speed, int direction)
+{
+     switch(direction)
+     {
+        case FORWARD:
+             //drive motor 1 fwd
+             M1Step();
+             m1State++;
+             if(m1State > 4) m1State =0;
+        break;
+      case BACKWARD:
+           //drive motor 1 fwd
+             M1Step();
+             m1State--;
+             if(m1State > 4) m1State =0;
+      break;
+     }
+      Vdelay_ms(speed);
 }
 
 void main() {
@@ -220,9 +245,24 @@ void main() {
   // Set GPIO_PORTE poins 0 and 1 as digital input
   GPIO_Digital_Output(&GPIOA_BASE, _GPIO_PINMASK_1 | _GPIO_PINMASK_2);
 
-  GPIO_Digital_Output(&GPIOB_BASE, _GPIO_PINMASK_ALL); // Set PORTB as digital output
+  //Set PortB output pins. Set PORTB as digital output
+  GPIO_Digital_Output(&GPIOB_BASE, _GPIO_PINMASK_5  |
+                                   _GPIO_PINMASK_13 |
+                                   _GPIO_PINMASK_0  |
+                                   _GPIO_PINMASK_1  |
+                                   _GPIO_PINMASK_9  |
+                                   _GPIO_PINMASK_8  |
+                                   _GPIO_PINMASK_4  |
+                                   _GPIO_PINMASK_15 |
+                                   _GPIO_PINMASK_14 |
+                                   _GPIO_PINMASK_10 |
+                                   _GPIO_PINMASK_11 |
+                                   _GPIO_PINMASK_7  |
+                                   _GPIO_PINMASK_6  );
   
-  GPIO_Digital_Output(&GPIOC_BASE, _GPIO_PINMASK_ALL); // Set PORTC as digital output
+  GPIO_Digital_Output(&GPIOC_BASE, _GPIO_PINMASK_9  |
+                                   _GPIO_PINMASK_11 |
+                                   _GPIO_PINMASK_10  ); // Set PORTC as digital output
 
   // GPIO_Digital_Input(&GPIOB_BASE, _GPIO_PINMASK_1);
   // GPIO_Digital_Input(&GPIOB_BASE, _GPIO_PINMASK_0);
@@ -240,22 +280,19 @@ void main() {
     // Toggle DATA LED
     //DATA = ~DATA;
     
-    //drive motor 1 fwd
-    M1Step();
-    m1State++;
-    if(m1State > 4) m1State =0;
+    Motor1Move(5, FORWARD);
     
-    M2Step();
-    m2State++;
+//    M2Step();
+   /*m2State++;
     if(m2State > 4) m2State = 0;
-    
+
     M3Step();
     m3State++;
     if(m3State > 4) m3State = 0;
-    
+
     M4Step();
     m4State++;
-    if(m4State > 4) m4State = 0;
+    if(m4State > 4) m4State = 0;*/
 
     // 500ms pause
     Wait();

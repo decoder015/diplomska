@@ -2,10 +2,10 @@ main
 	GPIO_Digital_Output
 		GPIO_Config
 			GPIO_Clk_Enable
-	M1Step
-	M2Step
-	M3Step
-	M4Step
+	Motor1Move
+		M1Step
+		VDelay_ms
+			Delay_Cyc
 	Wait
 	__CC2DW
 	__FillZeros

@@ -1,5 +1,5 @@
-#line 1 "C:/Users/Administrator/Desktop/Mobile Robotics/TumblerBotDrive/TimblerBotDrive.c"
-#line 26 "C:/Users/Administrator/Desktop/Mobile Robotics/TumblerBotDrive/TimblerBotDrive.c"
+#line 1 "C:/Users/Administrator/Desktop/The_Source Robotics/Robotics/Mobile Robotics/TumblerBotDrive/TimblerBotDrive.c"
+#line 26 "C:/Users/Administrator/Desktop/The_Source Robotics/Robotics/Mobile Robotics/TumblerBotDrive/TimblerBotDrive.c"
 sbit STAT at ODR13_GPIOC_ODR_bit;
 sbit DATA at ODR12_GPIOC_ODR_bit;
 
@@ -28,7 +28,14 @@ sbit m4s3 at ODR7_GPIOB_ODR_bit;
 sbit m4s4 at ODR6_GPIOB_ODR_bit;
 
 
+
 int m1State=0;
+int m2State=0;
+int m3State=0;
+int m4State=0;
+
+enum SteppMotorDirection {FORWARD = 0, BACKWARD =1};
+
 void M1Step()
 {
  switch(m1State)
@@ -67,7 +74,7 @@ void M1Step()
  }
 }
 
-int m2State=0;
+
 void M2Step()
 {
  switch(m2State)
@@ -106,7 +113,7 @@ void M2Step()
  }
 }
 
-int m3State=0;
+
 void M3Step()
 {
  switch(m3State)
@@ -145,7 +152,6 @@ void M3Step()
 }
 
 
-int m4State=0;
 void M4Step()
 {
  switch(m4State)
@@ -184,9 +190,28 @@ void M4Step()
 }
 
 
-
 void Wait() {
  Delay_ms(10);
+}
+
+void Motor1Move(int speed, int direction)
+{
+ switch(direction)
+ {
+ case FORWARD:
+
+ M1Step();
+ m1State++;
+ if(m1State > 4) m1State =0;
+ break;
+ case BACKWARD:
+
+ M1Step();
+ m1State--;
+ if(m1State > 4) m1State =0;
+ break;
+ }
+ Vdelay_ms(speed);
 }
 
 void main() {
@@ -197,9 +222,24 @@ void main() {
 
  GPIO_Digital_Output(&GPIOA_BASE, _GPIO_PINMASK_1 | _GPIO_PINMASK_2);
 
- GPIO_Digital_Output(&GPIOB_BASE, _GPIO_PINMASK_ALL);
 
- GPIO_Digital_Output(&GPIOC_BASE, _GPIO_PINMASK_ALL);
+ GPIO_Digital_Output(&GPIOB_BASE, _GPIO_PINMASK_5 |
+ _GPIO_PINMASK_13 |
+ _GPIO_PINMASK_0 |
+ _GPIO_PINMASK_1 |
+ _GPIO_PINMASK_9 |
+ _GPIO_PINMASK_8 |
+ _GPIO_PINMASK_4 |
+ _GPIO_PINMASK_15 |
+ _GPIO_PINMASK_14 |
+ _GPIO_PINMASK_10 |
+ _GPIO_PINMASK_11 |
+ _GPIO_PINMASK_7 |
+ _GPIO_PINMASK_6 );
+
+ GPIO_Digital_Output(&GPIOC_BASE, _GPIO_PINMASK_9 |
+ _GPIO_PINMASK_11 |
+ _GPIO_PINMASK_10 );
 
 
 
@@ -217,24 +257,8 @@ void main() {
 
 
 
-
- M1Step();
- m1State++;
- if(m1State > 4) m1State =0;
-
- M2Step();
- m2State++;
- if(m2State > 4) m2State = 0;
-
- M3Step();
- m3State++;
- if(m3State > 4) m3State = 0;
-
- M4Step();
- m4State++;
- if(m4State > 4) m4State = 0;
-
-
+ Motor1Move(5, FORWARD);
+#line 298 "C:/Users/Administrator/Desktop/The_Source Robotics/Robotics/Mobile Robotics/TumblerBotDrive/TimblerBotDrive.c"
  Wait();
  }
 }
