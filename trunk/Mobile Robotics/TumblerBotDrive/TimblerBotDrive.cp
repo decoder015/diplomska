@@ -50,24 +50,24 @@ void M1Step()
  m1s1 = 1;
  m1s2 = 0;
  m1s3 = 0;
- m1s4 = 0;
+ m1s4 = 1;
  break;
  case 2:
- m1s1 = 0;
+ m1s1 = 1;
  m1s2 = 1;
  m1s3 = 0;
  m1s4 = 0;
  break;
  case 3:
  m1s1 = 0;
- m1s2 = 0;
+ m1s2 = 1;
  m1s3 = 1;
  m1s4 = 0;
  break;
  case 4:
  m1s1 = 0;
  m1s2 = 0;
- m1s3 = 0;
+ m1s3 = 1;
  m1s4 = 1;
  break;
 
@@ -89,27 +89,26 @@ void M2Step()
  m2s1 = 1;
  m2s2 = 0;
  m2s3 = 0;
- m2s4 = 0;
+ m2s4 = 1;
  break;
  case 2:
- m2s1 = 0;
+ m2s1 = 1;
  m2s2 = 1;
  m2s3 = 0;
  m2s4 = 0;
  break;
  case 3:
  m2s1 = 0;
- m2s2 = 0;
+ m2s2 = 1;
  m2s3 = 1;
  m2s4 = 0;
  break;
  case 4:
  m2s1 = 0;
  m2s2 = 0;
- m2s3 = 0;
+ m2s3 = 1;
  m2s4 = 1;
  break;
-
  }
 }
 
@@ -169,21 +168,21 @@ void M4Step()
  m4s4 = 0;
  break;
  case 2:
- m4s1 = 0;
+ m4s1 = 1;
  m4s2 = 1;
  m4s3 = 0;
  m4s4 = 0;
  break;
  case 3:
  m4s1 = 0;
- m4s2 = 0;
+ m4s2 = 1;
  m4s3 = 1;
  m4s4 = 0;
  break;
  case 4:
  m4s1 = 0;
  m4s2 = 0;
- m4s3 = 0;
+ m4s3 = 1;
  m4s4 = 1;
  break;
  }
@@ -194,24 +193,64 @@ void Wait() {
  Delay_ms(10);
 }
 
+
 void Motor1Move(int speed, int direction)
 {
  switch(direction)
  {
  case FORWARD:
 
- M1Step();
+
  m1State++;
- if(m1State > 4) m1State =0;
+ if(m1State > 4)
+ {
+ m1State = 1;
+
+ }
+ M1Step();
  break;
  case BACKWARD:
 
- M1Step();
+
  m1State--;
- if(m1State > 4) m1State =0;
+ if(m1State < 1)
+ {
+ m1State = 4;
+
+ }
+ M1Step();
  break;
  }
- Vdelay_ms(speed);
+}
+
+
+void Motor2Move(int speed, int direction)
+{
+ switch(direction)
+ {
+ case FORWARD:
+
+
+ m2State++;
+ if(m2State > 4)
+ {
+ m1State = 1;
+
+ }
+ M2Step();
+ break;
+ case BACKWARD:
+
+
+ m2State--;
+ if(m2State < 1)
+ {
+ m2State= 4;
+
+ }
+ M2Step();
+ break;
+ }
 }
 
 void main() {
@@ -244,12 +283,13 @@ void main() {
 
 
 
- STAT = 0;
+ STAT = 1;
  DATA = 1;
 
 
 
- while (1) {
+ while (1)
+ {
 
 
  STAT = ~STAT;
@@ -257,8 +297,12 @@ void main() {
 
 
 
+
  Motor1Move(5, FORWARD);
-#line 298 "C:/Users/Administrator/Desktop/The_Source Robotics/Robotics/Mobile Robotics/TumblerBotDrive/TimblerBotDrive.c"
+ Motor2Move(5, BACKWARD);
+
+
  Wait();
+
  }
 }
