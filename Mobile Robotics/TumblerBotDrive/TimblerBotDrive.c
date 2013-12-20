@@ -73,24 +73,24 @@ void M1Step()
            m1s1 = 1;
            m1s2 = 0;
            m1s3 = 0;
-           m1s4 = 0;
+           m1s4 = 1;
       break;
       case 2:
-           m1s1 = 0;
+           m1s1 = 1;
            m1s2 = 1;
            m1s3 = 0;
            m1s4 = 0;
       break;
       case 3:
            m1s1 = 0;
-           m1s2 = 0;
+           m1s2 = 1;
            m1s3 = 1;
            m1s4 = 0;
       break;
       case 4:
            m1s1 = 0;
            m1s2 = 0;
-           m1s3 = 0;
+           m1s3 = 1;
            m1s4 = 1;
       break;
 
@@ -112,27 +112,26 @@ void M2Step()
            m2s1 = 1;
            m2s2 = 0;
            m2s3 = 0;
-           m2s4 = 0;
+           m2s4 = 1;
       break;
       case 2:
-           m2s1 = 0;
+           m2s1 = 1;
            m2s2 = 1;
            m2s3 = 0;
            m2s4 = 0;
       break;
       case 3:
            m2s1 = 0;
-           m2s2 = 0;
+           m2s2 = 1;
            m2s3 = 1;
            m2s4 = 0;
       break;
       case 4:
            m2s1 = 0;
            m2s2 = 0;
-           m2s3 = 0;
+           m2s3 = 1;
            m2s4 = 1;
       break;
-
      }
 }
 
@@ -192,21 +191,21 @@ void M4Step()
            m4s4 = 0;
       break;
       case 2:
-           m4s1 = 0;
+           m4s1 = 1;
            m4s2 = 1;
            m4s3 = 0;
            m4s4 = 0;
       break;
       case 3:
            m4s1 = 0;
-           m4s2 = 0;
+           m4s2 = 1;
            m4s3 = 1;
            m4s4 = 0;
       break;
       case 4:
            m4s1 = 0;
            m4s2 = 0;
-           m4s3 = 0;
+           m4s3 = 1;
            m4s4 = 1;
       break;
      }
@@ -217,24 +216,64 @@ void Wait() {
   Delay_ms(10);
 }
 
+ //move motor 1
 void Motor1Move(int speed, int direction)
 {
      switch(direction)
      {
         case FORWARD:
              //drive motor 1 fwd
-             M1Step();
+            // M1Step();
              m1State++;
-             if(m1State > 4) m1State =0;
+             if(m1State > 4)
+             {
+                m1State = 1;
+                //VDelay_ms(speed);
+             }
+             M1Step();
         break;
       case BACKWARD:
            //drive motor 1 fwd
-             M1Step();
+
              m1State--;
-             if(m1State > 4) m1State =0;
+             if(m1State < 1)
+             {
+                 m1State = 4;
+                // VDelay_ms(speed);
+             }
+              M1Step();
       break;
      }
-      Vdelay_ms(speed);
+}
+
+// Move Motor 2
+void Motor2Move(int speed, int direction)
+{
+     switch(direction)
+     {
+        case FORWARD:
+             //drive motor 2 fwd
+             // M1Step();
+             m2State++;
+             if(m2State > 4)
+             {
+                m1State = 1;
+                //VDelay_ms(speed);
+             }
+             M2Step();
+        break;
+      case BACKWARD:
+           //drive motor 1 fwd
+
+             m2State--;
+             if(m2State < 1)
+             {
+                 m2State= 4;
+                 //VDelay_ms(speed);
+             }
+              M2Step();
+     break;
+     }
 }
 
 void main() {
@@ -267,34 +306,26 @@ void main() {
   // GPIO_Digital_Input(&GPIOB_BASE, _GPIO_PINMASK_1);
   // GPIO_Digital_Input(&GPIOB_BASE, _GPIO_PINMASK_0);
 
-  STAT = 0;                                  // turn OFF the STAT LED
+  STAT = 1;                                  // turn OFF the STAT LED
   DATA = 1;                                  // turn OFF the DATA LED
 
   //GPIOB_ODR = 0;
 
-  while (1) {
+  while (1) 
+  {
 
     // Toggle STAT LED
     STAT = ~STAT;
-
-    // Toggle DATA LED
+    
+    //Toggle DATA LED
     //DATA = ~DATA;
     
+
     Motor1Move(5, FORWARD);
-    
-//    M2Step();
-   /*m2State++;
-    if(m2State > 4) m2State = 0;
-
-    M3Step();
-    m3State++;
-    if(m3State > 4) m3State = 0;
-
-    M4Step();
-    m4State++;
-    if(m4State > 4) m4State = 0;*/
+    Motor2Move(5, BACKWARD);
 
     // 500ms pause
     Wait();
-  }
+
+ }
 }
