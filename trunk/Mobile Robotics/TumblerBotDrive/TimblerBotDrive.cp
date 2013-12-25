@@ -1,5 +1,5 @@
 #line 1 "C:/Users/Administrator/Desktop/The_Source Robotics/Robotics/Mobile Robotics/TumblerBotDrive/TimblerBotDrive.c"
-#line 26 "C:/Users/Administrator/Desktop/The_Source Robotics/Robotics/Mobile Robotics/TumblerBotDrive/TimblerBotDrive.c"
+#line 27 "C:/Users/Administrator/Desktop/The_Source Robotics/Robotics/Mobile Robotics/TumblerBotDrive/TimblerBotDrive.c"
 sbit STAT at ODR13_GPIOC_ODR_bit;
 sbit DATA at ODR12_GPIOC_ODR_bit;
 
@@ -28,21 +28,23 @@ sbit m4s3 at ODR7_GPIOB_ODR_bit;
 sbit m4s4 at ODR6_GPIOB_ODR_bit;
 
 
-
 int m1State=0;
 int m2State=0;
 int m3State=0;
 int m4State=0;
 
+
 const int C_INT_STEP_DELAY = 50;
+
 
 enum SteppMotorDirection {FORWARD = 0, BACKWARD =1};
 
 
+char cnt;
+
+
 unsigned char readbuff[64];
 unsigned char writebuff[64];
-
-char cnt;
 
 
 void M1Step()
@@ -203,7 +205,7 @@ void Wait() {
 }
 
 
-void Motor1Move(int speed, int direction)
+void Motor1Move(int direction)
 {
  switch(direction)
  {
@@ -225,7 +227,7 @@ void Motor1Move(int speed, int direction)
 }
 
 
-void Motor2Move(int speed, int direction)
+void Motor2Move(int direction)
 {
  switch(direction)
  {
@@ -271,6 +273,7 @@ void InitPorts()
  _GPIO_PINMASK_7 |
  _GPIO_PINMASK_6 );
 
+
  GPIO_Digital_Output(&GPIOC_BASE, _GPIO_PINMASK_9 |
  _GPIO_PINMASK_11 |
  _GPIO_PINMASK_10 );
@@ -286,29 +289,29 @@ void InitPorts()
 }
 
 
-
-void interrupt()
+void InitUSB()
 {
- USB_Interrupt_Proc();
+
+ HID_Enable(&readbuff, &writebuff);
 }
 
+
+void interrupt(){
+
+ USB_Interrupt_Proc();
+}
 
 void main() {
 
  InitPorts();
-
-
- HID_Enable(&readbuff, &writebuff);
 
  while (1)
  {
 
  STAT = ~STAT;
 
- Motor1Move(5, FORWARD);
- Motor2Move(5, BACKWARD);
-
-
+ Motor1Move(FORWARD);
+ Motor2Move(BACKWARD);
  Wait();
 
  }
