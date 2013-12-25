@@ -34,7 +34,16 @@ int m2State=0;
 int m3State=0;
 int m4State=0;
 
+const int C_INT_STEP_DELAY = 50;
+
 enum SteppMotorDirection {FORWARD = 0, BACKWARD =1};
+
+
+unsigned char readbuff[64];
+unsigned char writebuff[64];
+
+char cnt;
+
 
 void M1Step()
 {
@@ -190,7 +199,7 @@ void M4Step()
 
 
 void Wait() {
- Delay_ms(10);
+ Delay_ms(C_INT_STEP_DELAY);
 }
 
 
@@ -198,26 +207,18 @@ void Motor1Move(int speed, int direction)
 {
  switch(direction)
  {
+
  case FORWARD:
-
-
  m1State++;
- if(m1State > 4)
- {
- m1State = 1;
+ if(m1State > 4) m1State = 1;
 
- }
  M1Step();
  break;
+
  case BACKWARD:
-
-
  m1State--;
- if(m1State < 1)
- {
- m1State = 4;
+ if(m1State < 1) m1State = 4;
 
- }
  M1Step();
  break;
  }
@@ -228,33 +229,27 @@ void Motor2Move(int speed, int direction)
 {
  switch(direction)
  {
+
  case FORWARD:
-
-
  m2State++;
- if(m2State > 4)
- {
- m1State = 1;
+ if(m2State > 4) m2State = 1;
 
- }
  M2Step();
  break;
+
+
  case BACKWARD:
-
-
  m2State--;
- if(m2State < 1)
- {
- m2State= 4;
+ if(m2State < 1) m2State= 4;
 
- }
  M2Step();
  break;
  }
 }
 
-void main() {
 
+void InitPorts()
+{
 
  GPIO_Digital_Output(&GPIOC_BASE, _GPIO_PINMASK_12 | _GPIO_PINMASK_13);
 
@@ -283,20 +278,32 @@ void main() {
 
 
 
+
  STAT = 1;
+
+
  DATA = 1;
+}
 
 
+
+void interrupt()
+{
+ USB_Interrupt_Proc();
+}
+
+
+void main() {
+
+ InitPorts();
+
+
+ HID_Enable(&readbuff, &writebuff);
 
  while (1)
  {
 
-
  STAT = ~STAT;
-
-
-
-
 
  Motor1Move(5, FORWARD);
  Motor2Move(5, BACKWARD);
