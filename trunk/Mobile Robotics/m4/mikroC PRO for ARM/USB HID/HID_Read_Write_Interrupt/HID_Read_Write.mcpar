@@ -30,9 +30,24 @@ Count=0
 Count=1
 File0=..\..\MINI-M4-STM32.jpg
 ActiveImageIndex=0
+[OPENED_FILES]
+Count=1
+File0=HID_Read_Write.c
 [EEPROM]
 Count=0
 [ACTIVE_COMMENTS_FILES]
+Count=0
+[OTHER_FILES]
+Count=0
+[SEARCH_PATH]
+Count=4
+Path0=C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for ARM\defs\
+Path1=C:\Users\Administrator\Desktop\The_Source Robotics\Robotics\Mobile Robotics\m4\mikroC PRO for ARM\USB HID\HID_Read_Write_Interrupt\
+Path2=C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for ARM\Uses\ST M4\
+Path3=C:\Users\Administrator\Desktop\The_Source Robotics\Robotics\Mobile Robotics\m4\mikroC PRO for ARM\
+[HEADER_PATH]
+Count=0
+[HEADERS]
 Count=0
 [PLDS]
 Count=0
@@ -47,3 +62,5 @@ Node3=Output Files
 Count=3
 [PROGRAMMER_OPTIONS]
 Value=SWD
+[PROGRAMMER_TYPE]
+Value=mE

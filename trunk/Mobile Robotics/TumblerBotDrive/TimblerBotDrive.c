@@ -57,7 +57,16 @@ int m2State=0;
 int m3State=0;
 int m4State=0;
 
+const int C_INT_STEP_DELAY = 50; //ms
+
 enum SteppMotorDirection  {FORWARD = 0, BACKWARD =1};
+
+// Buffers should be in USB RAM, please consult datasheet
+unsigned char readbuff[64]; //absolute 0x280;
+unsigned char writebuff[64]; //absolute 0x2c0;
+
+char cnt;
+
 //move Motor 1 by one step
 void M1Step()
 {
@@ -213,7 +222,7 @@ void M4Step()
 
 //sbit PA1 at ODR1_GPIOA_ODR_bit;
 void Wait() {
-  Delay_ms(10);
+  Delay_ms(C_INT_STEP_DELAY);
 }
 
  //move motor 1
@@ -221,27 +230,19 @@ void Motor1Move(int speed, int direction)
 {
      switch(direction)
      {
+        //step motor 1 fwd
         case FORWARD:
-             //drive motor 1 fwd
-            // M1Step();
-             m1State++;
-             if(m1State > 4)
-             {
-                m1State = 1;
-                //VDelay_ms(speed);
-             }
+              m1State++;
+              if(m1State > 4)  m1State = 1;
+
              M1Step();
         break;
-      case BACKWARD:
-           //drive motor 1 fwd
 
-             m1State--;
-             if(m1State < 1)
-             {
-                 m1State = 4;
-                // VDelay_ms(speed);
-             }
-              M1Step();
+        case BACKWARD:
+            m1State--;
+            if(m1State < 1)  m1State = 4;
+            
+            M1Step();
       break;
      }
 }
@@ -251,34 +252,28 @@ void Motor2Move(int speed, int direction)
 {
      switch(direction)
      {
+         //step motor 2 forward
         case FORWARD:
-             //drive motor 2 fwd
-             // M1Step();
              m2State++;
-             if(m2State > 4)
-             {
-                m1State = 1;
-                //VDelay_ms(speed);
-             }
+             if(m2State > 4) m2State = 1;
+
              M2Step();
         break;
+     
+      //step motor 2 backward
       case BACKWARD:
-           //drive motor 1 fwd
-
              m2State--;
-             if(m2State < 1)
-             {
-                 m2State= 4;
-                 //VDelay_ms(speed);
-             }
-              M2Step();
+             if(m2State < 1) m2State= 4;
+             
+             M2Step();
      break;
      }
 }
 
-void main() {
-
-  // configure DATA and STAT pins as output
+//Initialize ports and status LEDS
+void InitPorts()
+{
+     // configure DATA and STAT pins as output
   GPIO_Digital_Output(&GPIOC_BASE, _GPIO_PINMASK_12 | _GPIO_PINMASK_13);
 
   // Set GPIO_PORTE poins 0 and 1 as digital input
@@ -298,7 +293,7 @@ void main() {
                                    _GPIO_PINMASK_11 |
                                    _GPIO_PINMASK_7  |
                                    _GPIO_PINMASK_6  );
-  
+
   GPIO_Digital_Output(&GPIOC_BASE, _GPIO_PINMASK_9  |
                                    _GPIO_PINMASK_11 |
                                    _GPIO_PINMASK_10  ); // Set PORTC as digital output
@@ -306,20 +301,32 @@ void main() {
   // GPIO_Digital_Input(&GPIOB_BASE, _GPIO_PINMASK_1);
   // GPIO_Digital_Input(&GPIOB_BASE, _GPIO_PINMASK_0);
 
-  STAT = 1;                                  // turn OFF the STAT LED
-  DATA = 1;                                  // turn OFF the DATA LED
+  // turn ON the STAT LED
+  STAT = 1;
 
-  //GPIOB_ODR = 0;
+  // turn ON the DATA LED
+  DATA = 1;
+}
+
+
+
+void interrupt()
+{
+   USB_Interrupt_Proc();                  // USB servicing is done inside the interrupt
+}
+//void
+
+void main() {
+
+  InitPorts();
+
+  // Initialize HID communication and specify our read and write buffers
+   HID_Enable(&readbuff, &writebuff);
 
   while (1) 
   {
-
     // Toggle STAT LED
     STAT = ~STAT;
-    
-    //Toggle DATA LED
-    //DATA = ~DATA;
-    
 
     Motor1Move(5, FORWARD);
     Motor2Move(5, BACKWARD);
