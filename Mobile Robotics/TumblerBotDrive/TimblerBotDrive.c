@@ -1,10 +1,9 @@
 /*
  * Project name:
-     Led_Blinking (The simplest simple example)
+     TumblerDrive
  * Copyright:
-     (c) Mikroelektronika, 2012.
+     (c) Kristijan, 2013.
  * Revision History:
-     20121120:
        - initial release (FJ);
  * Description:
      Simple "Hello world" example for the world of ARM MCUs;
@@ -21,8 +20,9 @@
  * NOTES:
      - None.
  */
-
+ 
 //leds
+//sbit PA1 at ODR1_GPIOA_ODR_bit;
 sbit STAT at ODR13_GPIOC_ODR_bit;
 sbit DATA at ODR12_GPIOC_ODR_bit;
 
@@ -50,22 +50,24 @@ sbit m4s2 at ODR11_GPIOB_ODR_bit;
 sbit m4s3 at ODR7_GPIOB_ODR_bit;
 sbit m4s4 at ODR6_GPIOB_ODR_bit;
 
-
 // step motor states
 int m1State=0;
 int m2State=0;
 int m3State=0;
 int m4State=0;
 
-const int C_INT_STEP_DELAY = 50; //ms
+//in ms
+const int C_INT_STEP_DELAY = 50;
 
+//step motor direction
 enum SteppMotorDirection  {FORWARD = 0, BACKWARD =1};
 
-// Buffers should be in USB RAM, please consult datasheet
-unsigned char readbuff[64]; //absolute 0x280;
-unsigned char writebuff[64]; //absolute 0x2c0;
-
+// USB DATA
 char cnt;
+
+// Buffers should be in USB RAM, please consult datasheet
+unsigned char readbuff[64];
+unsigned char writebuff[64];
 
 //move Motor 1 by one step
 void M1Step()
@@ -220,13 +222,13 @@ void M4Step()
      }
 }
 
-//sbit PA1 at ODR1_GPIOA_ODR_bit;
+//delay between steps
 void Wait() {
   Delay_ms(C_INT_STEP_DELAY);
 }
 
  //move motor 1
-void Motor1Move(int speed, int direction)
+void Motor1Move(int direction)
 {
      switch(direction)
      {
@@ -248,7 +250,7 @@ void Motor1Move(int speed, int direction)
 }
 
 // Move Motor 2
-void Motor2Move(int speed, int direction)
+void Motor2Move(int direction)
 {
      switch(direction)
      {
@@ -294,9 +296,10 @@ void InitPorts()
                                    _GPIO_PINMASK_7  |
                                    _GPIO_PINMASK_6  );
 
+ // Set PORTC as digital output
   GPIO_Digital_Output(&GPIOC_BASE, _GPIO_PINMASK_9  |
                                    _GPIO_PINMASK_11 |
-                                   _GPIO_PINMASK_10  ); // Set PORTC as digital output
+                                   _GPIO_PINMASK_10  );
 
   // GPIO_Digital_Input(&GPIOB_BASE, _GPIO_PINMASK_1);
   // GPIO_Digital_Input(&GPIOB_BASE, _GPIO_PINMASK_0);
@@ -308,31 +311,30 @@ void InitPorts()
   DATA = 1;
 }
 
-
-
-void interrupt()
+//Initialize USB communication
+void InitUSB()
 {
-   USB_Interrupt_Proc();                  // USB servicing is done inside the interrupt
+   // Initialize HID communication and specify our read and write buffers
+   HID_Enable(&readbuff, &writebuff);
 }
-//void
+
+//enable interrupts
+void Interrupt(){
+   // USB servicing is done inside the interrupt
+   USB_Interrupt_Proc();
+}
 
 void main() {
 
   InitPorts();
-
-  // Initialize HID communication and specify our read and write buffers
-   HID_Enable(&readbuff, &writebuff);
 
   while (1) 
   {
     // Toggle STAT LED
     STAT = ~STAT;
 
-    Motor1Move(5, FORWARD);
-    Motor2Move(5, BACKWARD);
-
-    // 500ms pause
+    Motor1Move(FORWARD);
+    Motor2Move(BACKWARD);
     Wait();
-
  }
 }
