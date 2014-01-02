@@ -25,7 +25,7 @@
  */
 
 char readbuff[64];
-char writebuff[12];
+char writebuff[64];
 char cnt;
 
 void USB0Interrupt() iv IVT_INT_OTG_FS {
@@ -36,12 +36,11 @@ void main() {
   HID_Enable(&readbuff,&writebuff);
 
   while(1) {
-    while(!HID_Read())
-     ;
+    while(!HID_Read());
 
-  //  for(cnt=0;cnt<64;cnt++)
-   //   writebuff[cnt]=readbuff[cnt];
+    for(cnt=0;cnt<64;cnt++)
+      writebuff[cnt]=readbuff[cnt];
 
-   // while(!HID_Write(&writebuff,64))  ;
+    while(!HID_Write(&writebuff,64))  ;
   }
 }
