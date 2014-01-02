@@ -8,10 +8,11 @@ const char USB_TRANSFER_TYPE = 0x03;         //0x03 Interrupt
 const char EP_IN_INTERVAL = 1;
 const char EP_OUT_INTERVAL = 1;
 
-const char USB_INTERRUPT = 0;
+const char USB_INTERRUPT = 1;
 const char USB_HID_EP = 1;
 const char USB_HID_RPT_SIZE = 33;
 
+/* Device Descriptor */
 const struct {
     char bLength;               // bLength         - Descriptor size in bytes (12h)
     char bDescriptorType;       // bDescriptorType - The constant DEVICE (01h)
@@ -34,7 +35,7 @@ const struct {
       0x00,                   // bDeviceClass
       0x00,                   // bDeviceSubClass
       0x00,                   // bDeviceProtocol
-      0x40,                      // bMaxPacketSize0
+      8,                      // bMaxPacketSize0
       USB_VENDOR_ID,          // idVendor
       USB_PRODUCT_ID,         // idProduct
       0x0001,                 // bcdDevice
@@ -144,11 +145,11 @@ const struct{
 const struct{
   char bLength;
   char bDscType;
-  unsigned int string[23];
+  unsigned int string[12];
 }strd3={
-    32,          //sizeof this descriptor string
+    26,          //sizeof this descriptor string
     0x03,
-    {'U','S','B',' ','H','I','D',' ','L','i','b','r','a','r','y'}
+    {'T','u','m','b','l','e','r','D','r','i','v','e'}
  };
 
 //Array of configuration descriptors
