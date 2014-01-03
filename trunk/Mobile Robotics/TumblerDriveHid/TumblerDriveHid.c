@@ -61,19 +61,19 @@ const int C_INT_STEP_DELAY = 50;
 //step motor direction
 enum SteppMotorDirection  {FORWARD = 0, BACKWARD =1, LEFT=2, RIGHT=3};
 
-int i;
-int result;
-int steps;
-int direction;
 char stepForward[]  = "FORWARD";
 char stepBackward[] = "BACKWARD";
-char stepLeft[]        = "LEFT";
-char stepRight[]= "RIGHT";
+char stepLeft[]     = "LEFT";
+char stepRight[]    = "RIGHT";
+
+int i;
+int steps;
+int direction;
 char *cmdPtr;
 char *stepVal;
-char *stepValPtr;
-char tmpBuff[]  ="FORWARD,200";
 
+const char C_STR_OK[]            = "OK";
+const char C_STR_SYNTAX_ERROR[]  = "Syntax Error :";
 
 // USB DATA
 char cnt;
@@ -303,6 +303,18 @@ void DriveTumblerForward(int steps)
 void DriveTumblerBackward(int steps)
 {
 
+     for(i=0; i<steps; i++)
+     {
+         Motor1Move(BACKWARD);
+         Motor2Move(FORWARD);
+         Wait();
+     }
+
+     //reset ports
+     m1State=0;
+     m2State=0;
+     M1Step();
+     M2Step();
 }
 
 void DriveTumblerLeft(int steps)
@@ -450,9 +462,6 @@ void USB0Interrupt() iv IVT_INT_OTG_FS {
   USB_Interrupt_Proc();
 }
 
-const char C_STR_OK[] = "OK";
-const char C_STR_SYNTAX_ERROR[] = "Syntax Error :";
-
 void main() {
 
   InitUSB();
@@ -464,25 +473,21 @@ void main() {
   while (1)
   {
     DATA = 0;
-    while(!HID_Read());
     
+    //read command from USB
+    while(!HID_Read());
      
-    if(DriveTumbler(readbuff) ==0)
-        {
-               strcpy(writebuff,C_STR_OK);
-        }
-        else
-        {
-               cmdPtr = strcat(C_STR_SYNTAX_ERROR, readbuff);
-               strcpy(writebuff, cmdPtr);
-        }
-        
-   // for(cnt=0;cnt<64;cnt++)
-   // {
-   //   writebuff[cnt]=readbuff[cnt];
-   //     DATA = ~DATA;
-   // }
-
+    if(DriveTumbler(readbuff) == 0)
+    {
+     strcpy(writebuff, C_STR_OK);
+    }
+    else
+    {
+        cmdPtr = strcat(C_STR_SYNTAX_ERROR, readbuff);
+        strcpy(writebuff, cmdPtr);
+    }
+    
+    //write response message
     while(!HID_Write(&writebuff,64));
  }
 }

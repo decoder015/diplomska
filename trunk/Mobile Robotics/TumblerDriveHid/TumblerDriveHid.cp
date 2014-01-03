@@ -1,5 +1,5 @@
-#line 1 "C:/Users/Administrator/Desktop/The_Source Robotics/Robotics/Mobile Robotics/m4/mikroC PRO for ARM/USB HID/TumblerDriveHid/TumblerDriveHid.c"
-#line 25 "C:/Users/Administrator/Desktop/The_Source Robotics/Robotics/Mobile Robotics/m4/mikroC PRO for ARM/USB HID/TumblerDriveHid/TumblerDriveHid.c"
+#line 1 "C:/Users/Administrator/Desktop/The_Source Robotics/Robotics/Mobile Robotics/TumblerDriveHid/TumblerDriveHid.c"
+#line 25 "C:/Users/Administrator/Desktop/The_Source Robotics/Robotics/Mobile Robotics/TumblerDriveHid/TumblerDriveHid.c"
 sbit STAT at ODR13_GPIOC_ODR_bit;
 sbit DATA at ODR12_GPIOC_ODR_bit;
 
@@ -39,19 +39,19 @@ const int C_INT_STEP_DELAY = 50;
 
 enum SteppMotorDirection {FORWARD = 0, BACKWARD =1, LEFT=2, RIGHT=3};
 
-int i;
-int result;
-int steps;
-int direction;
 char stepForward[] = "FORWARD";
 char stepBackward[] = "BACKWARD";
 char stepLeft[] = "LEFT";
-char stepRight[]= "RIGHT";
+char stepRight[] = "RIGHT";
+
+int i;
+int steps;
+int direction;
 char *cmdPtr;
 char *stepVal;
-char *stepValPtr;
-char tmpBuff[] ="FORWARD,200";
 
+const char C_STR_OK[] = "OK";
+const char C_STR_SYNTAX_ERROR[] = "Syntax Error :";
 
 
 char cnt;
@@ -281,6 +281,18 @@ void DriveTumblerForward(int steps)
 void DriveTumblerBackward(int steps)
 {
 
+ for(i=0; i<steps; i++)
+ {
+ Motor1Move(BACKWARD);
+ Motor2Move(FORWARD);
+ Wait();
+ }
+
+
+ m1State=0;
+ m2State=0;
+ M1Step();
+ M2Step();
 }
 
 void DriveTumblerLeft(int steps)
@@ -428,9 +440,6 @@ void USB0Interrupt() iv IVT_INT_OTG_FS {
  USB_Interrupt_Proc();
 }
 
-const char C_STR_OK[] = "OK";
-const char C_STR_SYNTAX_ERROR[] = "Syntax Error :";
-
 void main() {
 
  InitUSB();
@@ -447,7 +456,7 @@ void main() {
 
  if(DriveTumbler(readbuff) ==0)
  {
- strcpy(writebuff,C_STR_OK);
+ strcpy(writebuff, C_STR_OK);
  }
  else
  {
