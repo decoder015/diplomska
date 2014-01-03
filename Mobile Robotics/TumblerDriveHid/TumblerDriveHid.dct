@@ -41503,7 +41503,6 @@ respcmd4_bit
 respcmd5
 respcmd5_bit
 restoreinterrupts
-result
 rettobase
 rettobase
 rettobase_bit
@@ -44686,7 +44685,6 @@ stepleft
 stepright
 steps
 stepval
-stepvalptr
 stid
 stid
 stid
@@ -46877,7 +46875,6 @@ tmeie
 tmeie
 tmeie_bit
 tmeie_can1_ier_bit
-tmpbuff
 toc
 toc
 toc

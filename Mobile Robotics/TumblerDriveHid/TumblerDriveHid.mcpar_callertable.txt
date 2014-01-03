@@ -332,6 +332,11 @@ main
 			M1Step
 			M2Step
 		DriveTumblerBackward
+			Motor1Move
+			Motor2Move
+			Wait
+			M1Step
+			M2Step
 		DriveTumblerLeft
 			Motor1Move
 			Motor2Move

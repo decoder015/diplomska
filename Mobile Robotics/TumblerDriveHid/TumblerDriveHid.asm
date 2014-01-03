@@ -891,18 +891,12 @@ BX	LR
 ; end of _DriveTumblerForward
 _DriveTumblerBackward:
 ;TumblerDriveHid.c,303 :: 		void DriveTumblerBackward(int steps)
-;TumblerDriveHid.c,306 :: 		}
-L_end_DriveTumblerBackward:
-BX	LR
-; end of _DriveTumblerBackward
-_DriveTumblerLeft:
-;TumblerDriveHid.c,308 :: 		void DriveTumblerLeft(int steps)
 ; steps start address is: 0 (R0)
 SUB	SP, SP, #4
 STR	LR, [SP, #0]
 ; steps end address is: 0 (R0)
 ; steps start address is: 0 (R0)
-;TumblerDriveHid.c,310 :: 		for(i=0; i<steps; i++)
+;TumblerDriveHid.c,306 :: 		for(i=0; i<steps; i++)
 MOVS	R2, #0
 SXTH	R2, R2
 MOVW	R1, #lo_addr(_i+0)
@@ -910,65 +904,131 @@ MOVT	R1, #hi_addr(_i+0)
 STRH	R2, [R1, #0]
 ; steps end address is: 0 (R0)
 SXTH	R3, R0
-L_DriveTumblerLeft45:
+L_DriveTumblerBackward45:
 ; steps start address is: 12 (R3)
 MOVW	R1, #lo_addr(_i+0)
 MOVT	R1, #hi_addr(_i+0)
 LDRSH	R1, [R1, #0]
 CMP	R1, R3
 IT	GE
-BGE	L_DriveTumblerLeft46
-;TumblerDriveHid.c,312 :: 		Motor1Move(FORWARD);
-MOVS	R0, #0
+BGE	L_DriveTumblerBackward46
+;TumblerDriveHid.c,308 :: 		Motor1Move(BACKWARD);
+MOVS	R0, #1
 SXTH	R0, R0
 BL	_Motor1Move+0
-;TumblerDriveHid.c,313 :: 		Motor2Move(FORWARD);
+;TumblerDriveHid.c,309 :: 		Motor2Move(FORWARD);
 MOVS	R0, #0
 SXTH	R0, R0
 BL	_Motor2Move+0
-;TumblerDriveHid.c,314 :: 		Wait();
+;TumblerDriveHid.c,310 :: 		Wait();
 BL	_Wait+0
-;TumblerDriveHid.c,310 :: 		for(i=0; i<steps; i++)
+;TumblerDriveHid.c,306 :: 		for(i=0; i<steps; i++)
 MOVW	R2, #lo_addr(_i+0)
 MOVT	R2, #hi_addr(_i+0)
 LDRSH	R1, [R2, #0]
 ADDS	R1, R1, #1
 STRH	R1, [R2, #0]
-;TumblerDriveHid.c,315 :: 		}
+;TumblerDriveHid.c,311 :: 		}
 ; steps end address is: 12 (R3)
 IT	AL
-BAL	L_DriveTumblerLeft45
-L_DriveTumblerLeft46:
-;TumblerDriveHid.c,318 :: 		m1State=0;
+BAL	L_DriveTumblerBackward45
+L_DriveTumblerBackward46:
+;TumblerDriveHid.c,314 :: 		m1State=0;
 MOVS	R2, #0
 SXTH	R2, R2
 MOVW	R1, #lo_addr(_m1State+0)
 MOVT	R1, #hi_addr(_m1State+0)
 STRH	R2, [R1, #0]
-;TumblerDriveHid.c,319 :: 		m2State=0;
+;TumblerDriveHid.c,315 :: 		m2State=0;
 MOVS	R2, #0
 SXTH	R2, R2
 MOVW	R1, #lo_addr(_m2State+0)
 MOVT	R1, #hi_addr(_m2State+0)
 STRH	R2, [R1, #0]
-;TumblerDriveHid.c,320 :: 		M1Step();
+;TumblerDriveHid.c,316 :: 		M1Step();
 BL	_M1Step+0
-;TumblerDriveHid.c,321 :: 		M2Step();
+;TumblerDriveHid.c,317 :: 		M2Step();
 BL	_M2Step+0
-;TumblerDriveHid.c,322 :: 		}
+;TumblerDriveHid.c,318 :: 		}
+L_end_DriveTumblerBackward:
+LDR	LR, [SP, #0]
+ADD	SP, SP, #4
+BX	LR
+; end of _DriveTumblerBackward
+_DriveTumblerLeft:
+;TumblerDriveHid.c,320 :: 		void DriveTumblerLeft(int steps)
+; steps start address is: 0 (R0)
+SUB	SP, SP, #4
+STR	LR, [SP, #0]
+; steps end address is: 0 (R0)
+; steps start address is: 0 (R0)
+;TumblerDriveHid.c,322 :: 		for(i=0; i<steps; i++)
+MOVS	R2, #0
+SXTH	R2, R2
+MOVW	R1, #lo_addr(_i+0)
+MOVT	R1, #hi_addr(_i+0)
+STRH	R2, [R1, #0]
+; steps end address is: 0 (R0)
+SXTH	R3, R0
+L_DriveTumblerLeft48:
+; steps start address is: 12 (R3)
+MOVW	R1, #lo_addr(_i+0)
+MOVT	R1, #hi_addr(_i+0)
+LDRSH	R1, [R1, #0]
+CMP	R1, R3
+IT	GE
+BGE	L_DriveTumblerLeft49
+;TumblerDriveHid.c,324 :: 		Motor1Move(FORWARD);
+MOVS	R0, #0
+SXTH	R0, R0
+BL	_Motor1Move+0
+;TumblerDriveHid.c,325 :: 		Motor2Move(FORWARD);
+MOVS	R0, #0
+SXTH	R0, R0
+BL	_Motor2Move+0
+;TumblerDriveHid.c,326 :: 		Wait();
+BL	_Wait+0
+;TumblerDriveHid.c,322 :: 		for(i=0; i<steps; i++)
+MOVW	R2, #lo_addr(_i+0)
+MOVT	R2, #hi_addr(_i+0)
+LDRSH	R1, [R2, #0]
+ADDS	R1, R1, #1
+STRH	R1, [R2, #0]
+;TumblerDriveHid.c,327 :: 		}
+; steps end address is: 12 (R3)
+IT	AL
+BAL	L_DriveTumblerLeft48
+L_DriveTumblerLeft49:
+;TumblerDriveHid.c,330 :: 		m1State=0;
+MOVS	R2, #0
+SXTH	R2, R2
+MOVW	R1, #lo_addr(_m1State+0)
+MOVT	R1, #hi_addr(_m1State+0)
+STRH	R2, [R1, #0]
+;TumblerDriveHid.c,331 :: 		m2State=0;
+MOVS	R2, #0
+SXTH	R2, R2
+MOVW	R1, #lo_addr(_m2State+0)
+MOVT	R1, #hi_addr(_m2State+0)
+STRH	R2, [R1, #0]
+;TumblerDriveHid.c,332 :: 		M1Step();
+BL	_M1Step+0
+;TumblerDriveHid.c,333 :: 		M2Step();
+BL	_M2Step+0
+;TumblerDriveHid.c,334 :: 		}
 L_end_DriveTumblerLeft:
 LDR	LR, [SP, #0]
 ADD	SP, SP, #4
 BX	LR
 ; end of _DriveTumblerLeft
 _DriveTumblerRight:
-;TumblerDriveHid.c,324 :: 		void DriveTumblerRight(int steps)
+;TumblerDriveHid.c,336 :: 		void DriveTumblerRight(int steps)
 ; steps start address is: 0 (R0)
 SUB	SP, SP, #4
 STR	LR, [SP, #0]
 ; steps end address is: 0 (R0)
 ; steps start address is: 0 (R0)
-;TumblerDriveHid.c,326 :: 		for(i=0; i<steps; i++)
+;TumblerDriveHid.c,338 :: 		for(i=0; i<steps; i++)
 MOVS	R2, #0
 SXTH	R2, R2
 MOVW	R1, #lo_addr(_i+0)
@@ -976,82 +1036,82 @@ MOVT	R1, #hi_addr(_i+0)
 STRH	R2, [R1, #0]
 ; steps end address is: 0 (R0)
 SXTH	R3, R0
-L_DriveTumblerRight48:
+L_DriveTumblerRight51:
 ; steps start address is: 12 (R3)
 MOVW	R1, #lo_addr(_i+0)
 MOVT	R1, #hi_addr(_i+0)
 LDRSH	R1, [R1, #0]
 CMP	R1, R3
 IT	GE
-BGE	L_DriveTumblerRight49
-;TumblerDriveHid.c,328 :: 		Motor1Move(BACKWARD);
+BGE	L_DriveTumblerRight52
+;TumblerDriveHid.c,340 :: 		Motor1Move(BACKWARD);
 MOVS	R0, #1
 SXTH	R0, R0
 BL	_Motor1Move+0
-;TumblerDriveHid.c,329 :: 		Motor2Move(BACKWARD);
+;TumblerDriveHid.c,341 :: 		Motor2Move(BACKWARD);
 MOVS	R0, #1
 SXTH	R0, R0
 BL	_Motor2Move+0
-;TumblerDriveHid.c,330 :: 		Wait();
+;TumblerDriveHid.c,342 :: 		Wait();
 BL	_Wait+0
-;TumblerDriveHid.c,326 :: 		for(i=0; i<steps; i++)
+;TumblerDriveHid.c,338 :: 		for(i=0; i<steps; i++)
 MOVW	R2, #lo_addr(_i+0)
 MOVT	R2, #hi_addr(_i+0)
 LDRSH	R1, [R2, #0]
 ADDS	R1, R1, #1
 STRH	R1, [R2, #0]
-;TumblerDriveHid.c,331 :: 		}
+;TumblerDriveHid.c,343 :: 		}
 ; steps end address is: 12 (R3)
 IT	AL
-BAL	L_DriveTumblerRight48
-L_DriveTumblerRight49:
-;TumblerDriveHid.c,334 :: 		m1State=0;
+BAL	L_DriveTumblerRight51
+L_DriveTumblerRight52:
+;TumblerDriveHid.c,346 :: 		m1State=0;
 MOVS	R2, #0
 SXTH	R2, R2
 MOVW	R1, #lo_addr(_m1State+0)
 MOVT	R1, #hi_addr(_m1State+0)
 STRH	R2, [R1, #0]
-;TumblerDriveHid.c,335 :: 		m2State=0;
+;TumblerDriveHid.c,347 :: 		m2State=0;
 MOVS	R2, #0
 SXTH	R2, R2
 MOVW	R1, #lo_addr(_m2State+0)
 MOVT	R1, #hi_addr(_m2State+0)
 STRH	R2, [R1, #0]
-;TumblerDriveHid.c,336 :: 		M1Step();
+;TumblerDriveHid.c,348 :: 		M1Step();
 BL	_M1Step+0
-;TumblerDriveHid.c,337 :: 		M2Step();
+;TumblerDriveHid.c,349 :: 		M2Step();
 BL	_M2Step+0
-;TumblerDriveHid.c,338 :: 		}
+;TumblerDriveHid.c,350 :: 		}
 L_end_DriveTumblerRight:
 LDR	LR, [SP, #0]
 ADD	SP, SP, #4
 BX	LR
 ; end of _DriveTumblerRight
 _GetDirection:
-;TumblerDriveHid.c,340 :: 		int GetDirection(char *command)
+;TumblerDriveHid.c,352 :: 		int GetDirection(char *command)
 ; command start address is: 0 (R0)
 SUB	SP, SP, #4
 STR	LR, [SP, #0]
 MOV	R7, R0
 ; command end address is: 0 (R0)
 ; command start address is: 28 (R7)
-;TumblerDriveHid.c,342 :: 		if(strstr(command, stepForward) != 0)
+;TumblerDriveHid.c,354 :: 		if(strstr(command, stepForward) != 0)
 MOVW	R1, #lo_addr(_stepForward+0)
 MOVT	R1, #hi_addr(_stepForward+0)
 MOV	R0, R7
 BL	_strstr+0
 CMP	R0, #0
 IT	EQ
-BEQ	L_GetDirection51
+BEQ	L_GetDirection54
 ; command end address is: 28 (R7)
-;TumblerDriveHid.c,344 :: 		return FORWARD;
+;TumblerDriveHid.c,356 :: 		return FORWARD;
 MOVS	R0, #0
 SXTH	R0, R0
 IT	AL
 BAL	L_end_GetDirection
-;TumblerDriveHid.c,345 :: 		}
-L_GetDirection51:
-;TumblerDriveHid.c,346 :: 		else if(strstr(command, stepBackward) != 0)
+;TumblerDriveHid.c,357 :: 		}
+L_GetDirection54:
+;TumblerDriveHid.c,358 :: 		else if(strstr(command, stepBackward) != 0)
 ; command start address is: 28 (R7)
 MOVW	R1, #lo_addr(_stepBackward+0)
 MOVT	R1, #hi_addr(_stepBackward+0)
@@ -1059,16 +1119,16 @@ MOV	R0, R7
 BL	_strstr+0
 CMP	R0, #0
 IT	EQ
-BEQ	L_GetDirection53
+BEQ	L_GetDirection56
 ; command end address is: 28 (R7)
-;TumblerDriveHid.c,348 :: 		return BACKWARD;
+;TumblerDriveHid.c,360 :: 		return BACKWARD;
 MOVS	R0, #1
 SXTH	R0, R0
 IT	AL
 BAL	L_end_GetDirection
-;TumblerDriveHid.c,349 :: 		}
-L_GetDirection53:
-;TumblerDriveHid.c,350 :: 		else if(strstr(command, stepLeft) != 0)
+;TumblerDriveHid.c,361 :: 		}
+L_GetDirection56:
+;TumblerDriveHid.c,362 :: 		else if(strstr(command, stepLeft) != 0)
 ; command start address is: 28 (R7)
 MOVW	R1, #lo_addr(_stepLeft+0)
 MOVT	R1, #hi_addr(_stepLeft+0)
@@ -1076,16 +1136,16 @@ MOV	R0, R7
 BL	_strstr+0
 CMP	R0, #0
 IT	EQ
-BEQ	L_GetDirection55
+BEQ	L_GetDirection58
 ; command end address is: 28 (R7)
-;TumblerDriveHid.c,352 :: 		return LEFT;
+;TumblerDriveHid.c,364 :: 		return LEFT;
 MOVS	R0, #2
 SXTH	R0, R0
 IT	AL
 BAL	L_end_GetDirection
-;TumblerDriveHid.c,353 :: 		}
-L_GetDirection55:
-;TumblerDriveHid.c,354 :: 		else if(strstr(command, stepRight) != 0)
+;TumblerDriveHid.c,365 :: 		}
+L_GetDirection58:
+;TumblerDriveHid.c,366 :: 		else if(strstr(command, stepRight) != 0)
 ; command start address is: 28 (R7)
 MOVW	R1, #lo_addr(_stepRight+0)
 MOVT	R1, #hi_addr(_stepRight+0)
@@ -1094,307 +1154,307 @@ MOV	R0, R7
 BL	_strstr+0
 CMP	R0, #0
 IT	EQ
-BEQ	L_GetDirection57
-;TumblerDriveHid.c,356 :: 		return RIGHT;
+BEQ	L_GetDirection60
+;TumblerDriveHid.c,368 :: 		return RIGHT;
 MOVS	R0, #3
 SXTH	R0, R0
 IT	AL
 BAL	L_end_GetDirection
-;TumblerDriveHid.c,357 :: 		}
-L_GetDirection57:
-;TumblerDriveHid.c,360 :: 		return -1;
+;TumblerDriveHid.c,369 :: 		}
+L_GetDirection60:
+;TumblerDriveHid.c,372 :: 		return -1;
 MOVW	R0, #65535
 SXTH	R0, R0
-;TumblerDriveHid.c,362 :: 		}
+;TumblerDriveHid.c,374 :: 		}
 L_end_GetDirection:
 LDR	LR, [SP, #0]
 ADD	SP, SP, #4
 BX	LR
 ; end of _GetDirection
 _GetSteps:
-;TumblerDriveHid.c,364 :: 		int GetSteps(char *command)
+;TumblerDriveHid.c,376 :: 		int GetSteps(char *command)
 ; command start address is: 0 (R0)
 SUB	SP, SP, #4
 STR	LR, [SP, #0]
 ; command end address is: 0 (R0)
 ; command start address is: 0 (R0)
-;TumblerDriveHid.c,366 :: 		steps = -1;
+;TumblerDriveHid.c,378 :: 		steps = -1;
 MOVW	R2, #65535
 SXTH	R2, R2
 MOVW	R1, #lo_addr(_steps+0)
 MOVT	R1, #hi_addr(_steps+0)
 STRH	R2, [R1, #0]
-;TumblerDriveHid.c,368 :: 		stepVal = strrchr(command, ',');
+;TumblerDriveHid.c,380 :: 		stepVal = strrchr(command, ',');
 MOVS	R1, #44
 ; command end address is: 0 (R0)
 BL	_strrchr+0
 MOVW	R1, #lo_addr(_stepVal+0)
 MOVT	R1, #hi_addr(_stepVal+0)
 STR	R0, [R1, #0]
-;TumblerDriveHid.c,369 :: 		if(stepVal != 0)
+;TumblerDriveHid.c,381 :: 		if(stepVal != 0)
 CMP	R0, #0
 IT	EQ
-BEQ	L_GetSteps59
-;TumblerDriveHid.c,372 :: 		stepVal++;
+BEQ	L_GetSteps62
+;TumblerDriveHid.c,384 :: 		stepVal++;
 MOVW	R2, #lo_addr(_stepVal+0)
 MOVT	R2, #hi_addr(_stepVal+0)
 LDR	R1, [R2, #0]
 ADDS	R1, R1, #1
 STR	R1, [R2, #0]
-;TumblerDriveHid.c,373 :: 		steps = atoi(stepVal);
+;TumblerDriveHid.c,385 :: 		steps = atoi(stepVal);
 MOV	R0, R1
 BL	_atoi+0
 MOVW	R1, #lo_addr(_steps+0)
 MOVT	R1, #hi_addr(_steps+0)
 STRH	R0, [R1, #0]
-;TumblerDriveHid.c,374 :: 		}
-L_GetSteps59:
-;TumblerDriveHid.c,375 :: 		return steps;
+;TumblerDriveHid.c,386 :: 		}
+L_GetSteps62:
+;TumblerDriveHid.c,387 :: 		return steps;
 MOVW	R1, #lo_addr(_steps+0)
 MOVT	R1, #hi_addr(_steps+0)
 LDRSH	R0, [R1, #0]
-;TumblerDriveHid.c,376 :: 		}
+;TumblerDriveHid.c,388 :: 		}
 L_end_GetSteps:
 LDR	LR, [SP, #0]
 ADD	SP, SP, #4
 BX	LR
 ; end of _GetSteps
 _DriveTumbler:
-;TumblerDriveHid.c,378 :: 		int DriveTumbler(char *command)
+;TumblerDriveHid.c,390 :: 		int DriveTumbler(char *command)
 ; command start address is: 0 (R0)
 SUB	SP, SP, #4
 STR	LR, [SP, #0]
 MOV	R8, R0
 ; command end address is: 0 (R0)
 ; command start address is: 32 (R8)
-;TumblerDriveHid.c,380 :: 		direction = GetDirection(command);
+;TumblerDriveHid.c,392 :: 		direction = GetDirection(command);
 MOV	R0, R8
 BL	_GetDirection+0
 MOVW	R1, #lo_addr(_direction+0)
 MOVT	R1, #hi_addr(_direction+0)
 STRH	R0, [R1, #0]
-;TumblerDriveHid.c,381 :: 		steps = GetSteps(command);
+;TumblerDriveHid.c,393 :: 		steps = GetSteps(command);
 MOV	R0, R8
 ; command end address is: 32 (R8)
 BL	_GetSteps+0
 MOVW	R1, #lo_addr(_steps+0)
 MOVT	R1, #hi_addr(_steps+0)
 STRH	R0, [R1, #0]
-;TumblerDriveHid.c,383 :: 		switch(direction)
+;TumblerDriveHid.c,395 :: 		switch(direction)
 IT	AL
-BAL	L_DriveTumbler60
-;TumblerDriveHid.c,385 :: 		case FORWARD:
-L_DriveTumbler62:
-;TumblerDriveHid.c,386 :: 		DriveTumblerForward(steps);
+BAL	L_DriveTumbler63
+;TumblerDriveHid.c,397 :: 		case FORWARD:
+L_DriveTumbler65:
+;TumblerDriveHid.c,398 :: 		DriveTumblerForward(steps);
 MOVW	R1, #lo_addr(_steps+0)
 MOVT	R1, #hi_addr(_steps+0)
 LDRSH	R1, [R1, #0]
 SXTH	R0, R1
 BL	_DriveTumblerForward+0
-;TumblerDriveHid.c,387 :: 		return 0;
+;TumblerDriveHid.c,399 :: 		return 0;
 MOVS	R0, #0
 SXTH	R0, R0
 IT	AL
 BAL	L_end_DriveTumbler
-;TumblerDriveHid.c,388 :: 		case BACKWARD:
-L_DriveTumbler63:
-;TumblerDriveHid.c,389 :: 		DriveTumblerBackward(steps);
+;TumblerDriveHid.c,400 :: 		case BACKWARD:
+L_DriveTumbler66:
+;TumblerDriveHid.c,401 :: 		DriveTumblerBackward(steps);
 MOVW	R1, #lo_addr(_steps+0)
 MOVT	R1, #hi_addr(_steps+0)
 LDRSH	R1, [R1, #0]
 SXTH	R0, R1
 BL	_DriveTumblerBackward+0
-;TumblerDriveHid.c,390 :: 		return 0;
+;TumblerDriveHid.c,402 :: 		return 0;
 MOVS	R0, #0
 SXTH	R0, R0
 IT	AL
 BAL	L_end_DriveTumbler
-;TumblerDriveHid.c,391 :: 		case LEFT:
-L_DriveTumbler64:
-;TumblerDriveHid.c,392 :: 		DriveTumblerLeft(steps);
+;TumblerDriveHid.c,403 :: 		case LEFT:
+L_DriveTumbler67:
+;TumblerDriveHid.c,404 :: 		DriveTumblerLeft(steps);
 MOVW	R1, #lo_addr(_steps+0)
 MOVT	R1, #hi_addr(_steps+0)
 LDRSH	R1, [R1, #0]
 SXTH	R0, R1
 BL	_DriveTumblerLeft+0
-;TumblerDriveHid.c,393 :: 		return 0;
+;TumblerDriveHid.c,405 :: 		return 0;
 MOVS	R0, #0
 SXTH	R0, R0
 IT	AL
 BAL	L_end_DriveTumbler
-;TumblerDriveHid.c,394 :: 		case RIGHT:
-L_DriveTumbler65:
-;TumblerDriveHid.c,395 :: 		DriveTumblerRight(steps);
+;TumblerDriveHid.c,406 :: 		case RIGHT:
+L_DriveTumbler68:
+;TumblerDriveHid.c,407 :: 		DriveTumblerRight(steps);
 MOVW	R1, #lo_addr(_steps+0)
 MOVT	R1, #hi_addr(_steps+0)
 LDRSH	R1, [R1, #0]
 SXTH	R0, R1
 BL	_DriveTumblerRight+0
-;TumblerDriveHid.c,396 :: 		return 0;
+;TumblerDriveHid.c,408 :: 		return 0;
 MOVS	R0, #0
 SXTH	R0, R0
 IT	AL
 BAL	L_end_DriveTumbler
-;TumblerDriveHid.c,397 :: 		default:
-L_DriveTumbler66:
-;TumblerDriveHid.c,398 :: 		return -1;
+;TumblerDriveHid.c,409 :: 		default:
+L_DriveTumbler69:
+;TumblerDriveHid.c,410 :: 		return -1;
 MOVW	R0, #65535
 SXTH	R0, R0
 IT	AL
 BAL	L_end_DriveTumbler
-;TumblerDriveHid.c,399 :: 		}
-L_DriveTumbler60:
+;TumblerDriveHid.c,411 :: 		}
+L_DriveTumbler63:
 MOVW	R1, #lo_addr(_direction+0)
 MOVT	R1, #hi_addr(_direction+0)
 LDRSH	R1, [R1, #0]
 CMP	R1, #0
 IT	EQ
-BEQ	L_DriveTumbler62
+BEQ	L_DriveTumbler65
 MOVW	R1, #lo_addr(_direction+0)
 MOVT	R1, #hi_addr(_direction+0)
 LDRSH	R1, [R1, #0]
 CMP	R1, #1
 IT	EQ
-BEQ	L_DriveTumbler63
+BEQ	L_DriveTumbler66
 MOVW	R1, #lo_addr(_direction+0)
 MOVT	R1, #hi_addr(_direction+0)
 LDRSH	R1, [R1, #0]
 CMP	R1, #2
 IT	EQ
-BEQ	L_DriveTumbler64
+BEQ	L_DriveTumbler67
 MOVW	R1, #lo_addr(_direction+0)
 MOVT	R1, #hi_addr(_direction+0)
 LDRSH	R1, [R1, #0]
 CMP	R1, #3
 IT	EQ
-BEQ	L_DriveTumbler65
+BEQ	L_DriveTumbler68
 IT	AL
-BAL	L_DriveTumbler66
-;TumblerDriveHid.c,400 :: 		}
+BAL	L_DriveTumbler69
+;TumblerDriveHid.c,412 :: 		}
 L_end_DriveTumbler:
 LDR	LR, [SP, #0]
 ADD	SP, SP, #4
 BX	LR
 ; end of _DriveTumbler
 _InitPorts:
-;TumblerDriveHid.c,403 :: 		void InitPorts()
+;TumblerDriveHid.c,415 :: 		void InitPorts()
 SUB	SP, SP, #4
 STR	LR, [SP, #0]
-;TumblerDriveHid.c,406 :: 		GPIO_Digital_Output(&GPIOC_BASE, _GPIO_PINMASK_12 | _GPIO_PINMASK_13);
+;TumblerDriveHid.c,418 :: 		GPIO_Digital_Output(&GPIOC_BASE, _GPIO_PINMASK_12 | _GPIO_PINMASK_13);
 MOVW	R1, #12288
 MOVW	R0, #lo_addr(GPIOC_BASE+0)
 MOVT	R0, #hi_addr(GPIOC_BASE+0)
 BL	_GPIO_Digital_Output+0
-;TumblerDriveHid.c,409 :: 		GPIO_Digital_Output(&GPIOA_BASE, _GPIO_PINMASK_1 | _GPIO_PINMASK_2);
+;TumblerDriveHid.c,421 :: 		GPIO_Digital_Output(&GPIOA_BASE, _GPIO_PINMASK_1 | _GPIO_PINMASK_2);
 MOVS	R1, #6
 MOVW	R0, #lo_addr(GPIOA_BASE+0)
 MOVT	R0, #hi_addr(GPIOA_BASE+0)
 BL	_GPIO_Digital_Output+0
-;TumblerDriveHid.c,424 :: 		_GPIO_PINMASK_6  );
+;TumblerDriveHid.c,436 :: 		_GPIO_PINMASK_6  );
 MOVW	R1, #61427
-;TumblerDriveHid.c,412 :: 		GPIO_Digital_Output(&GPIOB_BASE, _GPIO_PINMASK_5  |
+;TumblerDriveHid.c,424 :: 		GPIO_Digital_Output(&GPIOB_BASE, _GPIO_PINMASK_5  |
 MOVW	R0, #lo_addr(GPIOB_BASE+0)
 MOVT	R0, #hi_addr(GPIOB_BASE+0)
-;TumblerDriveHid.c,424 :: 		_GPIO_PINMASK_6  );
+;TumblerDriveHid.c,436 :: 		_GPIO_PINMASK_6  );
 BL	_GPIO_Digital_Output+0
-;TumblerDriveHid.c,429 :: 		_GPIO_PINMASK_10  );
+;TumblerDriveHid.c,441 :: 		_GPIO_PINMASK_10  );
 MOVW	R1, #3584
-;TumblerDriveHid.c,427 :: 		GPIO_Digital_Output(&GPIOC_BASE, _GPIO_PINMASK_9  |
+;TumblerDriveHid.c,439 :: 		GPIO_Digital_Output(&GPIOC_BASE, _GPIO_PINMASK_9  |
 MOVW	R0, #lo_addr(GPIOC_BASE+0)
 MOVT	R0, #hi_addr(GPIOC_BASE+0)
-;TumblerDriveHid.c,429 :: 		_GPIO_PINMASK_10  );
+;TumblerDriveHid.c,441 :: 		_GPIO_PINMASK_10  );
 BL	_GPIO_Digital_Output+0
-;TumblerDriveHid.c,435 :: 		STAT = 1;
+;TumblerDriveHid.c,447 :: 		STAT = 1;
 MOVS	R1, #1
 SXTB	R1, R1
 MOVW	R0, #lo_addr(ODR13_GPIOC_ODR_bit+0)
 MOVT	R0, #hi_addr(ODR13_GPIOC_ODR_bit+0)
 STR	R1, [R0, #0]
-;TumblerDriveHid.c,438 :: 		DATA = 1;
+;TumblerDriveHid.c,450 :: 		DATA = 1;
 MOVW	R0, #lo_addr(ODR12_GPIOC_ODR_bit+0)
 MOVT	R0, #hi_addr(ODR12_GPIOC_ODR_bit+0)
 STR	R1, [R0, #0]
-;TumblerDriveHid.c,439 :: 		}
+;TumblerDriveHid.c,451 :: 		}
 L_end_InitPorts:
 LDR	LR, [SP, #0]
 ADD	SP, SP, #4
 BX	LR
 ; end of _InitPorts
 _InitUSB:
-;TumblerDriveHid.c,442 :: 		void InitUSB()
+;TumblerDriveHid.c,454 :: 		void InitUSB()
 SUB	SP, SP, #4
 STR	LR, [SP, #0]
-;TumblerDriveHid.c,445 :: 		HID_Enable(&readbuff, &writebuff);
+;TumblerDriveHid.c,457 :: 		HID_Enable(&readbuff, &writebuff);
 MOVW	R1, #lo_addr(_writebuff+0)
 MOVT	R1, #hi_addr(_writebuff+0)
 MOVW	R0, #lo_addr(_readbuff+0)
 MOVT	R0, #hi_addr(_readbuff+0)
 BL	_HID_Enable+0
-;TumblerDriveHid.c,446 :: 		}
+;TumblerDriveHid.c,458 :: 		}
 L_end_InitUSB:
 LDR	LR, [SP, #0]
 ADD	SP, SP, #4
 BX	LR
 ; end of _InitUSB
 _USB0Interrupt:
-;TumblerDriveHid.c,449 :: 		void USB0Interrupt() iv IVT_INT_OTG_FS {
+;TumblerDriveHid.c,461 :: 		void USB0Interrupt() iv IVT_INT_OTG_FS {
 SUB	SP, SP, #4
 STR	LR, [SP, #0]
-;TumblerDriveHid.c,450 :: 		USB_Interrupt_Proc();
+;TumblerDriveHid.c,462 :: 		USB_Interrupt_Proc();
 BL	_USB_Interrupt_Proc+0
-;TumblerDriveHid.c,451 :: 		}
+;TumblerDriveHid.c,463 :: 		}
 L_end_USB0Interrupt:
 LDR	LR, [SP, #0]
 ADD	SP, SP, #4
 BX	LR
 ; end of _USB0Interrupt
 _main:
-;TumblerDriveHid.c,456 :: 		void main() {
-;TumblerDriveHid.c,458 :: 		InitUSB();
+;TumblerDriveHid.c,465 :: 		void main() {
+;TumblerDriveHid.c,467 :: 		InitUSB();
 BL	_InitUSB+0
-;TumblerDriveHid.c,459 :: 		InitPorts();
+;TumblerDriveHid.c,468 :: 		InitPorts();
 BL	_InitPorts+0
-;TumblerDriveHid.c,462 :: 		STAT = ~STAT;
+;TumblerDriveHid.c,471 :: 		STAT = ~STAT;
 MOVW	R1, #lo_addr(ODR13_GPIOC_ODR_bit+0)
 MOVT	R1, #hi_addr(ODR13_GPIOC_ODR_bit+0)
 LDR	R0, [R1, #0]
 EOR	R0, R0, #1
 STR	R0, [R1, #0]
-;TumblerDriveHid.c,464 :: 		while (1)
-L_main67:
-;TumblerDriveHid.c,466 :: 		DATA = 0;
+;TumblerDriveHid.c,473 :: 		while (1)
+L_main70:
+;TumblerDriveHid.c,475 :: 		DATA = 0;
 MOVS	R1, #0
 SXTB	R1, R1
 MOVW	R0, #lo_addr(ODR12_GPIOC_ODR_bit+0)
 MOVT	R0, #hi_addr(ODR12_GPIOC_ODR_bit+0)
 STR	R1, [R0, #0]
-;TumblerDriveHid.c,467 :: 		while(!HID_Read());
-L_main69:
+;TumblerDriveHid.c,476 :: 		while(!HID_Read());
+L_main72:
 BL	_HID_Read+0
 CMP	R0, #0
 IT	NE
-BNE	L_main70
+BNE	L_main73
 IT	AL
-BAL	L_main69
-L_main70:
-;TumblerDriveHid.c,470 :: 		if(DriveTumbler(readbuff) ==0)
+BAL	L_main72
+L_main73:
+;TumblerDriveHid.c,479 :: 		if(DriveTumbler(readbuff) ==0)
 MOVW	R0, #lo_addr(_readbuff+0)
 MOVT	R0, #hi_addr(_readbuff+0)
 BL	_DriveTumbler+0
 CMP	R0, #0
 IT	NE
-BNE	L_main71
-;TumblerDriveHid.c,472 :: 		strcpy(writebuff,C_STR_OK);
+BNE	L_main74
+;TumblerDriveHid.c,481 :: 		strcpy(writebuff, C_STR_OK);
 MOVW	R1, #lo_addr(_C_STR_OK+0)
 MOVT	R1, #hi_addr(_C_STR_OK+0)
 MOVW	R0, #lo_addr(_writebuff+0)
 MOVT	R0, #hi_addr(_writebuff+0)
 BL	_strcpy+0
-;TumblerDriveHid.c,473 :: 		}
+;TumblerDriveHid.c,482 :: 		}
 IT	AL
-BAL	L_main72
-L_main71:
-;TumblerDriveHid.c,476 :: 		cmdPtr = strcat(C_STR_SYNTAX_ERROR, readbuff);
+BAL	L_main75
+L_main74:
+;TumblerDriveHid.c,485 :: 		cmdPtr = strcat(C_STR_SYNTAX_ERROR, readbuff);
 MOVW	R1, #lo_addr(_readbuff+0)
 MOVT	R1, #hi_addr(_readbuff+0)
 MOVW	R0, #lo_addr(_C_STR_SYNTAX_ERROR+0)
@@ -1403,29 +1463,29 @@ BL	_strcat+0
 MOVW	R1, #lo_addr(_cmdPtr+0)
 MOVT	R1, #hi_addr(_cmdPtr+0)
 STR	R0, [R1, #0]
-;TumblerDriveHid.c,477 :: 		strcpy(writebuff, cmdPtr);
+;TumblerDriveHid.c,486 :: 		strcpy(writebuff, cmdPtr);
 MOV	R1, R0
 MOVW	R0, #lo_addr(_writebuff+0)
 MOVT	R0, #hi_addr(_writebuff+0)
 BL	_strcpy+0
-;TumblerDriveHid.c,478 :: 		}
-L_main72:
-;TumblerDriveHid.c,486 :: 		while(!HID_Write(&writebuff,64));
-L_main73:
+;TumblerDriveHid.c,487 :: 		}
+L_main75:
+;TumblerDriveHid.c,495 :: 		while(!HID_Write(&writebuff,64));
+L_main76:
 MOVS	R1, #64
 MOVW	R0, #lo_addr(_writebuff+0)
 MOVT	R0, #hi_addr(_writebuff+0)
 BL	_HID_Write+0
 CMP	R0, #0
 IT	NE
-BNE	L_main74
+BNE	L_main77
 IT	AL
-BAL	L_main73
-L_main74:
-;TumblerDriveHid.c,487 :: 		}
+BAL	L_main76
+L_main77:
+;TumblerDriveHid.c,496 :: 		}
 IT	AL
-BAL	L_main67
-;TumblerDriveHid.c,488 :: 		}
+BAL	L_main70
+;TumblerDriveHid.c,497 :: 		}
 L_end_main:
 L__main_end_loop:
 B	L__main_end_loop

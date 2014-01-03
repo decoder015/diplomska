@@ -1,4 +1,4 @@
-#line 1 "C:/Users/Administrator/Desktop/The_Source Robotics/Robotics/Mobile Robotics/m4/mikroC PRO for ARM/USB HID/TumblerDriveHid/USBdsc.c"
+#line 1 "C:/Users/Administrator/Desktop/The_Source Robotics/Robotics/Mobile Robotics/TumblerDriveHid/USBdsc.c"
 const unsigned int USB_VENDOR_ID = 0x1234;
 const unsigned int USB_PRODUCT_ID = 0x0001;
 const char USB_SELF_POWER = 0x80;
