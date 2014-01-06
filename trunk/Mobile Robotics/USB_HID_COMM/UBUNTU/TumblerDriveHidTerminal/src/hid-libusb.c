@@ -377,7 +377,7 @@ static char *make_path(libusb_device *dev, int interface_number)
 		libusb_get_device_address(dev),
 		interface_number);
 	str[sizeof(str)-1] = '\0';
-
+	
 	return strdup(str);
 }
 
@@ -582,23 +582,16 @@ void  HID_API_EXPORT hid_free_enumeration(struct hid_device_info *devs)
 
 hid_device * hid_open(unsigned short vendor_id, unsigned short product_id, wchar_t *serial_number)
 {
-	printf("runnung hid_open\n");
 	struct hid_device_info *devs, *cur_dev;
 	const char *path_to_open = NULL;
 	hid_device *handle = NULL;
 	
 	devs = hid_enumerate(vendor_id, product_id);
-
-	if(devs == NULL)
-		printf("devs are null!\n");
-
 	cur_dev = devs;
 	while (cur_dev) {
-		if (cur_dev->vendor_id == vendor_id && cur_dev->product_id == product_id) 
-		{
-			printf("Match foudn!\n");
-			if (serial_number) 
-			{
+		if (cur_dev->vendor_id == vendor_id &&
+		    cur_dev->product_id == product_id) {
+			if (serial_number) {
 				if (wcscmp(serial_number, cur_dev->serial_number) == 0) {
 					path_to_open = cur_dev->path;
 					break;
@@ -612,9 +605,7 @@ hid_device * hid_open(unsigned short vendor_id, unsigned short product_id, wchar
 		cur_dev = cur_dev->next;
 	}
 
-	
 	if (path_to_open) {
-		printf("Open device");
 		/* Open the device */
 		handle = hid_open_path(path_to_open);
 	}
@@ -758,55 +749,42 @@ hid_device * HID_API_EXPORT hid_open_path(const char *path)
 	int res;
 	int d = 0;
 	int good_open = 0;
-
+	
 	setlocale(LC_ALL,"");
-
+	
 	if (!initialized)
 		hid_init();
 
 	num_devs = libusb_get_device_list(NULL, &devs);
-
-	while ((usb_dev = devs[d++]) != NULL) 
-	{
+	while ((usb_dev = devs[d++]) != NULL) {
 		struct libusb_device_descriptor desc;
 		struct libusb_config_descriptor *conf_desc = NULL;
-
 		int i,j,k;
 		libusb_get_device_descriptor(usb_dev, &desc);
 
-		
-
 		if (libusb_get_active_config_descriptor(usb_dev, &conf_desc) < 0)
 			continue;
-
-		for (j = 0; j < conf_desc->bNumInterfaces; j++) 
-		{
+		for (j = 0; j < conf_desc->bNumInterfaces; j++) {
 			const struct libusb_interface *intf = &conf_desc->interface[j];
-
-			for (k = 0; k < intf->num_altsetting; k++) 
-			{
+			for (k = 0; k < intf->num_altsetting; k++) {
 				const struct libusb_interface_descriptor *intf_desc;
 				intf_desc = &intf->altsetting[k];
-
-				if (intf_desc->bInterfaceClass == LIBUSB_CLASS_HID) 
-				{
+				if (intf_desc->bInterfaceClass == LIBUSB_CLASS_HID) {
 					char *dev_path = make_path(usb_dev, intf_desc->bInterfaceNumber);
-
-					if (!strcmp(dev_path, path)) 
-					{
+					if (!strcmp(dev_path, path)) {
 						/* Matched Paths. Open this device */
 
 						// OPEN HERE //
 						res = libusb_open(usb_dev, &dev->device_handle);
 						if (res < 0) {
-							printf("can't open device\n");
+							LOG("can't open device\n");
 							free(dev_path);
-							break;
+ 							break;
 						}
 						good_open = 1;
-
+						
 						/* Detach the kernel driver, but only if the
-						device is managed by the kernel */
+						   device is managed by the kernel */
 						if (libusb_kernel_driver_active(dev->device_handle, intf_desc->bInterfaceNumber) == 1) {
 							res = libusb_detach_kernel_driver(dev->device_handle, intf_desc->bInterfaceNumber);
 							if (res < 0) {
@@ -817,7 +795,7 @@ hid_device * HID_API_EXPORT hid_open_path(const char *path)
 								break;
 							}
 						}
-
+						
 						res = libusb_claim_interface(dev->device_handle, intf_desc->bInterfaceNumber);
 						if (res < 0) {
 							LOG("can't claim interface %d: %d\n", intf_desc->bInterfaceNumber, res);
@@ -834,44 +812,44 @@ hid_device * HID_API_EXPORT hid_open_path(const char *path)
 
 						/* Store off the interface number */
 						dev->interface = intf_desc->bInterfaceNumber;
-
+												
 						/* Find the INPUT and OUTPUT endpoints. An
-						OUTPUT endpoint is not required. */
+						   OUTPUT endpoint is not required. */
 						for (i = 0; i < intf_desc->bNumEndpoints; i++) {
 							const struct libusb_endpoint_descriptor *ep
 								= &intf_desc->endpoint[i];
 
 							/* Determine the type and direction of this
-							endpoint. */
+							   endpoint. */
 							int is_interrupt =
 								(ep->bmAttributes & LIBUSB_TRANSFER_TYPE_MASK)
-								== LIBUSB_TRANSFER_TYPE_INTERRUPT;
+							      == LIBUSB_TRANSFER_TYPE_INTERRUPT;
 							int is_output = 
 								(ep->bEndpointAddress & LIBUSB_ENDPOINT_DIR_MASK)
-								== LIBUSB_ENDPOINT_OUT;
+							      == LIBUSB_ENDPOINT_OUT;
 							int is_input = 
 								(ep->bEndpointAddress & LIBUSB_ENDPOINT_DIR_MASK)
-								== LIBUSB_ENDPOINT_IN;
+							      == LIBUSB_ENDPOINT_IN;
 
 							/* Decide whether to use it for intput or output. */
 							if (dev->input_endpoint == 0 &&
-								is_interrupt && is_input) {
-									/* Use this endpoint for INPUT */
-									dev->input_endpoint = ep->bEndpointAddress;
-									dev->input_ep_max_packet_size = ep->wMaxPacketSize;
+							    is_interrupt && is_input) {
+								/* Use this endpoint for INPUT */
+								dev->input_endpoint = ep->bEndpointAddress;
+								dev->input_ep_max_packet_size = ep->wMaxPacketSize;
 							}
 							if (dev->output_endpoint == 0 &&
-								is_interrupt && is_output) {
-									/* Use this endpoint for OUTPUT */
-									dev->output_endpoint = ep->bEndpointAddress;
+							    is_interrupt && is_output) {
+								/* Use this endpoint for OUTPUT */
+								dev->output_endpoint = ep->bEndpointAddress;
 							}
 						}
-
+						
 						pthread_create(&dev->thread, NULL, read_thread, dev);
-
+						
 						// Wait here for the read thread to be initialized.
 						pthread_barrier_wait(&dev->barrier);
-
+						
 					}
 					free(dev_path);
 				}
@@ -882,7 +860,7 @@ hid_device * HID_API_EXPORT hid_open_path(const char *path)
 	}
 
 	libusb_free_device_list(devs, 1);
-
+	
 	// If we have a good handle, return it.
 	if (good_open) {
 		return dev;
@@ -917,13 +895,13 @@ int HID_API_EXPORT hid_write(hid_device *dev, const unsigned char *data, size_t 
 			dev->interface,
 			(unsigned char *)data, length,
 			1000/*timeout millis*/);
-
+		
 		if (res < 0)
 			return -1;
-
+		
 		if (skipped_report_id)
 			length++;
-
+		
 		return length;
 	}
 	else {
@@ -934,13 +912,13 @@ int HID_API_EXPORT hid_write(hid_device *dev, const unsigned char *data, size_t 
 			(unsigned char*)data,
 			length,
 			&actual_length, 1000);
-
+		
 		if (res < 0)
 			return -1;
-
+		
 		if (skipped_report_id)
 			actual_length++;
-
+		
 		return actual_length;
 	}
 }

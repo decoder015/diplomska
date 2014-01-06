@@ -8,30 +8,29 @@
 #define USB_VENDOR_ID   0x1234
 #define USB_PRODUCT_ID  0x0001
 
+const int C_INT_MAX_BUFFER = 64;
+
 int main(int argc, char* argv[])
 {
-	int res;
-	char buf[64] = "BACKWARD,200";	
+	int res, i;
+	char buf[C_INT_MAX_BUFFER] = "BACKWARD,200";
+
 	wchar_t wstr[MAX_STR];
-
 	hid_device *handle;
-	int i;
 
-	printf("Argc:%i\n",argc);
-	for(i=0; i<argc; i++)
-	{
-		printf("Argument:%s\n", *argv);
-	}
+	//display header 
+	message("Tumbler drive terminal v-0.1", "Kris tech", 70);	
 
-	// Open the device using the VID, PID,
-	// and optionally the Serial number.
+	// Open the device using the VID, PID, and optionally the Serial number.
 	handle = hid_open(USB_VENDOR_ID, USB_PRODUCT_ID, NULL);
 
 	if(handle == NULL)
 	{
-		printf("Handle is null!\n");
+		displayError("Handle is null. Tumbler drive module not found! Exiting...",'-',70);
 		return;
 	}
+	else
+		displayStr("Tumbler drive module online...", '-', 50);
 
 	// Read the Manufacturer String
 	res = hid_get_manufacturer_string(handle, wstr, MAX_STR);
@@ -49,15 +48,24 @@ int main(int argc, char* argv[])
 	// Set the hid_read() function to be non-blocking.
 	hid_set_nonblocking(handle, 1);
 
-	// Send an Output report to toggle the LED (cmd 0x80)	
-	res = hid_write(handle, buf, 65);
+	//TODO parse args
+	printf("Argc:%i\n",argc);
+	for(i=0; i<argc; i++)
+	{
+		printf("Argument:%s\n", *argv);
+	}
+
+	// Send command to module
+	res = hid_write(handle, buf, C_INT_MAX_BUFFER);
 
 	// Read requested state
-	res = hid_read(handle, buf, 65);
+	res = hid_read(handle, buf, C_INT_MAX_BUFFER);
 	if (res < 0)
 		printf("Unable to read()\n");
 
-	printf("Status command:%s\n",buf);	
+	printf("Status command:%s\n", buf);	
 
+	//Before exit close the device
+	hid_close(handle);
 	return 0;
 }
