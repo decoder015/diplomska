@@ -1,8 +1,0 @@
-sudo rmmod uvcvideo
-sudo modprobe uvcvideo quirks=128
-
-to add on boot
-sudo nano /etc/modprobe.d/uvcvideo.conf
-
-add line
-options uvcvideo quirks=0x80
