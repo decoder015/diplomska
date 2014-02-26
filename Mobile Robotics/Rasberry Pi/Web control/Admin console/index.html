@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <title>Statistics</title>
+      <!-- Bootstrap -->
+      <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+      <link href="bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" media="screen">
+      <link href="assets/styles.css" rel="stylesheet" media="screen">
+      <link href="vendors/easypiechart/jquery.easy-pie-chart.css" rel="stylesheet" media="screen">
+      <!--[if lte IE 8]><script language="javascript" type="text/javascript" src="vendors/flot/excanvas.min.js"></script><![endif]--><!-- HTML5 shim, for IE6-8 support of HTML5 elements --><!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+      <![endif]-->
+      <script src="vendors/modernizr-2.6.2-respond-1.1.0.min.js"></script>
+      <link rel="stylesheet" href="vendors/morris/morris.css">
+   </head>
+   <body>
+      <div class="navbar navbar-fixed-top">
+         <div class="navbar-inner">
+            <div class="container-fluid">
+               <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"> <span class="icon-bar"></span>
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span>
+               </a>
+               <a class="brand" href="#">Admin Panel</a>
+               <div class="nav-collapse collapse">
+                  <ul class="nav">
+                     <li class="active">
+                        <a href="#">Dashboard</a>
+                     </li>
+                     <li class="dropdown">
+                        <a href="#" data-toggle="dropdown" class="dropdown-toggle">Settings </a>
+                        <ul class="dropdown-menu" id="menu1">
+                           <li>
+                              <a href="#">Tools </a>
+                           </li>
+                           <ul class="dropdown-menu sub-menu">
+                              <li>
+                                 <a href="#">Logs</a>
+                              </li>
+                              <li>
+                                 <a href="#">Errors</a>
+                              </li>
+                           </ul>
+                           <li>
+                              <a href="#">SEO Settings</a>
+                           </li>
+                           <li class="divider"></li>
+                           <li>
+                              <a href="#">Other Link</a>
+                           </li>
+                        </ul>
+                     </li>
+                  </ul>
+               </div>
+               <!--/.nav-collapse -->
+            </div>
+         </div>
+      </div>
+      <div class="container-fluid">
+         <div class="row-fluid">
+            <!--/ Vertical menu <div class="span3" id="sidebar">			
+               <ul class="nav nav-list bs-docs-sidenav nav-collapse collapse">
+               <li>
+               <a href="#index.html"> Dashboard</a>
+               </li>
+               <li>
+               <a href="#calendar.html"> Calendar</a>
+               </li>
+               <li class="active">
+               <a href="#stats.html"> Statistics (Charts)</a>
+               </li>
+               <li>
+               <a href="#form.html"> Forms</a>
+               </li>
+               <li>
+               <a href="#tables.html"> Tables</a>
+               </li>
+               </ul>
+               </div>-->
+			   
+            <!--/span-->
+            <div class="span13" id="content">
+               <!--/Road Runner Control Panel-->
+               <div class="row-fluid section">
+                  <!-- block -->
+                  <div class="block">
+                     <div class="navbar navbar-inner block-header">
+                        <div class="muted pull-left">Road Runner Control Panel</div>
+                        <div class="pull-right"></div>
+                     </div>
+					 
+                     <div class="block-content collapse in">
+                        <div class="span13">
+                           <div id="hero-graph" style="height: 85%;">
+                              <div class="chart-bottom-heading"> 
+							
+                                 <table style="width: 100%; height: 787px;" border="0" cellpadding="2" cellspacing="2">
+                                    <tbody>
+                                       <tr align="center" valign="baseline" >
+                                         <td style="width: 250px;">
+											<div class="span6 chart">																		  
+												<div id="hero-donut" style="height: 250px; width: 100%"></div>
+											</div>
+										 </td>
+                                          <td colspan="1" rowspan="1" align="center">
+                                             <img style="width: 680px; height: 510px;" alt="" src="./Images/c1.jpg">
+                                          </td>
+                                       </tr>
+                                       <tr align="center">
+                                          <td></td>
+                                          <td style="text-align: justify;" colspan="1" rowspan="1">
+                                             <div style="text-align: left;"></div>
+                                             <table style="text-align: left; margin-left: auto; margin-right: auto; height: 167px; width: 35%;" border="1" cellpadding="2" cellspacing="2">
+                                                <tbody>
+                                                   <!-- Cam X axe control -->
+                                                   <tr>
+                                                      <td style="width: 226px;" colspan="1" rowspan="1">
+                                                         Camera X axe:
+                                                         <input style="width: 250px;" id="sliderBarCamXAxe" min="0" max="180" step="1" value="90" onchange="showValueCamXAxe(this.value);" type="range">
+                                                      </td>
+                                                      <td style="width: 250px;">
+                                                         <div  id="resultCamXAxe" style="border: 1px solid rgb(153, 153, 153); height: 20px; width: 40px;"></div>
+                                                      </td>
+                                                   </tr>
+                                                   <!-- Cam Y axe control -->
+                                                   <tr>
+                                                      <td style="width: 226px;" colspan="1" rowspan="1">
+                                                         Camera Y axe:
+                                                         <input style="width: 250px;" id="sliderBarCamYAxe" min="0" max="180" step="1" value="90" onchange="showValueCamYAxe(this.value);" type="range">
+                                                      </td>
+                                                      <td style="width: 250px;">
+                                                         <div id="resultCamYAxe" style="border: 1px solid rgb(153, 153, 153); height: 20px; width: 40px;"></div>
+                                                      </td>
+                                                   </tr>
+                                                   <tr>
+                                                      <td style="text-align: center; width: 250px;" colspan="2" rowspan="1">
+                                                         <button type="button" class="btn btn-primary btn-large" onclick="alert('Hello world!')">Forward</button>
+                                                      </td>
+                                                   </tr>
+                                                   <tr>
+                                                      <td style="text-align: center; width: 226px;">
+                                                         <button type="button" class="btn btn-primary btn-large" onclick="alert('Hello world!')">Left</button>
+                                                      </td>
+                                                      <td style="text-align: center; width: 250px;">
+                                                         <button type="button" class="btn btn-primary btn-large" onclick="alert('Hello world!')">Right</button>
+                                                      </td>
+                                                   </tr>
+                                                   <tr>
+                                                      <td style="text-align: center; width: 250px;" colspan="2" rowspan="1">
+                                                         <button type="button" class="btn btn-danger btn-large on" click="alert('Hello world!')">Stop</button>
+                                                      </td>
+                                                   </tr>
+                                                </tbody>
+                                             </table>
+                                          </td>
+                                       </tr>
+                                    </tbody>
+                                 </table>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                     <!-- /block -->
+                  </div>
+                  <!-- morris bar & donut charts -->
+                  <div class="row-fluid section">
+                 
+                  </div>
+                  <!-- jQuery knobs -->
+                  <div class="row-fluid section">
+                     <!-- block -->
+                     <div class="block">
+                        <div class="navbar navbar-inner block-header">
+                           <div class="muted pull-left">jQuery Knob</div>
+                           <div class="pull-right"></div>
+                        </div>
+                        <div class="block-content collapse in">
+                           <div class="span3">
+                              <input id="sliderBarCamXAxe" onchange="showValueCamXAxe(this.value);" value="90" class="knob second" data-thickness=".3" data-inputcolor="#333" data-fgcolor="#30a1ec" data-bgcolor="#d4ecfd" data-width="140" type="text">                              
+                           </div>
+                           <br>                           
+                           <div class="span3">
+                              <input value="85" class="knob second" data-thickness=".3" data-inputcolor="#333" data-fgcolor="#b85e80" data-bgcolor="#f8d2e0" data-width="140" type="text">
+                           </div>
+                        </div>
+                     </div>
+                     <!-- /block -->
+                  </div>
+                  <br>
+               </div>
+            </div>
+            <hr>
+            <footer></footer>
+            <p>&copy;&nbsp; Kristijan 2013</p>
+         </div>
+         <!--/.fluid-container-->
+         <script src="vendors/jquery-1.9.1.min.js"></script>
+         <script src="vendors/jquery.knob.js"></script>
+         <script src="vendors/raphael-min.js"></script>
+         <script src="vendors/morris/morris.min.js"></script>
+         <script src="bootstrap/js/bootstrap.min.js"></script>
+         <script src="vendors/flot/jquery.flot.js"></script>
+         <script src="vendors/flot/jquery.flot.categories.js"></script>
+         <script src="vendors/flot/jquery.flot.pie.js"></script>
+         <script src="vendors/flot/jquery.flot.time.js"></script>
+         <script src="vendors/flot/jquery.flot.stack.js"></script>
+         <script src="vendors/flot/jquery.flot.resize.js"></script>
+         <script src="vendors/easypiechart/jquery.easy-pie-chart.js"></script>
+         <script src="assets/scripts.js"></script>
+         <script>
+            //Cam x axe control
+            function showValueCamXAxe(num) 
+			{
+				var result = document.getElementById('resultCamXAxe');
+				result.innerHTML = num;
+            }
+			
+			//Cam Y axe control
+			function showValueCamYAxe(num)
+			{
+				var result = document.getElementById('resultCamYAxe'); 
+				result.innerHTML = num;
+			}
+			
+            $(
+            function () {
+            var data = [],
+				series = Math.floor(Math.random() * 6) + 3;
+				for (var i = 0; i < series; i++) {
+					data[i] = {
+					label: "Series" + (i + 1),
+					data: Math.floor(Math.random() * 100) + 1
+				}
+            }
+			
+            function euroFormatter(v, axis) {
+            return v.toFixed(axis.tickDecimals) + "â&#8218;¬";
+            }
+            });
+            // Morris Donut Chart
+            Morris.Donut(
+            {
+            element: 'hero-donut',
+            data: [
+            {
+            label: 'Batttery',
+            value: 79
+            }, {
+            label: '',
+            value: 21
+            }],
+            colors: ["#30a1ec", "#76bdee", "#c4dafe"],
+            formatter: function (y) { return y + "%" }
+            });
+            // Build jQuery Knobs
+            $(".knob").knob();
+            function labelFormatter(label, series) {
+            return "<div style='font-size:8pt; text-align:center; padding:2px; color:white;'>" + label + "<br/>" + Math.round(series.percent) + "%</div>";
+            }
+         </script>        
+      </div>
+   </body>
+</html>
