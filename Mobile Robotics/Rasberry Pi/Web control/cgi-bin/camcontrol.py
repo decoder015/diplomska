@@ -19,7 +19,9 @@ try:
 	arguments = cgi.FieldStorage()
 	for i in arguments.keys():		
 		print arguments[i].value
+		text_file.write("Arg idex" + i)	
 		text_file.write("Arg passed:" + arguments[i].value + "\n")
+		
 	
 	
 	text_file.close()
