@@ -1,0 +1,50 @@
+<!DOCTYPE html> 
+<html>
+  <head>
+    <title>Slider Test</title>
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.0a2/jquery.mobile-1.0a2.min.css" />
+    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+    <script src="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            var slider = $('#slider1');
+            $('#slider1').on('slidestop', function(e) {
+            $.post('cgi-bin/script.py', { id: $(this).data('slider-id'), value: e.target.value }, function(data, textStatus, jqXHR) {
+                console.log('POSTed: ' + textStatus);
+            });
+        });
+    });
+	</script>
+	<script>
+	$(document).ready(function() {
+    $('.posting-slider').on('slidestop', function(e) {
+        $.post('/server/script.py', { id: $(this).data('slider-id'), value: e.target.value }, function(data, textStatus, jqXHR) {
+            console.log('POSTed: ' + textStatus);
+        });
+    });
+});
+</script>
+</head>
+<body>
+<div data-role="page"> 
+    <div data-role="fieldcontain">
+        <fieldset data-role="controlgroup">
+            <div class="rgbw_label">
+                <label for="red_slider">
+                Slider 1:
+                </label>
+            </div>
+            <input type="range" id="slider1" name="slider1" class="posting-slider" data-slider-id="1" value="0" min="0" max="100" data-highlight="true" />
+            <!-- <input type="range" name="slider-1" id="slider-1" value="60" min="0" max="100" /> -->
+			
+			<div class="rgbw_label"><label for="red_slider">
+            Red:
+        </label></div>
+        <input type="range" id="red_slider" name="red_slider" class="posting-slider" data-slider-id="1" value="0" min="0" max="255" data-highlight="true" />
+        </fieldset>
+    </div>
+
+    <div data-role="footer">
+    <h4>Page Footer</h4>
+    </div> 
+</div> 
