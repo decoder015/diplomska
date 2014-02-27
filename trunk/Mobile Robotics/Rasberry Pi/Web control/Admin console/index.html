@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html>
    <head>
-      <title>Statistics</title>
+      <title>Road Runner Remote Control</title>
       <!-- Bootstrap -->
+	  
       <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
       <link href="bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet" media="screen">
       <link href="assets/styles.css" rel="stylesheet" media="screen">
       <link href="vendors/easypiechart/jquery.easy-pie-chart.css" rel="stylesheet" media="screen">
+	  
+   
       <!--[if lte IE 8]><script language="javascript" type="text/javascript" src="vendors/flot/excanvas.min.js"></script><![endif]--><!-- HTML5 shim, for IE6-8 support of HTML5 elements --><!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
       <![endif]-->
@@ -103,7 +106,7 @@
 											</div>
 										 </td>
                                           <td colspan="1" rowspan="1" align="center">
-                                             <img style="width: 680px; height: 510px;" alt="" src="./Images/c1.jpg">
+                                             <img style="width: 680px; height: 510px;" alt="" src="./images/c1.jpg">
                                           </td>
                                        </tr>
                                        <tr align="center">
@@ -116,7 +119,7 @@
                                                    <tr>
                                                       <td style="width: 226px;" colspan="1" rowspan="1">
                                                          Camera X axe:
-                                                         <input style="width: 250px;" id="sliderBarCamXAxe" min="0" max="180" step="1" value="90" onchange="showValueCamXAxe(this.value);" type="range">
+                                                         <input style="width: 100%;" name="sliderBarCamXAxe" id="sliderBarCamXAxe" min="0" max="180" step="1" value="90" onchange="showValueCamXAxe(this.value);" type="range">
                                                       </td>
                                                       <td style="width: 250px;">
                                                          <div  id="resultCamXAxe" style="border: 1px solid rgb(153, 153, 153); height: 20px; width: 40px;"></div>
@@ -206,14 +209,21 @@
          <script src="vendors/flot/jquery.flot.stack.js"></script>
          <script src="vendors/flot/jquery.flot.resize.js"></script>
          <script src="vendors/easypiechart/jquery.easy-pie-chart.js"></script>
-         <script src="assets/scripts.js"></script>
+         <script src="assets/scripts.js"></script>	 
+		 
+		 
          <script>
             //Cam x axe control
             function showValueCamXAxe(num) 
 			{
+			
 				var result = document.getElementById('resultCamXAxe');
 				result.innerHTML = num;
-            }
+				
+				$.post('../cgi-bin/left.py', { id: $(this).data('resultCamXAxe'), value: num }, 
+											   function(data, textStatus, jqXHR) { console.log('POSTed: ' + textStatus);} 
+											 );
+            }	
 			
 			//Cam Y axe control
 			function showValueCamYAxe(num)
@@ -221,6 +231,20 @@
 				var result = document.getElementById('resultCamYAxe'); 
 				result.innerHTML = num;
 			}
+			
+			$(document).ready(
+			function() {			
+				var slider = $('#sliderBarCamXAxe');
+				$('#sliderBarCamXAxe').on('slidestop', 
+								function(e) { 
+								alert('Hello world!');
+												$.post('../cgi-bin/left.py', { id: $(this).data('resultCamXAxe'), value: e.target.value }, 
+													   function(data, textStatus, jqXHR) { console.log('POSTed: ' + textStatus);} 
+												  );
+											}
+								);
+				}
+			);
 			
             $(
             function () {
