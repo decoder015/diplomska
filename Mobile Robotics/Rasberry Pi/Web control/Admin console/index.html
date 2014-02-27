@@ -220,9 +220,10 @@
 				var result = document.getElementById('resultCamXAxe');
 				result.innerHTML = num;
 				
-				$.post('../cgi-bin/left.py', { id: $(this).data('resultCamXAxe'), value: num }, 
-											   function(data, textStatus, jqXHR) { console.log('POSTed: ' + textStatus);} 
-											 );
+				$.post( '../cgi-bin/camcontrol.py', 
+					   { id: $(this).data('resultCamXAxe'), X: num }, 
+						function(data, textStatus, jqXHR) { console.log('POSTed: ' + textStatus);} 
+					   );
             }	
 			
 			//Cam Y axe control
@@ -230,6 +231,11 @@
 			{
 				var result = document.getElementById('resultCamYAxe'); 
 				result.innerHTML = num;
+				
+				$.post( '../cgi-bin/camcontrol.py', 
+				       { id: $(this).data('resultCamXAxe'), Y: num }, 
+		               function(data, textStatus, jqXHR) { console.log('POSTed: ' + textStatus);} 
+					   );
 			}
 			
 			$(document).ready(
