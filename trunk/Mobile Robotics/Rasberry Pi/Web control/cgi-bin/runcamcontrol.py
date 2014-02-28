@@ -6,13 +6,13 @@ import subprocess
 import shlex
 import getpass
 import time 
-
+import os
 #print "Now do something as 'root'..."
-
-
 
 #main
 try:
+	sudoPassword = 'h'
+	
 	print "Content-type: text/html\n\n"
 	# obtains current time
 	timeStr = time.ctime( time.time() );
@@ -31,20 +31,28 @@ try:
 		#log args
 		text_file.write("Arg id :" + i + "\n");
 		text_file.write("Arg value :" + arguments[i].value + "\n");		
-		#move servos
-		if i == "X":
-			text_file.write("Calling camcontrol for X axe:" +  arguments[i].value + "\n");			
+		
+	    # send value to camcontroler
+		if i == "X" :			
+			command = 'python camcontrol.py -X %s'  %(arguments[i].value); 
+			#px = os.system('echo h|sudo -S mkdir tt1');	
+			#px = os.system('echo %s|sudo -S %s' %(sudoPassword, command));			
 			
-			subprocess.call(shlex.split("python camcontrol.py -X " + str(arguments[i].value) ));
-		elif i == "Y" :
-			text_file.write("Calling camcontrol for Y axe:" +  arguments[i].value + "\n");
+			#test_file.write(str(px));
+			text_file.write("%s\n" %(command));			
+			text_file.write("Calling camcontrol for X axe: %s\n" %(arguments[i].value) );						
+			subprocess.call(shlex.split("sudo python camcontrol.py -X " + str(arguments[i].value) ));
+		elif i == "Y" :					
+			command = 'python camcontrol.py -Y %s' %(arguments[i].value); 		
+			#py = os.system('echo %s|sudo -S %s' %(sudoPassword, command));
 			
-			subprocess.call(shlex.split("python camcontrol.py -Y " + str(arguments[i].value) ));
+			#test_file.write(str(py));
+			text_file.write("%s\n" %(command));
+			text_file.write("Calling camcontrol for Y axe: %s \n" %(arguments[i].value) );
+			subprocess.call(shlex.split("sudo python camcontrol.py -Y " + str(arguments[i].value) ));
 			
 	#close file when finished	
 	text_file.close();
 	
 except IOError:
     print "Cannot open file for writing"
-
-#print "Now switch back to the calling user: " + getpass.getuser()
