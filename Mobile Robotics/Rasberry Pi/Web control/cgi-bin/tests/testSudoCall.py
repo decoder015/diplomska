@@ -7,8 +7,6 @@ import RPi.GPIO as GPIO
 
 print "This script was called by: " + getpass.getuser()
 
-
-
 print "Now do something as 'root'..."
 subprocess.call(shlex.split('sudo python servo2.py'))
 
