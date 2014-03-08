@@ -106,7 +106,7 @@
 											</div>
 										 </td>
                                           <td colspan="1" rowspan="1" align="center">
-                                             <img style="width: 680px; height: 510px;" alt="" src="./images/c1.jpg">
+                                             <img style="width: 680px; height: 510px;" id="myImage" alt="" src="../Images/c1.jpg">
                                           </td>
                                        </tr>
                                        <tr align="center">
@@ -115,11 +115,11 @@
                                              <div style="text-align: left;"></div>
                                              <table style="text-align: left; margin-left: auto; margin-right: auto; height: 167px; width: 35%;" border="1" cellpadding="2" cellspacing="2">
                                                 <tbody>
-                                                   <!-- Cam X axe control -->
+                                                   <!-- Cam X axe control onload="refreshIt(this)"-->
                                                    <tr>
                                                       <td style="width: 226px;" colspan="1" rowspan="1">
                                                          Camera X axe:
-                                                         <input style="width: 100%;" name="sliderBarCamXAxe" id="sliderBarCamXAxe" min="0" max="180" step="1" value="90" onchange="showValueCamXAxe(this.value);" type="range">
+                                                         <input style="width: 100%;" name="sliderBarCamXAxe" id="sliderBarCamXAxe" min="0" max="180" step="30" value="90" onchange="showValueCamXAxe(this.value);" type="range">
                                                       </td>
                                                       <td style="width: 250px;">
                                                          <div  id="resultCamXAxe" style="border: 1px solid rgb(153, 153, 153); height: 20px; width: 40px;"></div>
@@ -129,7 +129,7 @@
                                                    <tr>
                                                       <td style="width: 226px;" colspan="1" rowspan="1">
                                                          Camera Y axe:
-                                                         <input style="width: 250px;" id="sliderBarCamYAxe" min="0" max="180" step="1" value="90" onchange="showValueCamYAxe(this.value);" type="range">
+                                                         <input style="width: 100%;" id="sliderBarCamYAxe" min="0" max="180" step="30" value="90" onchange="showValueCamYAxe(this.value);" type="range">
                                                       </td>
                                                       <td style="width: 250px;">
                                                          <div id="resultCamYAxe" style="border: 1px solid rgb(153, 153, 153); height: 20px; width: 40px;"></div>
@@ -213,6 +213,19 @@
 		 
 		 
          <script>
+			
+			setInterval(function() {
+				var myImageElement = document.getElementById('myImage');
+				myImageElement.src = '../Images/c1.jpg?rand=' + Math.random();
+			}, 500);
+		
+            function refreshIt(element) {
+                setTimeout(function() {
+                    element.src = element.src.split('?')[0] + '?' + new Date().getTime();
+                    refreshIt(element);
+                }, 2500); // refresh every 500ms
+            }
+       
             //Cam x axe control
             function showValueCamXAxe(num) 
 			{			
