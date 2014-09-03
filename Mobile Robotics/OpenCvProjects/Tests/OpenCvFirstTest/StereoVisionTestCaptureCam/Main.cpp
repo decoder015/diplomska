@@ -5,7 +5,11 @@
 #include <iostream>
 #include <opencv/cv.h>
 #include <opencv/highgui.h>
+#include <opencv2/calib3d/calib3d.hpp>
+#include <opencv2/opencv.hpp>
+#include "opencv2/imgproc/imgproc.hpp"
 
+#include "stereo_match1.h"
 
 using namespace cv;
 using namespace std;
@@ -16,9 +20,7 @@ using namespace std;
 
 #define C_STR_LEFT_WIN_TITLE "Left camera"
 #define C_STR_RIGHT_WIN_TITLE "Right camera"
-#pragma endregion 
-
-
+#pragma endregion
 
 #pragma region Functions
 void CaptureFromCamera(int camNo, string windowTitle)
@@ -93,6 +95,8 @@ void  TestCapture()
    IplImage * image1=0;
    IplImage * image2=0;
 
+   Mat disp;
+
    cvNamedWindow("Grab1");
    cvNamedWindow("Grab2");
    while(1)
@@ -103,9 +107,12 @@ void  TestCapture()
       if(!image1||!image2)
          break;
 
+	 disp = StereoMatch(image1, image2);
+
       cvShowImage("Grab1",image1);
       cvShowImage("Grab2",image2);
-
+	  imshow("Disparaty",disp);
+	  //imshow("right", img2);
       int key=cvWaitKey(10);
       if(27==key)
          break;
