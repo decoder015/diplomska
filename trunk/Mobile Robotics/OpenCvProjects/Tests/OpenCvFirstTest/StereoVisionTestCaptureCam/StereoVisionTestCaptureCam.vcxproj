@@ -39,7 +39,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>D:\OpenCv\opencv2_4_9\build\include;$(IncludePath)</IncludePath>
+    <IncludePath>.;D:\OpenCv\opencv2_4_9\build\include;$(IncludePath)</IncludePath>
     <LibraryPath>D:\OpenCv\opencv2_4_9\build\x86\vc10\lib;D:\OpenCv\opencv2_4_9\build\x86\vc10\bin;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -80,7 +80,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="D:\OpenCv\opencv2_4_9\sources\modules\contrib\src\stereovar.cpp" />
+    <ClCompile Include="D:\OpenCv\opencv2_4_9\sources\samples\cpp\stereo_match1.cpp" />
     <ClCompile Include="Main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="stereo_match1.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
