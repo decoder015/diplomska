@@ -9,11 +9,13 @@
 #include <opencv2/opencv.hpp>
 #include "opencv2/imgproc/imgproc.hpp"
 
-#include "stereo_match1.h"
-
 //file io
 #include <iostream>
 #include <fstream>
+#include <string.h>
+#include <direct.h>
+
+#include "stereo_match1.h"
 
 using namespace cv;
 using namespace std;
@@ -22,14 +24,21 @@ using namespace std;
 #define C_INT_LEFT_CAM  0
 #define C_INT_RIGHT_CAM 1
 
+//window titles
 #define C_STR_LEFT_WIN_TITLE "Left camera"
 #define C_STR_RIGHT_WIN_TITLE "Right camera"
 
-#define C_STR_CALIBRATION_FILE_LIST "\calibImages\list.txt"
+//list of calibration images
+#define C_STR_CALIBRATION_FILE_LIST  ".\\calibImages\\list.txt"
 
+//image calibration directory
 #define C_STR_CALIBRATION_DIR "calibImages"
 
+//image name format for calipration 
 #define C_STR_CALIBRATION_IMAGE_NAME_FMT "%s\\%s%d.jpg"
+
+//maximum number of acquired calibration images
+const int C_INT_NUMBER_OF_CALIB_IMAGES = 20;
 #pragma endregion
 
 #pragma region Functions: capture images from web cams - Not working
@@ -84,7 +93,6 @@ void CaptureRightCamThreadProc(void *  param)
 #pragma endregion
 
 #pragma region Capture Images from web cam
-
 void  TestCapture()
 {
 	IplImage * image1=0;
@@ -117,7 +125,7 @@ void  TestCapture()
 		if(!image1||!image2)
 			break;
 
-		disp = StereoMatch(image1, image2);
+		disp = StereoMatch(image1, image2, ".\\CalibFiles\\intr.xml", ".\\CalibFiles\\extr.xml");
 
 		cvShowImage("Grab1",image1);
 		cvShowImage("Grab2",image2);
@@ -134,16 +142,68 @@ void  TestCapture()
 	cvDestroyWindow("Grab2");   
 }
 
+bool FindChessBoard(IplImage* img, int nx, int ny, int displayCorners)
+{
+	char buf[1024];
+	int count = 0, result=0, j;
+	int board_n = nx*ny;	
+	CvSize imageSize = cvGetSize(img);
+	//vector<CvPoint2D32f> temp(n);
+	CvPoint2D32f* corners = new CvPoint2D32f[ board_n ];
+
+	//or up-down camera arrangements
+	const int maxScale = 1;
+
+	//FIND CHESSBOARDS AND CORNERS THEREIN:
+	for( int s = 1; s <= maxScale; s++ )
+	{
+		IplImage* timg = img;
+		if( s > 1 )
+		{
+			timg = cvCreateImage(cvSize(img->width*s,img->height*s), img->depth, img->nChannels );
+			cvResize( img, timg, CV_INTER_CUBIC );
+		}
+		
+		//find corners
+		result = cvFindChessboardCorners(timg, cvSize(nx, ny),	&corners[0], &count,  CV_CALIB_CB_ADAPTIVE_THRESH | CV_CALIB_CB_FILTER_QUADS); // CV_CALIB_CB_ADAPTIVE_THRESH | CV_CALIB_CB_NORMALIZE_IMAGE)
+
+		if( timg != img )
+			cvReleaseImage( &timg );
+
+		if( result || s == maxScale )
+			for( j = 0; j < count; j++ )
+			{
+				corners[j].x /= s;
+				corners[j].y /= s;
+			}
+			if( result )break;
+	}
+
+	if( displayCorners &&  count > 0 )
+	{
+		IplImage* cimg = cvCreateImage(imageSize, 8, 3 );
+		cimg = cvCloneImage(img);
+		cvDrawChessboardCorners( cimg, cvSize(nx, ny), &corners[0], count, result );
+		cvShowImage( "corners", cimg );	
+	}
+
+	if(count == board_n)
+		return true;
+	else
+		return false;
+}
+
 //Capturees images for calibration
 void  CaptureCalibImagesFromWebCameras()
 {
-	ofstream fileImagesList;
+	mkdir(C_STR_CALIBRATION_DIR);
+	ofstream fileImagesList;	
 	fileImagesList.open(C_STR_CALIBRATION_FILE_LIST);
 
 	char buffer[1024];
 	char imgName[30];
-	IplImage * image1=0;
-	IplImage * image2=0;
+	IplImage * leftImage = 0;
+	IplImage * rightImage = 0;
 
 	CvCapture * capture1=cvCaptureFromCAM(0);
 	CvCapture * capture2=cvCaptureFromCAM(1);
@@ -160,66 +220,81 @@ void  CaptureCalibImagesFromWebCameras()
 		exit(0);
 	}	
 
-	cvNamedWindow("Grab1");
-	cvNamedWindow("Grab2");
-	
-	int index = 1;
-	while(index < 40)
-	{
-		image1=cvQueryFrame(capture1);
-		image2=cvQueryFrame(capture2);
+	cvNamedWindow(C_STR_LEFT_WIN_TITLE);
+	cvNamedWindow(C_STR_RIGHT_WIN_TITLE);
 
-		if(!image1||!image2)
+
+	Sleep(2000);
+	printf("Starting to capture images...");
+
+	int index = 1;
+	while(index <= C_INT_NUMBER_OF_CALIB_IMAGES )
+	{
+		leftImage=cvQueryFrame(capture1);
+		rightImage=cvQueryFrame(capture2);
+
+		if(!leftImage || !rightImage)
 			break;
 
-		//store left image
-		sprintf(buffer, C_STR_CALIBRATION_IMAGE_NAME_FMT, C_STR_CALIBRATION_DIR, "left", index);
-		fileImagesList << buffer << endl;
-		cvSaveImage(buffer, image1 );
-		printf("Save image %s\n", buffer);
+		if(FindChessBoard(leftImage, 8, 6, 1) && FindChessBoard(rightImage, 8, 6, 1))
+		{
+			//store left image
+			sprintf(buffer, C_STR_CALIBRATION_IMAGE_NAME_FMT, C_STR_CALIBRATION_DIR, "left", index);
+			fileImagesList << buffer << endl;
+			cvSaveImage(buffer, leftImage );
+			printf("Save image %s\n", buffer);		
 
-		//store right image
-		sprintf(buffer, C_STR_CALIBRATION_IMAGE_NAME_FMT,C_STR_CALIBRATION_DIR, "right", index);
-		fileImagesList << buffer <<endl;
-		cvSaveImage(buffer, image2 );
-		printf("Save image %s \n", buffer);
-		Sleep(1000);
+			//store right image
+			sprintf(buffer, C_STR_CALIBRATION_IMAGE_NAME_FMT,C_STR_CALIBRATION_DIR, "right", index);
+			fileImagesList << buffer <<endl;
+			cvSaveImage(buffer, rightImage );
+			printf("Save image %s \n", buffer);
+			Sleep(200);
 
-		cvShowImage("Grab1",image1);
-		cvShowImage("Grab2",image2);		
+			index++;
+		}
+		else
+		{
+			cvShowImage(C_STR_LEFT_WIN_TITLE, leftImage);
+			cvShowImage(C_STR_RIGHT_WIN_TITLE, rightImage);
+		}
 
 		//read keyboard input
 		int key=cvWaitKey(10);
-		if(27==key)	break;
-
-		index++;
+		if(27==key)	break;		
 	}
 
+	//close file with limage list
 	fileImagesList.close();
 
+	//release resources
 	cvReleaseCapture(&capture1);
 	cvReleaseCapture(&capture2);
+	cvDestroyWindow(C_STR_LEFT_WIN_TITLE);
+	cvDestroyWindow(C_STR_RIGHT_WIN_TITLE);
 
-	cvDestroyWindow("Grab1");
-	cvDestroyWindow("Grab2");   
+	StereoCalib(C_STR_CALIBRATION_FILE_LIST, 8, 6, 0, 2.5);
 }
 
 #pragma region Main
 int main()
-{	
+{
+	bool doCalib = false;
+	if(doCalib)
+	{
+		//load image list file
+		CaptureCalibImagesFromWebCameras();
+	}
+	else
+		TestCapture();
 
-	//load image list file
-	CaptureCalibImagesFromWebCameras();
 
-	
 	//_beginthread( CaptureLeftCamThreadProc, 0, NULL );
 	//_beginthread( CaptureRightCamThreadProc, 0, NULL );
 	//HANDLE h1 = CreateThread(NULL, 0, CaptureLeftCamThreadProc, NULL, 0L, NULL );
 	//HANDLE h2 = CreateThread(NULL, 0, CaptureRightCamThreadProc, NULL, 0L, NULL );
-
 	//WaitForSingleObject(h1, 10000); // wait for thread to exit, TIME is a DWORD in milliseconds
 	//WaitForSingleObject(h2, 10000); // wait for thread to exit, TIME is a DWORD in milliseconds
-
 	//CaptureFromCamera(C_INT_LEFT_CAM, C_STR_LEFT_WIN_TITLE);
 	//CaptureFromCamera(C_INT_RIGHT_CAM, C_STR_RIGHT_WIN_TITLE);
 	//waitKey(33);
