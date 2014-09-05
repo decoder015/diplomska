@@ -81,8 +81,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="D:\OpenCv\opencv2_4_9\sources\modules\contrib\src\stereovar.cpp" />
-    <ClCompile Include="D:\OpenCv\opencv2_4_9\sources\samples\cpp\stereo_match1.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="stereo_match1.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stereo_match1.h" />

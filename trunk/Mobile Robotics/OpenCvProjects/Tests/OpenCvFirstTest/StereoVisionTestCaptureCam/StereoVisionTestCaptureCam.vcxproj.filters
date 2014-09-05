@@ -18,10 +18,10 @@
     <ClCompile Include="Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\OpenCv\opencv2_4_9\sources\samples\cpp\stereo_match1.cpp">
+    <ClCompile Include="D:\OpenCv\opencv2_4_9\sources\modules\contrib\src\stereovar.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D:\OpenCv\opencv2_4_9\sources\modules\contrib\src\stereovar.cpp">
+    <ClCompile Include="stereo_match1.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
