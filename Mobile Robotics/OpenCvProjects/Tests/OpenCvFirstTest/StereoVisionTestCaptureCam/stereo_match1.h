@@ -9,5 +9,5 @@
 
 using namespace cv;
 
-Mat StereoMatch(Mat img1, Mat img2, const char* intrinsic_filename, const char* extrinsic_filename);
+Mat StereoMatch(Mat* img1, Mat* img2, Mat* M1, Mat* D1, Mat* M2, Mat* D2, Mat* R1, Mat* P1, Mat* R2, Mat* P2, Mat* Q);
 void StereoCalib(const char* imageList, int nx, int ny, int useUncalibrated, float _squareSize);
