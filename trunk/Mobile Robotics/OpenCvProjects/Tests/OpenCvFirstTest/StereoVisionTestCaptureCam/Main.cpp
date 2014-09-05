@@ -37,6 +37,9 @@ using namespace std;
 //image name format for calipration 
 #define C_STR_CALIBRATION_IMAGE_NAME_FMT "%s\\%s%d.jpg"
 
+#define C_STR_INTRINSIC_FILENAME ".\\CalibFiles\\intr.xml"
+#define C_STR_EXTRINSIC_FILENAME ".\\CalibFiles\\extr.xml"
+
 //maximum number of acquired calibration images
 const int C_INT_NUMBER_OF_CALIB_IMAGES = 20;
 #pragma endregion
@@ -93,7 +96,8 @@ void CaptureRightCamThreadProc(void *  param)
 #pragma endregion
 
 #pragma region Capture Images from web cam
-void  TestCapture()
+
+void  StereoCapture(Mat* M1, Mat* D1, Mat* M2, Mat* D2, Mat* R1, Mat* R2, Mat* P1, Mat* P2, Mat* Q)
 {
 	IplImage * image1=0;
 	IplImage * image2=0;
@@ -115,8 +119,8 @@ void  TestCapture()
 		exit(0);
 	}	
 
-	cvNamedWindow("Grab1");
-	cvNamedWindow("Grab2");
+	cvNamedWindow(C_STR_LEFT_WIN_TITLE);
+	cvNamedWindow(C_STR_RIGHT_WIN_TITLE);
 	while(1)
 	{
 		image1=cvQueryFrame(capture1);
@@ -124,22 +128,25 @@ void  TestCapture()
 
 		if(!image1||!image2)
 			break;
+		
+		Mat matImg1(image1);
+		Mat matImg2(image2);
 
-		disp = StereoMatch(image1, image2, ".\\CalibFiles\\intr.xml", ".\\CalibFiles\\extr.xml");
+		disp = StereoMatch(&matImg1, &matImg2, M1, D1, M2, D2, R1, P1, R2, P2, Q);
 
-		cvShowImage("Grab1",image1);
-		cvShowImage("Grab2",image2);
+		imshow(C_STR_LEFT_WIN_TITLE, matImg1);
+		imshow(C_STR_RIGHT_WIN_TITLE, matImg2);
 		imshow("Disparaty",disp);
 
+
 		int key=cvWaitKey(10);
-		if(27==key)
-			break;
+		if(27==key)	break;
 	}
 	cvReleaseCapture(&capture1);
 	cvReleaseCapture(&capture2);
 
-	cvDestroyWindow("Grab1");
-	cvDestroyWindow("Grab2");   
+	cvDestroyWindow(C_STR_LEFT_WIN_TITLE);
+	cvDestroyWindow(C_STR_RIGHT_WIN_TITLE);   
 }
 
 bool FindChessBoard(IplImage* img, int nx, int ny, int displayCorners)
@@ -276,17 +283,46 @@ void  CaptureCalibImagesFromWebCameras()
 	StereoCalib(C_STR_CALIBRATION_FILE_LIST, 8, 6, 0, 2.5);
 }
 
-#pragma region Main
-int main()
+
+bool LoadCalibMatrces(Mat* M1, Mat* D1, Mat* M2, Mat* D2, Mat* R1, Mat* R2, Mat* P1, Mat* P2, Mat* Q)
 {
-	bool doCalib = false;
-	if(doCalib)
+	//open filenames
+	FileStorage fsIntr(C_STR_INTRINSIC_FILENAME, CV_STORAGE_READ);
+	FileStorage fsExtr(C_STR_EXTRINSIC_FILENAME, CV_STORAGE_READ);
+
+	if(!fsIntr.isOpened() && !fsExtr.isOpened())
+	{
+	    printf("Failed to open file %s\n", C_STR_INTRINSIC_FILENAME);
+	   return false;
+	}
+	
+	fsIntr["M1"] >> *M1;
+	fsIntr["D1"] >> *D1;
+	fsIntr["M2"] >> *M2;
+	fsIntr["D2"] >> *D2;
+
+	fsExtr["R1"] >> *R1;
+	fsExtr["R2"] >> *R2;
+	fsExtr["P1"] >> *P1;
+	fsExtr["P2"] >> *P2;
+	fsExtr["Q"] >> *Q;
+
+	return true;
+}
+#pragma region Main
+int main(int argc, char** argv)
+{
+
+	Mat M1, D1, M2, D2, R1, R2, P1, P2, Q;
+	bool doCalib = LoadCalibMatrces(&M1, &D1, &M2, &D2, &R1, &R2, &P1, &P2, &Q);
+
+	if(!doCalib)
 	{
 		//load image list file
 		CaptureCalibImagesFromWebCameras();
 	}
 	else
-		TestCapture();
+		StereoCapture(&M1, &D1, &M2, &D2, &R1, &R2, &P1, &P2, &Q);
 
 
 	//_beginthread( CaptureLeftCamThreadProc, 0, NULL );
