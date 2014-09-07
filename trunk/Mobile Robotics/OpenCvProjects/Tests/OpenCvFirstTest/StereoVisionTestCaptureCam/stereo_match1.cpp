@@ -440,7 +440,7 @@ Mat StereoMatch(Mat* img1, Mat* img2, Mat* M1, Mat* D1, Mat* M2, Mat* D2, Mat* R
 
 	//algo type
 	enum { STEREO_BM=0, STEREO_SGBM=1, STEREO_HH=2, STEREO_VAR=3 };
-	int alg = STEREO_BM;
+	int alg = STEREO_SGBM;
 
 	int SADWindowSize = 0, numberOfDisparities = 0;
 	bool no_display = false;
@@ -463,8 +463,7 @@ Mat StereoMatch(Mat* img1, Mat* img2, Mat* M1, Mat* D1, Mat* M2, Mat* D2, Mat* R
 	}
 
 	Size img_size = img1->size();
-
-	Rect roi1, roi2;
+	numberOfDisparities = numberOfDisparities > 0 ? numberOfDisparities : ((img_size.width/8) + 15) & -16;	
 
 	*M1 *= scale;
 	*M2 *= scale;	
@@ -474,16 +473,9 @@ Mat StereoMatch(Mat* img1, Mat* img2, Mat* M1, Mat* D1, Mat* M2, Mat* D2, Mat* R
 	initUndistortRectifyMap(*M2, *D2, *R2, *P2, img_size, CV_16SC2, map21, map22);
 
 	Mat img1r, img2r;
-	remap(*img1, img1r, map11, map12, INTER_LINEAR);
-	remap(*img2, img2r, map21, map22, INTER_LINEAR);
-
-	*img1 = img1r;
-	*img2 = img2r;	
-
-	numberOfDisparities = numberOfDisparities > 0 ? numberOfDisparities : ((img_size.width/8) + 15) & -16;
-
-	bm.state->roi1 = roi1;
-	bm.state->roi2 = roi2;
+	remap(*img1, *img1, map11, map12, INTER_LINEAR);
+	remap(*img2, *img2, map21, map22, INTER_LINEAR);
+	
 	bm.state->preFilterCap = 31;
 	bm.state->SADWindowSize = SADWindowSize > 0 ? SADWindowSize : 9;
 	bm.state->minDisparity = 0;
@@ -501,7 +493,7 @@ Mat StereoMatch(Mat* img1, Mat* img2, Mat* M1, Mat* D1, Mat* M2, Mat* D2, Mat* R
 
 	sgbm.P1 = 8*cn*sgbm.SADWindowSize*sgbm.SADWindowSize;
 	sgbm.P2 = 32*cn*sgbm.SADWindowSize*sgbm.SADWindowSize;
-	sgbm.minDisparity = 0;
+	sgbm.minDisparity = 8;
 	sgbm.numberOfDisparities = numberOfDisparities;
 	sgbm.uniquenessRatio = 10;
 	sgbm.speckleWindowSize = bm.state->speckleWindowSize;
@@ -524,7 +516,7 @@ Mat StereoMatch(Mat* img1, Mat* img2, Mat* M1, Mat* D1, Mat* M2, Mat* D2, Mat* R
 
 	Mat disp, disp8;	
 
-	int64 t = getTickCount();
+	
 	if( alg == STEREO_BM )
 	{
 		bm(*img1, *img2, disp);
@@ -537,10 +529,9 @@ Mat StereoMatch(Mat* img1, Mat* img2, Mat* M1, Mat* D1, Mat* M2, Mat* D2, Mat* R
 	{
 		sgbm(*img1, *img2, disp);
 	}
-	t = getTickCount() - t;
-	printf("Time elapsed: %fms\n", t*1000/getTickFrequency());
+	
 
-	//disp = dispp.colRange(numberOfDisparities, img1p.cols);
+	//disp8 = disp.colRange(numberOfDisparities, img1->cols);
 	if( alg != STEREO_VAR )
 		disp.convertTo(disp8, CV_8U, 255/(numberOfDisparities*16.));
 	else
