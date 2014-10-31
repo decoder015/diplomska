@@ -1,0 +1,35 @@
+Alt: 4 digits
+spd: 2 digits
+vario: -(sign=digit) digit dot digit = 3 digits
+temp:  -(sign=digit) digit digit = 3 digits
+total : 12
+
+Address pins: 2^4 = 16
+CMOS логичко коло
+SN74HC154S. Print this pageseparatorSmaller textspacertextp
+     
+4-line to 16-line Decoder/Demultiplexer.
+95 ден
+(вклучено ДДВ): 14,49 д
+- See more at: http://www.loging.mk/1594/169257/0/ShowProduct/CMOS_logichko_kolo#sthash.yyNtbTX6.dpuf
+
+Код: CD4514BE
+4-bit Latch/4-to-16 Line Decoders, Output = High.
+75 ден
+(вклучено ДДВ): 11,44 ден
+- See more at: http://www.loging.mk/1374/166834/0/ShowProduct/CMOS_logichko_kolo#sthash.cOqcyTc9.dpuf
+
+SN74HC4514W. Print this pageseparatorSmaller textspacertextp
+4-bit Latch/4-to-16 Line Decoders, Output = High.
+40 ден
+(вклучено ДДВ): 6,1 ден
+- See more at: http://www.loging.mk/1594/171153/0/ShowProduct/CMOS_logichko_kolo#sthash.2eV0CrDG.dpuf
+
+TTL логичко коло
+SN74LS154. Print this pageseparatorSmaller textspacertextp
+ 
+     
+4-line to 16-line Decoder/Demultiplexer.
+143 ден
+(вклучено ДДВ): 6,81 ден
+- See more at: http://www.loging.mk/1593/162496/0/ShowProduct/TTL_logichko_kolo#sthash.HPOMVB2C.dpuf
