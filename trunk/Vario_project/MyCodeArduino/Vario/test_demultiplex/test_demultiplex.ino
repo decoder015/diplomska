@@ -70,7 +70,7 @@ void Beep()
    beepCount++ ;
 }
 
-int count = 0;
+int alt = 0;
 
 void loop()
 {
@@ -79,18 +79,20 @@ void loop()
   
   //light the number
   
-  for(int k=0; k<10; k++)
+  for(int k=0; k<40; k++)
   {
-  displayThreeDigitNumber(count);
-  delay(10);
+    Display1(alt);
+    Display2(alt);
+    delay(1);
   }
+  
   //set lech to hifh
   if(i> 7)
     i =0;
   else
     i++; 
   
-   count++;
+   alt++;
     
   //beep on alt change
   Beep();
@@ -180,11 +182,11 @@ void WriteDigitAtPositon(int numb)
   //digitalWrite(addr[1] , LOW);
   //digitalWrite(addr[2] , LOW);
   //digitalWrite(addr[3] , LOW);
-  //delay(2);
+  //delay(1);
   digitalWrite(letch, LOW);    
 };
 
-void displayThreeDigitNumber(int number) {  
+void Display2(int number) {  
  #define DISPLAY_BRIGHTNESS 500  
     
   #define DIGIT_ON   LOW
@@ -207,28 +209,59 @@ void displayThreeDigitNumber(int number) {
    }       
     
     int digitPos = 0;
-    for(i = 3 ; i>=0 ; i--)
+    for(i = 7 ; i>=4; i--)
     {
-       //digitalWrite(digitPins[i], DIGIT_ON);       
-       //lightNumber(10);        
-       lightNumber(numDigits[digitPos]); 
        WriteDigitAtPositon(i);    
-       delay(1000);
+       lightNumber(numDigits[digitPos]);
+       delay(2);
        
        //clear all segments
-       lightNumber(10);
-       delay(1);
-       for(int k = 3; k>=0; k--)
-       {
-         WriteDigitAtPositon(k);
-         //delay(1);
-       }
+       lightNumber(10);      
+       for(int k = 3; k>=0; k--)       
+         WriteDigitAtPositon(k);     
+              
+       digitPos++;       
+    }
+    
+   //Turn off all segments  
+   lightNumber(10);   
+  } 
+
+void Display1(int number) {  
+ #define DISPLAY_BRIGHTNESS 500  
+    
+  #define DIGIT_ON   LOW
+  #define DIGIT_OFF HIGH  
+    
+  int  numDigits[4] ;  
+  int divider = 10;
+  int shift   = 1;
+  int i;  
+  
+  //Turn off all segments  
+  lightNumber(10);   
+    
+  for(i = 0 ; i<4; i++)
+  {
+    numDigits[i] = (number % divider) / shift;
+    shift   *= 10;
+    divider *= 10;
+    number -=  numDigits[i];	
+   }       
+    
+    int digitPos = 0;
+    for(i = 3 ; i>=0; i--)
+    {
+       WriteDigitAtPositon(i);    
+       lightNumber(numDigits[digitPos]);
+       delay(2);
        
-       delay(1);
-       
-       
-       digitPos++;
-       //digitalWrite(digitPins[i], DIGIT_OFF);
+       //clear all segments
+       lightNumber(10);      
+       for(int k = 3; k>=0; k--)       
+         WriteDigitAtPositon(k);     
+              
+       digitPos++;       
     }
     
    //Turn off all segments  
