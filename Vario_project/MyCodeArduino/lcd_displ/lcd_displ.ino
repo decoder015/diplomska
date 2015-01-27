@@ -35,134 +35,186 @@
 
  http://arduino.cc/en/Tutorial/LiquidCrystalDisplay
 
- */
+*/
+
+//LCD
+#include <LiquidCrystal.h>
 
 //sensor
 #include <Wire.h>
-#define ADDRESS 0x77 //0x76
+#include <MS561101BA.h>
 
-uint32_t D1 = 0;
-uint32_t D2 = 0;
-int64_t dT = 0;
-int32_t TEMP = 0;
-int64_t OFF = 0; 
-int64_t SENS = 0; 
-int32_t P = 0;
-uint16_t C[7];
-
-float alt;
-float temp;
-float pres;
-const float sea_press = 1013.25;
-
-//LCD
-// include the library code:
-#include <LiquidCrystal.h>
-
-#define beep_freq_go_up  300   //Hz
+//beeper
+#define GOUP 1
+#define GODOWN 0
+#define beep_freq_go_up   400 //Hz
 #define beep_freq_go_down 200 //Hz
 #define beep_duration 500
 
+#define MOVAVG_SIZE 32
+
+//constants
+const int sumC = 3;
+const float dV = 0.5;
+const float sea_press = 1013.25;
+
+//variables
+float alt = 0;
+float temp = 0;
+float pres = 0;
+float vario = -1.5;
+
+MS561101BA baro = MS561101BA();
+int movavg_i=0;
+float movavg_buff[MOVAVG_SIZE];
 
 // initialize the library with the numbers of the interface pins
 LiquidCrystal lcd(12, 11, 5, 4, 1, 0);
 
-char buff[16];
+float prevAlt = 0;
+float avgTempSum = 0;
+float avgPressSum = 0;
 
 
-//int beepCount = 0;
-float vario = -1.5;
-char vario_str[4];
-
-void Beep()
+void Beep(int updown)
 {
    //beeper  
-  //if(beepCount == 5)  
-  //{
-     tone(A0, beep_freq_go_up, 200) ;
-   //  beepCount = 0;
-  //}
-  //else
- 
+  if(updown == GOUP)
+     tone(A0, beep_freq_go_up, 400);    
+  else
+     tone(A0, beep_freq_go_down, 200);
 }
 
 void setup() 
-{  
+{
+ 
+ Wire.begin();
+ Serial.begin(9600); 
+ delay(25000);  
+ 
+ Serial.println("INIT:Serial port initialized..."); 
+  
  //beeper
  pinMode(A0, OUTPUT);
+ Serial.println("INIT: A0 pin set to output...");
+  
+ // initialize digital pin 13 as an output.
+ //pinMode(13, OUTPUT);
+ Serial.println("INIT: Pin 13 set to output...");
   
  // set up the LCD's number of columns and rows: 
  lcd.begin(16, 2);
+ Serial.println("INIT: LCD initialized...");
  
  //move coursor to next line
  lcd.setCursor(0,1);
   
- // Disable internal pullups, 10Kohms are on the breakout
- PORTC |= (1 << 4);
- PORTC |= (1 << 5);
-
- Wire.begin();
- Serial.begin(9600); //9600 changed 'cos of timing?
+ // Suppose that the CSB pin is connected to GND.
+ // You'll have to check this on your breakout schematics
+ baro.init(MS561101BA_ADDR_CSB_LOW); 
+ Serial.println("INIT: Baro initialized...");
  delay(100);
- initial(ADDRESS);
+  
+ // populate movavg_buff before starting loop
+ Serial.println("INIT: Avg buff initialized...");
+ for(int i=0; i<MOVAVG_SIZE; i++)
+ {
+    Serial.println("INIT: Get press start...");
+    pres =  baro.getPressure(MS561101BA_OSR_4096);   
+    movavg_buff[i] = pres;
+    delay(20);
+    Serial.println("INIT: Get press end...");
+ }
+   
 }
 
+
+
 void loop() {
+
+  //get temperature
+  Serial.println("#####################Loop: Start read temp...#####################");
+  temp= baro.getTemperature(MS561101BA_OSR_4096);
+  Serial.println("#####################Loop: End read temp...#####################");
+  
+  delay(10);
+  
+  // get pressure
+  Serial.println("#####################Loop: Start read press...#####################");
+  pres = baro.getPressure(MS561101BA_OSR_4096);
+  Serial.println("#####################Loop: End read press...#####################");
   
   
-  //Turn off the display:
-  //lcd.noDisplay();
-  delay(500);
+  digitalWrite(13, HIGH);   // turn the LED on (HIGH is the voltage level)
   
-  ComputePressAndTemp();  
-  alt = getAltitude(pres,temp);
+  pushAvg(pres);  
+  pres = getAvg(movavg_buff, MOVAVG_SIZE);
+  Serial.println("Loop: Calc avg. press...");
   
-  //vario_str[0] = '\0';
-  //dtostrf(vario,7, 4, vario_str);
-  //sprintf(buff, "Alt:%dm V:%s", alt,  vario_str);  
+  //get altitude
+  alt  = getAltitude(pres, temp);  
+  Serial.println("Loop: Calc alt...");
+  delay(10); 
   
-  // Print a message to the LCD.
-  //lcd.clear ();
-  //print alt on LCD
+  //compute vario  
+  //if(abs(prevAlt - alt) > dV)
+  //{   
+    //vario = prevAlt - alt;
+    //if(vario > 0)
+    //    Beep(GOUP);
+    //else 
+     //   Beep(GODOWN);
+ // }
+  //else
+  //vario = 0;
+  
+  
+  //Print a message to the LCD.  
+  //first line
   lcd.setCursor(0,0);
   lcd.print("A:" );  
   lcd.print(alt);
   lcd.print("m");
+  //delay(5);
+  //lcd.print("|");
+  //delay(5);
+  //lcd.print("/");   
+  //delay(5);
+  //lcd.print("-");
+  //delay(5);
+  //lcd.print("\\");
   
   //print vario on LCD
   lcd.print(" V:");
-  lcd.print(vario);
+  lcd.print(vario);  
   
-  //move coursor to next line
-  //buff[0] = '\0';
-  //sprintf(buff, "P:%dHpa T:%dC", (int)pres, (int)temp);  
-  
-  // Print a message to the LCD.
+  //second line
   lcd.setCursor(0,1);
   lcd.print("P:");
   lcd.print(pres);
-  lcd.print("Hpa ");
+  lcd.print("m ");
+  
+  //print temp
   lcd.print("T:");
-  lcd.print(temp);
+  lcd.print(temp);  
   
+  prevAlt = alt;  
+  delay(50);
+  digitalWrite(13, LOW);    // turn the LED off by making the voltage LOW 
   
-  //alt++;
-  vario += 0.1;
-  
-  if((int)alt % 5 == 0)
-  {
-    for(int i=0 ;i<3; i++)
-    {
-      Beep();
-      delay(250);
-    }
-  }  
+  //print on serial port
   Serial.print("Actual TEMP= ");
   Serial.println(temp);
   Serial.print("Actual PRESSURE= ");
   Serial.println(pres);
+  Serial.print("Actual ALT= ");
+  Serial.println(alt);
+  Serial.print("PREV ALT= ");
+  Serial.println(prevAlt);
+  Serial.print("Vario");
+  Serial.println(vario); 
+  Serial.println("-------------------------------------------");
   
-  delay(1500);
 }
 
 float getAltitude(float press, float temp) {
@@ -170,81 +222,24 @@ float getAltitude(float press, float temp) {
   return ((pow((sea_press / press), 1/5.257) - 1.0) * (temp + 273.15)) / 0.0065;
 }
 
-void ComputePressAndTemp()
-{
- D1 = getVal(ADDRESS, 0x48); // Pressure raw
- D2 = getVal(ADDRESS, 0x58); // Temperature raw
-  
- dT   = D2 - ((uint32_t)C[5] << 8);
- OFF  = ((int64_t)C[2] << 16) + ((dT * C[4]) >> 7);
- SENS = ((int32_t)C[1] << 15) + ((dT * C[3]) >> 8);
+void pushAvg(float val) {
+  movavg_buff[movavg_i] = val;
+  movavg_i = (movavg_i + 1) % MOVAVG_SIZE;
+}
 
- //compute temp
- TEMP = (int64_t)dT * (int64_t)C[6] / 8388608 + 2000;
-
- temp = (float)TEMP / 100; 
-
- // compute pressure 
- P  = ((int64_t)D1 * SENS / 2097152 - OFF) / 32768;
- pres = (float)P / 100;
+float getAvg(float * buff, int size) {
+  float sum = 0.0;
+  for(int i=0; i<size; i++) {
+    sum += buff[i];
+  }
+  return sum / size;
 }
 
 
-long getVal(int address, byte code)
-{
- unsigned long ret = 0;
- Wire.beginTransmission(address);
- Wire.write(code);
- Wire.endTransmission();
- delay(10);
- 
- // start read sequence
- Wire.beginTransmission(address);
- Wire.write((byte) 0x00);
- Wire.endTransmission();
- Wire.beginTransmission(address);
- Wire.requestFrom(address, (int)3);
- if (Wire.available() >= 3)
- {
-   ret = Wire.read() * (unsigned long)65536 + Wire.read() * (unsigned long)256 + Wire.read();
- }
- else 
- {
-   ret = -1;
- }
- Wire.endTransmission();
- return ret;
-}
+//move coursor to next line
+//buff[0] = '\0';
+//sprintf(buff, "P:%dHpa T:%dC", (int)pres, (int)temp);  
 
-void initial(uint8_t address)
-{
-
-   Serial.println();
-   Serial.println("PROM COEFFICIENTS ivan");
-
-   Wire.beginTransmission(address);
-   Wire.write(0x1E); // reset
-   Wire.endTransmission();
-   delay(10);
-
-   for (int i=0; i<6  ; i++) 
-   {
-     Wire.beginTransmission(address);
-     Wire.write(0xA2 + (i * 2));
-     Wire.endTransmission();
-
-     Wire.beginTransmission(address);
-     Wire.requestFrom(address, (uint8_t) 6);
-     delay(1);
-     if(Wire.available())
-     {
-      C[i+1] = Wire.read() << 8 | Wire.read();
-     }
-     else 
-     {
-       Serial.println("Error reading PROM 1"); // error reading the PROM or communicating with the device
-     }
-     Serial.println(C[i+1]);
- }
- Serial.println();
-}
+//vario_str[0] = '\0';
+//dtostrf(vario,7, 4, vario_str);
+//sprintf(buff, "Alt:%dm V:%s", alt,  vario_str);  
