@@ -37,6 +37,13 @@
 
 */
 
+//debug 
+#include <debug.h>
+
+//togle DEBUG mode
+//#define DEBUG
+
+
 //LCD
 #include <LiquidCrystal.h>
 
@@ -54,8 +61,6 @@
 #define MOVAVG_SIZE 32
 
 //constants
-const int sumC = 3;
-const float dV = 0.5;
 const float sea_press = 1013.25;
 
 //variables
@@ -64,9 +69,10 @@ float temp = 0;
 float pres = 0;
 float vario = -1.5;
 
-MS561101BA baro = MS561101BA();
 int movavg_i=0;
 float movavg_buff[MOVAVG_SIZE];
+
+MS561101BA baro = MS561101BA();
 
 // initialize the library with the numbers of the interface pins
 LiquidCrystal lcd(12, 11, 5, 4, 1, 0);
@@ -90,21 +96,24 @@ void setup()
  
  Wire.begin();
  Serial.begin(9600); 
- delay(25000);  
  
- Serial.println("INIT:Serial port initialized..."); 
+ #ifdef DEBUG
+   delay(25000);  
+ #endif
+ 
+ DEBUG_PRINTLN("INIT:Serial port initialized..."); 
   
  //beeper
  pinMode(A0, OUTPUT);
- Serial.println("INIT: A0 pin set to output...");
+ DEBUG_PRINTLN("INIT: A0 pin set to output...");
   
  // initialize digital pin 13 as an output.
  //pinMode(13, OUTPUT);
- Serial.println("INIT: Pin 13 set to output...");
+ DEBUG_PRINTLN("INIT: Pin 13 set to output...");
   
  // set up the LCD's number of columns and rows: 
  lcd.begin(16, 2);
- Serial.println("INIT: LCD initialized...");
+ DEBUG_PRINTLN("INIT: LCD initialized...");
  
  //move coursor to next line
  lcd.setCursor(0,1);
@@ -112,49 +121,64 @@ void setup()
  // Suppose that the CSB pin is connected to GND.
  // You'll have to check this on your breakout schematics
  baro.init(MS561101BA_ADDR_CSB_LOW); 
- Serial.println("INIT: Baro initialized...");
- delay(100);
+ DEBUG_PRINTLN("INIT: Baro initialized...");
+ 
+ delay(10);
   
  // populate movavg_buff before starting loop
- Serial.println("INIT: Avg buff initialized...");
+ DEBUG_PRINTLN("INIT: Avg buff initialized...");
  for(int i=0; i<MOVAVG_SIZE; i++)
  {
-    Serial.println("INIT: Get press start...");
+    DEBUG_PRINTLN("INIT: Get press start...");
+    
     pres =  baro.getPressure(MS561101BA_OSR_4096);   
     movavg_buff[i] = pres;
-    delay(20);
-    Serial.println("INIT: Get press end...");
+    
+    DEBUG_PRINTLN("INIT: Get press end...");
  }
    
 }
 
-
-
 void loop() {
 
+  // turn the LED on by making the voltage HIGH
+  digitalWrite(13, HIGH);
+  
   //get temperature
-  Serial.println("#####################Loop: Start read temp...#####################");
-  temp= baro.getTemperature(MS561101BA_OSR_4096);
-  Serial.println("#####################Loop: End read temp...#####################");
+  DEBUG_PRINTLN("#####################Loop: Start read temp...#####################");
+  temp = -1;
+  while(temp <=0 )
+  {
+    temp= baro.getTemperature(MS561101BA_OSR_4096);
+    DEBUG_PRINT("```````````````````````````Current temp:");
+    DEBUG_PRINTLN(temp);
+  }
+  DEBUG_PRINTLN("#####################Loop: End read temp...#####################");
   
   delay(10);
   
   // get pressure
-  Serial.println("#####################Loop: Start read press...#####################");
-  pres = baro.getPressure(MS561101BA_OSR_4096);
-  Serial.println("#####################Loop: End read press...#####################");
+  DEBUG_PRINTLN("#####################Loop: Start read press...#####################");
+  pres = -1;  
+  while(pres <= 0)
+  {
+    pres = baro.getPressure(MS561101BA_OSR_4096);
+    DEBUG_PRINT("```````````````````````````Current resss:");
+    DEBUG_PRINTLN(pres);    
+  }
+  DEBUG_PRINTLN("#####################Loop: End read press...#####################"); 
   
-  
-  digitalWrite(13, HIGH);   // turn the LED on (HIGH is the voltage level)
-  
-  pushAvg(pres);  
+  // turn the LED off (HIGH is the voltage level)  
+  digitalWrite(13, LOW);
+     
+  pushAvg(pres);    
   pres = getAvg(movavg_buff, MOVAVG_SIZE);
-  Serial.println("Loop: Calc avg. press...");
+  DEBUG_PRINTLN("Loop: Calc avg. press...");
   
   //get altitude
   alt  = getAltitude(pres, temp);  
-  Serial.println("Loop: Calc alt...");
-  delay(10); 
+  DEBUG_PRINTLN("Loop: Calc alt...");
+  
   
   //compute vario  
   //if(abs(prevAlt - alt) > dV)
@@ -173,16 +197,8 @@ void loop() {
   //first line
   lcd.setCursor(0,0);
   lcd.print("A:" );  
-  lcd.print(alt);
-  lcd.print("m");
-  //delay(5);
-  //lcd.print("|");
-  //delay(5);
-  //lcd.print("/");   
-  //delay(5);
-  //lcd.print("-");
-  //delay(5);
-  //lcd.print("\\");
+  lcd.print(Round(alt,1), 1);
+  lcd.print("m");  
   
   //print vario on LCD
   lcd.print(" V:");
@@ -191,30 +207,29 @@ void loop() {
   //second line
   lcd.setCursor(0,1);
   lcd.print("P:");
-  lcd.print(pres);
+  lcd.print(Round(pres,2), 2);
   lcd.print("m ");
   
   //print temp
   lcd.print("T:");
-  lcd.print(temp);  
+  lcd.print(Round(temp, 1), 1);  
   
-  prevAlt = alt;  
-  delay(50);
-  digitalWrite(13, LOW);    // turn the LED off by making the voltage LOW 
+  prevAlt = alt;
+  
+  delay(20);
   
   //print on serial port
-  Serial.print("Actual TEMP= ");
-  Serial.println(temp);
-  Serial.print("Actual PRESSURE= ");
-  Serial.println(pres);
-  Serial.print("Actual ALT= ");
-  Serial.println(alt);
-  Serial.print("PREV ALT= ");
-  Serial.println(prevAlt);
-  Serial.print("Vario");
-  Serial.println(vario); 
-  Serial.println("-------------------------------------------");
-  
+  DEBUG_PRINT("Actual TEMP= ");
+  DEBUG_PRINTLN(temp);
+  DEBUG_PRINT("Actual PRESSURE= ");
+  DEBUG_PRINTLN(pres);
+  DEBUG_PRINT("Actual ALT= ");
+  DEBUG_PRINTLN(alt);
+  DEBUG_PRINT("PREV ALT= ");
+  DEBUG_PRINTLN(prevAlt);
+  DEBUG_PRINT("Vario");
+  DEBUG_PRINTLN(vario); 
+  DEBUG_PRINTLN("-------------------------------------------");
 }
 
 float getAltitude(float press, float temp) {
@@ -236,10 +251,24 @@ float getAvg(float * buff, int size) {
 }
 
 
-//move coursor to next line
-//buff[0] = '\0';
-//sprintf(buff, "P:%dHpa T:%dC", (int)pres, (int)temp);  
+//round float 
+float Round(float n, int places)
+{
+    int digitPlace = 1;       
+    float d;
+    int   i;
+  
+    for(i=1; i<=places; i++)
+      digitPlace *= 10;
+      
+    /* rescale 123.45678 to 12345.678 */ 
+    d = n * digitPlace;
+    
+    /* round off: 12345.678 + 0.5 = 12346.178 -> 12346 */ 
+    i = d + 0.5;
+    
+    /* restore to its original scale: 12346 -> 123.46 */
+    d = (float)i / digitPlace;
 
-//vario_str[0] = '\0';
-//dtostrf(vario,7, 4, vario_str);
-//sprintf(buff, "Alt:%dm V:%s", alt,  vario_str);  
+    return d;
+}
