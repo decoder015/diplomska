@@ -43,7 +43,6 @@
 //togle DEBUG mode
 //#define DEBUG
 
-
 //LCD
 #include <LiquidCrystal.h>
 
@@ -61,14 +60,18 @@
 #define MOVAVG_SIZE 32
 
 //constants
-const float sea_press = 1013.25;
+const float sea_press = 1027.0;
+const float dT = 500;
 
 //variables
 float alt = 0;
 float temp = 0;
 float pres = 0;
+float prev_pres = 0;
+float prev_time = 0;
 float vario = -1.5;
-
+//float time = 0;
+float curr_time = 0;
 int movavg_i=0;
 float movavg_buff[MOVAVG_SIZE];
 
@@ -86,9 +89,9 @@ void Beep(int updown)
 {
    //beeper  
   if(updown == GOUP)
-     tone(A0, beep_freq_go_up, 400);    
+     tone(A0, beep_freq_go_up, 250);    
   else
-     tone(A0, beep_freq_go_down, 200);
+     tone(A0, beep_freq_go_down, 250);
 }
 
 void setup() 
@@ -143,9 +146,12 @@ void loop() {
 
   // turn the LED on by making the voltage HIGH
   digitalWrite(13, HIGH);
-  
+  //curr_time = millis();  
   //get temperature
   DEBUG_PRINTLN("#####################Loop: Start read temp...#####################");
+  //Serial.println("test");
+  DEBUG_PRINT("Loop start time:");
+  DEBUG_PRINTLN(curr_time);
   temp = -1;
   while(temp <=0 )
   {
@@ -177,21 +183,36 @@ void loop() {
   
   //get altitude
   alt  = getAltitude(pres, temp);  
-  DEBUG_PRINTLN("Loop: Calc alt...");
+  DEBUG_PRINTLN("Loop: Calc alt...");  
   
-  
-  //compute vario  
-  //if(abs(prevAlt - alt) > dV)
-  //{   
-    //vario = prevAlt - alt;
-    //if(vario > 0)
-    //    Beep(GOUP);
-    //else 
-     //   Beep(GODOWN);
- // }
-  //else
-  //vario = 0;
-  
+  //compute vario 
+  curr_time = millis();
+  if(abs(curr_time- prev_time) >= dT)
+  {
+    DEBUG_PRINT("Curr time - prev time: ");
+    DEBUG_PRINTLN(abs(curr_time- prev_time));
+    
+    DEBUG_PRINT("Prev_alt: ");
+    DEBUG_PRINTLN(abs(getAltitude(prev_pres,temp)));
+    
+    
+    DEBUG_PRINT("Curr_alt: ");
+    DEBUG_PRINTLN(abs(getAltitude(pres,temp)));
+    
+    float altDif = getAltitude(pres,temp) - getAltitude(prev_pres,temp);    
+    if( abs(altDif) > 0.1)
+    {
+       if(altDif > 0)
+       Beep(GOUP) ;
+      else Beep(GODOWN);
+       vario = altDif ;        
+    }
+    else    
+      vario = 0;
+     
+     prev_time = curr_time; 
+     prev_pres = pres;
+  }   
   
   //Print a message to the LCD.  
   //first line
@@ -207,7 +228,7 @@ void loop() {
   //second line
   lcd.setCursor(0,1);
   lcd.print("P:");
-  lcd.print(Round(pres,2), 2);
+  lcd.print(Round(pres,1), 1);
   lcd.print("m ");
   
   //print temp
@@ -216,8 +237,8 @@ void loop() {
   
   prevAlt = alt;
   
-  delay(20);
-  
+  delay(5);
+  //time = millis();
   //print on serial port
   DEBUG_PRINT("Actual TEMP= ");
   DEBUG_PRINTLN(temp);
@@ -228,7 +249,9 @@ void loop() {
   DEBUG_PRINT("PREV ALT= ");
   DEBUG_PRINTLN(prevAlt);
   DEBUG_PRINT("Vario");
-  DEBUG_PRINTLN(vario); 
+  DEBUG_PRINTLN(vario);
+  DEBUG_PRINT("Loop time: "); 
+  DEBUG_PRINTLN(time - curr_time ); 
   DEBUG_PRINTLN("-------------------------------------------");
 }
 
