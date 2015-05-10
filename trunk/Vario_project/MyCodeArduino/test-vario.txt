@@ -1,0 +1,21 @@
+ pressure = getPressure();
+  
+  lowpassFast = lowpassFast + (pressure - lowpassFast) * 0.1;
+  lowpassSlow = lowpassSlow + (pressure - lowpassSlow) * 0.05;
+  
+  toneFreq = (lowpassSlow - lowpassFast) * 50;
+  
+  toneFreqLowpass = toneFreqLowpass + (toneFreq - toneFreqLowpass) * 0.1;
+   
+  toneFreq = constrain(toneFreqLowpass, -500, 500);
+  
+  ddsAcc += toneFreq * 100 + 2000;
+  
+  if (toneFreq < 0 || ddsAcc > 0) 
+  {
+    tone(2, toneFreq + 510);  
+  }
+  else
+  {
+    noTone(2);
+  }
