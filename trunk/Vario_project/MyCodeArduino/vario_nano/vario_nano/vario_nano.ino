@@ -1,285 +1,216 @@
-#define DIGIT_ON   LOW
-#define DIGIT_OFF HIGH  
-  
-  int digits[3] ;
-  int divider = 10; 
+//debug 
+#include <debug.h>
 
-    
-//Pin mapping from Arduino to the ATmega DIP28 if you need it  
-//http://www.arduino.cc/en/Hacking/PinMapping  
-int segA = 2; //Display pin 14  
-int segB = 6; //Display pin 16  
-int segC = 9; //Display pin 13  
-int segD = 11; //Display pin 3  
-int segE = 12; //Display pin 5  
-int segF = 3; //Display pin 11  
-int segG = 8; //Display pin 15 
-int dot = 10;
+//togle DEBUG mode
+//#define DEBUG
 
-//int addr[] = {7,5,4,0};
-int addr[] = {0,4,5,7};
-int  i =0;
+//sensor
+#include <Wire.h>
+#include <MS561101BA.h>
 
+#define MOVAVG_SIZE 32    
 
+//constants
+const float sea_press = 1027.0;
+
+#define dT 500
 #define beep_freq_go_up  500   //Hz
 #define beep_freq_go_down 200 //Hz
 #define beep_duration = 500
 
 
+//variables
+float alt = 0;
+float temp = 0;
+float pres = 0;
+float prev_pres = 0;
+float prev_time = 0;
+float vario = -1.5;
+float time = 0;
+float curr_time = 0;
+int movavg_i=0;
+float movavg_buff[MOVAVG_SIZE];
+
+MS561101BA baro = MS561101BA();
+
+float prevAlt = 0;
+float avgTempSum = 0;
+float avgPressSum = 0;
+
 void Beep(float vario)
 {
-   //beeper  
-  //if(updown == GOUP)
-  //   tone(A0, beep_freq_go_up, 250);    
-  //else
-  //   tone(A0, beep_freq_go_down, 250);
-     
-     tone(13, beep_freq_go_up+vario*100, -(250*vario-1500)/3);
-}
+     tone(2, beep_freq_go_up+vario*100, -(250*vario-1500)/3);
+}  
 
 void setup()
 {
-  //Segment pins
-  pinMode(segA, OUTPUT);  
-  pinMode(segB, OUTPUT);  
-  pinMode(segC, OUTPUT);  
-  pinMode(segD, OUTPUT);  
-  pinMode(segE, OUTPUT);  
-  pinMode(segF, OUTPUT);
-  pinMode(segG, OUTPUT);   
-  
-  //address pins 
-  pinMode(addr[0], OUTPUT);
-  pinMode(addr[1], OUTPUT);
-  pinMode(addr[2], OUTPUT);
-  pinMode(addr[3], OUTPUT); 
+ Wire.begin();
+ //beeper
+ pinMode(2, OUTPUT);
  
+ Serial.begin(9600);
+ 
+ #ifdef DEBUG    
+   delay(25000);  
+ #endif
+ 
+ DEBUG_PRINTLN("INIT:Serial port initialized...");  
+
+ // Suppose that the CSB pin is connected to GND.
+ // You'll have to check this on your breakout schematics
+ baro.init(MS561101BA_ADDR_CSB_LOW); 
+ DEBUG_PRINTLN("INIT: Baro initialized...");
+ 
+ delay(10);
+  
+ // populate movavg_buff before starting loop
+ DEBUG_PRINTLN("INIT: Avg buff initialized...");
+ for(int i=0; i<MOVAVG_SIZE; i++)
+ {
+    DEBUG_PRINTLN("INIT: Get press start...");
+    
+    pres =  baro.getPressure(MS561101BA_OSR_4096);   
+    movavg_buff[i] = pres;
+    
+    DEBUG_PRINTLN("INIT: Get press end...");
+ }
 };
 
 void loop()
 {
-  for(int k=0; k<40; k++)
+  // turn the LED on by making the voltage HIGH
+  digitalWrite(13, HIGH);
+  curr_time = millis(); 
+  
+  //get temperature
+  DEBUG_PRINTLN("#####################Loop: Start read temp...#####################");  
+  DEBUG_PRINT("Loop start time:");
+  DEBUG_PRINTLN(curr_time);
+  
+  temp = -1;
+  while(temp <=0 )
   {
-    Display(i);    
+    temp= baro.getTemperature(MS561101BA_OSR_4096);
+    DEBUG_PRINT("```````````````````````````Current temp:");
+    DEBUG_PRINTLN(temp);
     delay(1);
   }
- Beep(i);
-// if(i>3)
-//  i =0;
-i++;
-// digitalWrite(segA, HIGH);
-// digitalWrite(segB, HIGH);
- //digitalWrite(segC, HIGH);
- //digitalWrite(segD, HIGH);
- //digitalWrite(segE, HIGH);
- //digitalWrite(segF, HIGH);
- //digitalWrite(segG, HIGH); 
- //digitalWrite(addr[0], HIGH);
- //digitalWrite(addr[1], HIGH);
- //digitalWrite(addr[2], HIGH);
- //digitalWrite(addr[3], LOW);
- //digitalWrite(13, LOW);
- //delay(10);
-
-};
-
-//Writes Number to display
-void WriteDigitAtPositon(int numb)
-{  
-  switch(numb)
-  {
-    case  0 :
-      digitalWrite(addr[0] , LOW);
-      digitalWrite(addr[1] , HIGH);
-      digitalWrite(addr[2] , HIGH);
-      digitalWrite(addr[3] , HIGH);
-      break;
-    case 1 :
-      digitalWrite(addr[0] , HIGH);
-      digitalWrite(addr[1] , LOW);
-      digitalWrite(addr[2] , HIGH);
-      digitalWrite(addr[3] , HIGH);
-      break;      
-    case 2 :
-      digitalWrite(addr[0] , HIGH);
-      digitalWrite(addr[1] , HIGH);
-      digitalWrite(addr[2] , LOW);
-      digitalWrite(addr[3] , HIGH);
-    break;
-    case 3 :
-      digitalWrite(addr[0] , HIGH);
-      digitalWrite(addr[1] , HIGH);
-      digitalWrite(addr[2] , HIGH);
-      digitalWrite(addr[3] , LOW);
-    break;    
-  } 
+  DEBUG_PRINTLN("#####################Loop: End read temp...#####################"); 
   
-  //digitalWrite(addr[0] , LOW);
-  //digitalWrite(addr[1] , LOW);
-  //digitalWrite(addr[2] , LOW);
-  //digitalWrite(addr[3] , LOW);
-  //delay(1); 
-};
-
-void Display(int number) 
-{  
- #define DISPLAY_BRIGHTNESS 500  
-    
-  #define DIGIT_ON   LOW
-  #define DIGIT_OFF HIGH  
-    
-  int  numDigits[4] ;  
-  int divider = 10;
-  int shift   = 1;
-  int i;  
-  
-  //Turn off all segments  
-  lightNumber(10);   
-    
-  for(i = 0 ; i<4; i++)
+  // get pressure
+  DEBUG_PRINTLN("#####################Loop: Start read press...#####################");
+  pres = -1;  
+  while(pres <= 0)
   {
-    numDigits[i] = (number % divider) / shift;
-    shift   *= 10;
-    divider *= 10;
-    number -=  numDigits[i];	
-   }       
+    pres = baro.getPressure(MS561101BA_OSR_4096);
+    DEBUG_PRINT("```````````````````````````Current resss:");
+    DEBUG_PRINTLN(pres);        
+    delay(1);
+  }
+  Serial.println(pres);
+  //DEBUG_PRINTLN("#####################Loop: End read press...#####################"); 
+  
+  // turn the LED off (HIGH is the voltage level)  
+  //digitalWrite(13, LOW);
+     
+  pushAvg(pres);    
+  pres = getAvg(movavg_buff, MOVAVG_SIZE);
+  //DEBUG_PRINTLN("Loop: Calc avg. press...");
+  
+  //get altitude
+  alt  = getAltitude(pres, temp);  
+ /// DEBUG_PRINTLN("Loop: Calc alt...");  
+  
+  //compute vario 
+  curr_time = millis();
+  if(abs(curr_time- prev_time) >= dT)
+  {
+    DEBUG_PRINT("Curr time - prev time: ");
+    DEBUG_PRINTLN(abs(curr_time- prev_time));
     
-    int digitPos = 0;
-    for(i = 3 ; i>=0; i--)
+    DEBUG_PRINT("Prev_alt: ");
+    DEBUG_PRINTLN(abs(getAltitude(prev_pres,temp)));
+    
+    //Serial.println("test");
+    DEBUG_PRINT("Curr_alt: ");
+    DEBUG_PRINTLN(abs(getAltitude(pres,temp)));
+    
+    float altDif = getAltitude(pres,temp) - getAltitude(prev_pres,temp);    
+    if( abs(altDif) > 0.1)
     {
-       WriteDigitAtPositon(i);    
-       lightNumber(numDigits[digitPos]);
-       delay(2);
-       
-       //clear all segments
-       lightNumber(10);      
-       for(int k = 3; k>=0; k--)       
-         WriteDigitAtPositon(k);     
-              
-       digitPos++;       
+       vario = altDif ;
+       if(altDif > 0)
+         Beep(vario);
     }
-    
-   //Turn off all segments  
-   lightNumber(10);   
-  } 
+    else    
+      vario = 0;
+     
+     prev_time = curr_time; 
+     prev_pres = pres;
+  }  
   
-//Given a number, turns on those segments  
-//If number == 10, then turn off number  
-void lightNumber(int numberToDisplay) {  
+  //Display(Round(alt,1));
+  
+  prevAlt = alt;
+  
+  delay(5);
+  time = millis();
+  
+  //print on serial port
+  DEBUG_PRINT("Actual TEMP= ");
+  DEBUG_PRINTLN(temp);
+  DEBUG_PRINT("Actual PRESSURE= ");
+  DEBUG_PRINTLN(pres);
+  DEBUG_PRINT("Actual ALT= ");
+  DEBUG_PRINTLN(alt);
+  DEBUG_PRINT("PREV ALT= ");
+  DEBUG_PRINTLN(prevAlt);
+  DEBUG_PRINT("Vario");
+  DEBUG_PRINTLN(vario);
+  DEBUG_PRINT("Loop time: "); 
+  DEBUG_PRINTLN(time - curr_time ); 
+  DEBUG_PRINTLN("-------------------------------------------");
+};
+
+  
+float getAltitude(float press, float temp) 
+ {
+  //return (1.0f - pow(press/101325.0f, 0.190295f)) * 4433000.0f;
+  return ((pow((sea_press / press), 1/5.257) - 1.0) * (temp + 273.15)) / 0.0065;
+}
+
+void pushAvg(float val) {
+  movavg_buff[movavg_i] = val;
+  movavg_i = (movavg_i + 1) % MOVAVG_SIZE;
+}
+
+float getAvg(float * buff, int size) {
+  float sum = 0.0;
+  for(int i=0; i<size; i++) {
+    sum += buff[i];
+  }
+  return sum / size;
+}
+
+
+//round float 
+float Round(float n, int places)
+{
+    int digitPlace = 1;       
+    float d;
+    int   i;
+  
+    for(i=1; i<=places; i++)
+      digitPlace *= 10;
+      
+    /* rescale 123.45678 to 12345.678 */ 
+    d = n * digitPlace;
     
-  #define SEGMENT_ON  HIGH 
-  #define SEGMENT_OFF LOW   
+    /* round off: 12345.678 + 0.5 = 12346.178 -> 12346 */ 
+    i = d + 0.5;
     
-   switch (numberToDisplay){  
-    
-   case 0:  
-    digitalWrite(segA, SEGMENT_ON);  
-    digitalWrite(segB, SEGMENT_ON);  
-    digitalWrite(segC, SEGMENT_ON);  
-    digitalWrite(segD, SEGMENT_ON);  
-    digitalWrite(segE, SEGMENT_ON);  
-    digitalWrite(segF, SEGMENT_ON);  
-    digitalWrite(segG, SEGMENT_OFF);  
-    break;  
-    
-   case 1:  
-    digitalWrite(segA, SEGMENT_OFF);  
-    digitalWrite(segB, SEGMENT_ON);  
-    digitalWrite(segC, SEGMENT_ON);  
-    digitalWrite(segD, SEGMENT_OFF);  
-    digitalWrite(segE, SEGMENT_OFF);  
-    digitalWrite(segF, SEGMENT_OFF);  
-    digitalWrite(segG, SEGMENT_OFF);  
-    break;  
-    
-   case 2:  
-    digitalWrite(segA, SEGMENT_ON);  
-    digitalWrite(segB, SEGMENT_ON);  
-    digitalWrite(segC, SEGMENT_OFF);  
-    digitalWrite(segD, SEGMENT_ON);  
-    digitalWrite(segE, SEGMENT_ON);  
-    digitalWrite(segF, SEGMENT_OFF);  
-    digitalWrite(segG, SEGMENT_ON);  
-    break;  
-    
-   case 3:  
-    digitalWrite(segA, SEGMENT_ON);  
-    digitalWrite(segB, SEGMENT_ON);  
-    digitalWrite(segC, SEGMENT_ON);  
-    digitalWrite(segD, SEGMENT_ON);  
-    digitalWrite(segE, SEGMENT_OFF);  
-    digitalWrite(segF, SEGMENT_OFF);  
-    digitalWrite(segG, SEGMENT_ON);  
-    break;  
-    
-   case 4:  
-    digitalWrite(segA, SEGMENT_OFF);  
-    digitalWrite(segB, SEGMENT_ON);  
-    digitalWrite(segC, SEGMENT_ON);  
-    digitalWrite(segD, SEGMENT_OFF);  
-    digitalWrite(segE, SEGMENT_OFF);  
-    digitalWrite(segF, SEGMENT_ON);  
-    digitalWrite(segG, SEGMENT_ON);  
-    break;  
-    
-   case 5:  
-    digitalWrite(segA, SEGMENT_ON);  
-    digitalWrite(segB, SEGMENT_OFF);  
-    digitalWrite(segC, SEGMENT_ON);  
-    digitalWrite(segD, SEGMENT_ON);  
-    digitalWrite(segE, SEGMENT_OFF);  
-    digitalWrite(segF, SEGMENT_ON);  
-    digitalWrite(segG, SEGMENT_ON);  
-    break;  
-    
-   case 6:  
-    digitalWrite(segA, SEGMENT_ON);  
-    digitalWrite(segB, SEGMENT_OFF);  
-    digitalWrite(segC, SEGMENT_ON);  
-    digitalWrite(segD, SEGMENT_ON);  
-    digitalWrite(segE, SEGMENT_ON);  
-    digitalWrite(segF, SEGMENT_ON);  
-    digitalWrite(segG, SEGMENT_ON);  
-   break;  
-    
-   case 7:  
-    digitalWrite(segA, SEGMENT_ON);  
-    digitalWrite(segB, SEGMENT_ON);  
-    digitalWrite(segC, SEGMENT_ON);  
-    digitalWrite(segD, SEGMENT_OFF);  
-    digitalWrite(segE, SEGMENT_OFF);  
-    digitalWrite(segF, SEGMENT_OFF);  
-    digitalWrite(segG, SEGMENT_OFF);  
-    break;  
-    
-   case 8:  
-    digitalWrite(segA, SEGMENT_ON);  
-    digitalWrite(segB, SEGMENT_ON);  
-    digitalWrite(segC, SEGMENT_ON);  
-    digitalWrite(segD, SEGMENT_ON);  
-    digitalWrite(segE, SEGMENT_ON);  
-    digitalWrite(segF, SEGMENT_ON);  
-    digitalWrite(segG, SEGMENT_ON);  
-    break;  
-    
-   case 9:  
-    digitalWrite(segA, SEGMENT_ON);  
-    digitalWrite(segB, SEGMENT_ON);  
-    digitalWrite(segC, SEGMENT_ON);  
-    digitalWrite(segD, SEGMENT_ON);  
-    digitalWrite(segE, SEGMENT_OFF);  
-    digitalWrite(segF, SEGMENT_ON);  
-    digitalWrite(segG, SEGMENT_ON);  
-    break;  
-    
-   case 10:  
-    digitalWrite(segA, SEGMENT_OFF);  
-    digitalWrite(segB, SEGMENT_OFF);  
-    digitalWrite(segC, SEGMENT_OFF);  
-    digitalWrite(segD, SEGMENT_OFF);  
-    digitalWrite(segE, SEGMENT_OFF);  
-    digitalWrite(segF, SEGMENT_OFF);  
-    digitalWrite(segG, SEGMENT_OFF);  
-    break;  
-   }  
-  };
+    /* restore to its original scale: 12346 -> 123.46 */
+    d = (float)i / digitPlace;
+
+    return d;
+}
