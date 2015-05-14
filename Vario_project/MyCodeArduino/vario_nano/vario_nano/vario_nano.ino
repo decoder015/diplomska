@@ -8,16 +8,15 @@
 #include <Wire.h>
 #include <MS561101BA.h>
 
-#define MOVAVG_SIZE 32    
+#define MOVAVG_SIZE 32   
 
 //constants
 const float sea_press = 1027.0;
 
-#define dT 500
-#define beep_freq_go_up  500   //Hz
+const int dT = 300;
+#define beepePort 2
+#define beep_freq_go_up  300   //Hz
 #define beep_freq_go_down 200 //Hz
-#define beep_duration = 500
-
 
 //variables
 float alt = 0;
@@ -25,6 +24,7 @@ float temp = 0;
 float pres = 0;
 float prev_pres = 0;
 float prev_time = 0;
+float prev_temp = 0;
 float vario = -1.5;
 float time = 0;
 float curr_time = 0;
@@ -39,15 +39,23 @@ float avgPressSum = 0;
 
 void Beep(float vario)
 {
-     tone(2, beep_freq_go_up+vario*100, -(250*vario-1500)/3);
+    //positive
+    //0.+1751.22 x+x^2×(-1838.17)+733.359 x^3+x^4×(-127.857)+8.15296 x^5
+    float duration = 1751.22 * vario - 1838.17 * pow(vario,2) + 733.359 * pow(vario,3) - 127.85 * pow(vario,4) + 8.15296*pow(vario,5);
+    if(vario >0)
+      tone(beepePort, beep_freq_go_up+vario*100, -(250*vario-1500)/3);
+    else
+       tone(beepePort, beep_freq_go_up+vario*100, -(250*vario-1500)/3);
 }  
+
+
 
 void setup()
 {
  Wire.begin();
  //beeper
- pinMode(2, OUTPUT);
- 
+ pinMode(beepePort, OUTPUT);
+ pinMode(13, OUTPUT);
  Serial.begin(9600);
  
  #ifdef DEBUG    
@@ -80,7 +88,6 @@ void loop()
 {
   // turn the LED on by making the voltage HIGH
   digitalWrite(13, HIGH);
-  curr_time = millis(); 
   
   //get temperature
   DEBUG_PRINTLN("#####################Loop: Start read temp...#####################");  
@@ -93,10 +100,10 @@ void loop()
     temp= baro.getTemperature(MS561101BA_OSR_4096);
     DEBUG_PRINT("```````````````````````````Current temp:");
     DEBUG_PRINTLN(temp);
-    delay(1);
+    //delay(1);
   }
   DEBUG_PRINTLN("#####################Loop: End read temp...#####################"); 
-  
+  delay(10);
   // get pressure
   DEBUG_PRINTLN("#####################Loop: Start read press...#####################");
   pres = -1;  
@@ -105,21 +112,21 @@ void loop()
     pres = baro.getPressure(MS561101BA_OSR_4096);
     DEBUG_PRINT("```````````````````````````Current resss:");
     DEBUG_PRINTLN(pres);        
-    delay(1);
+    //delay(1);
   }
-  Serial.println(pres);
-  //DEBUG_PRINTLN("#####################Loop: End read press...#####################"); 
+  //Serial.println(pres);
+  DEBUG_PRINTLN("#####################Loop: End read press...#####################"); 
   
   // turn the LED off (HIGH is the voltage level)  
-  //digitalWrite(13, LOW);
+  digitalWrite(13, LOW);
      
   pushAvg(pres);    
   pres = getAvg(movavg_buff, MOVAVG_SIZE);
-  //DEBUG_PRINTLN("Loop: Calc avg. press...");
+  DEBUG_PRINTLN("Loop: Calc avg. press...");
   
   //get altitude
   alt  = getAltitude(pres, temp);  
- /// DEBUG_PRINTLN("Loop: Calc alt...");  
+  DEBUG_PRINTLN("Loop: Calc alt...");  
   
   //compute vario 
   curr_time = millis();
@@ -129,33 +136,35 @@ void loop()
     DEBUG_PRINTLN(abs(curr_time- prev_time));
     
     DEBUG_PRINT("Prev_alt: ");
-    DEBUG_PRINTLN(abs(getAltitude(prev_pres,temp)));
+    DEBUG_PRINTLN(abs(getAltitude(prev_pres,temp)));    
     
-    //Serial.println("test");
     DEBUG_PRINT("Curr_alt: ");
     DEBUG_PRINTLN(abs(getAltitude(pres,temp)));
     
-    float altDif = getAltitude(pres,temp) - getAltitude(prev_pres,temp);    
+    float altDif = getAltitude(pres,temp) - getAltitude(prev_pres, prev_temp);    
     if( abs(altDif) > 0.1)
     {
-       vario = altDif ;
-       if(altDif > 0)
-         Beep(vario);
+       
+       vario = altDif * 1000/abs(curr_time- prev_time);  
+       Serial.println(abs(curr_time- prev_time));
+       Serial.print(" ");
+       Serial.print(pres);
+       Serial.print(" ");
+       Serial.println(vario);       
+       Beep(vario);
     }
     else    
       vario = 0;
      
      prev_time = curr_time; 
      prev_pres = pres;
-  }  
-  
-  //Display(Round(alt,1));
+     prev_temp = temp;
+  }   
   
   prevAlt = alt;
   
   delay(5);
-  time = millis();
-  
+    
   //print on serial port
   DEBUG_PRINT("Actual TEMP= ");
   DEBUG_PRINTLN(temp);
