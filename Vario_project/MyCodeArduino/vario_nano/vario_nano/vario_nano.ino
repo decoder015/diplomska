@@ -8,12 +8,12 @@
 #include <Wire.h>
 #include <MS561101BA.h>
 
-#define MOVAVG_SIZE 32   
+#define MOVAVG_SIZE 16   
 
 //constants
 const float sea_press = 1027.0;
 
-const int dT = 300;
+const int dT = 200;
 #define beepePort 2
 #define beep_freq_go_up  300   //Hz
 #define beep_freq_go_down 200 //Hz
@@ -41,14 +41,20 @@ void Beep(float vario)
 {
     //positive
     //0.+1751.22 x+x^2×(-1838.17)+733.359 x^3+x^4×(-127.857)+8.15296 x^5
-    float duration = 1751.22 * vario - 1838.17 * pow(vario,2) + 733.359 * pow(vario,3) - 127.85 * pow(vario,4) + 8.15296*pow(vario,5);
-    if(vario >0)
-      tone(beepePort, beep_freq_go_up+vario*100, -(250*vario-1500)/3);
+    //float duration = 1751.22 * vario - 1838.17 * pow(vario,2) + 733.359 * pow(vario,3) - 127.85 * pow(vario,4) + 8.15296*pow(vario,5);
+    double freq;
+    if(vario >0 && vario < 5)
+    { 
+      //{{0,0},{0.1, 400}, {0.2, 500}, {0.5, 600} ,{0.75, 800}, {1, 900}} 
+      freq = 23807.3 * pow(vario, 5) - 67297.6 *pow(vario, 4) + 69315.3 * pow(vario, 3) -31440.9 * pow(vario,2) + 6515.85 * vario;
+      tone(beepePort, 2000 + vario * 10 , dT);//beep_freq_go_up+vario*100 -(250*vario-1500)/3
+    }
     else
-       tone(beepePort, beep_freq_go_up+vario*100, -(250*vario-1500)/3);
-}  
-
-
+    {
+       //freq = pow(vario*5, 2) + 100;
+       tone(beepePort, 800 - (vario * 10) , dT );//-(250*vario-1500)/3beep_freq_go_up+vario*100
+    }
+} 
 
 void setup()
 {
@@ -146,11 +152,12 @@ void loop()
     {
        
        vario = altDif * 1000/abs(curr_time- prev_time);  
-       Serial.println(abs(curr_time- prev_time));
-       Serial.print(" ");
+       Serial.print(abs(curr_time- prev_time));
+       Serial.print("ms ");
        Serial.print(pres);
-       Serial.print(" ");
-       Serial.println(vario);       
+       Serial.print("mb ");
+       Serial.println(vario); 
+       
        Beep(vario);
     }
     else    
